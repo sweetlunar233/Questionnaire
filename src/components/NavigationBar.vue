@@ -1,4 +1,5 @@
-<!-- 首页 -->
+<!-- 导航栏 -->
+<!-- 请作为组件引入到首页，即 HomeView.vue -->
 <template>
 
 </template>
