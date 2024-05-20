@@ -7,16 +7,21 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@vueup/vue-quill": "^1.2.0",
     "core-js": "^3.8.3",
     "element-plus": "^2.7.3",
     "vue": "^3.2.13",
-    "vue-router": "^4.0.3",
+    "vue-router": "^4.3.2",
     "vuex": "^4.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-router": "~5.0.0",
     "@vue/cli-plugin-vuex": "~5.0.0",
-    "@vue/cli-service": "~5.0.0"
+    "@vue/cli-service": "~5.0.0",
+    "node-sass": "^9.0.0",
+    "sass": "^1.77.1",
+    "sass-loader": "^14.2.1",
+    "webpack": "^5.91.0"
   }
 }
