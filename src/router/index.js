@@ -48,6 +48,11 @@ const routes = [
         component: () => import('../views/user/FilledQuestionaire.vue')
       }
     ]
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/LoginView.vue')
   }
 ]
 
