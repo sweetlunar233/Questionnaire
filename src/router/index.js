@@ -22,9 +22,37 @@ const routes = [
     component: () => import('../views/QuestionnaireFillView.vue')
   },
   {
+    path: '/personal',
+    name: 'personal',
+    component: () => import('../views/PersonalView.vue')
+  },
+  {
     path: '/userManage',
     name: 'userManage',
-    component: () => import('../views/UserManageView.vue')
+    component: () => import('../views/UserManageView.vue'),
+    redirect:'/userManage/filled',
+    children: [
+      {
+        path: '/userManage/unreleased',
+        name: 'unreleasedQuestinaire',
+        component: () => import('../views/user/UnreleasedQuestionaire.vue')
+      },
+      {
+        path: '/userManage/released',
+        name: 'releasedQuestinaire',
+        component: () => import('../views/user/ReleasedQuestionaire.vue')
+      },
+      {
+        path: '/userManage/filled',
+        name: 'filledQuestinaire',
+        component: () => import('../views/user/FilledQuestionaire.vue')
+      }
+    ]
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/LoginView.vue')
   }
 ]
 
