@@ -7,7 +7,8 @@ import {
     Crop,
     EditPen,
     SwitchButton,
-    CaretBottom
+    CaretBottom,
+    ChatDotRound
 } from '@element-plus/icons-vue'
 import avatar from '@/assets/default.png'
 
@@ -76,6 +77,12 @@ import avatar from '@/assets/default.png'
                         </el-icon>
                         <span>个人中心</span>
                     </el-menu-item>
+                    <el-menu-item index="/square">
+                        <el-icon>
+                            <ChatDotRound />
+                        </el-icon>
+                        <span>问卷广场</span>
+                    </el-menu-item>
                 </el-menu>
             </el-aside>
             <el-container>
@@ -96,7 +103,7 @@ import avatar from '@/assets/default.png'
 <style scoped>
 .layout-container {
     height: 100vh;
-    background: url("../assets/bg.png");
+    background: url("../assets/stacked-peaks-haikei.png");
 }
 
 .layout-container .el-aside {

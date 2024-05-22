@@ -10,6 +10,7 @@ import {
 
 import { ref } from 'vue'
 
+const value1 = ref(true)
 //文章分类数据模型
 const categorys = ref([
     {
@@ -39,7 +40,7 @@ const articles = ref([
         "state": "草稿",
         "categoryId": 2,
         "createTime": "2023-09-03 11:55:30",
-        "updateTime": "2023-09-03 11:55:30"
+        "published": true
     },
     {
         "id": 5,
@@ -49,7 +50,7 @@ const articles = ref([
         "state": "草稿",
         "categoryId": 2,
         "createTime": "2023-09-03 11:55:30",
-        "updateTime": "2023-09-03 11:55:30"
+        "published": true
     },
     {
         "id": 5,
@@ -59,7 +60,7 @@ const articles = ref([
         "state": "草稿",
         "categoryId": 2,
         "createTime": "2023-09-03 11:55:30",
-        "updateTime": "2023-09-03 11:55:30"
+        "published": true
     },
 ])
 
@@ -129,7 +130,7 @@ const onCurrentChange = (num) => {
                         <el-button type="text" :icon="Link">发送问卷</el-button>
                         <el-button type="text" :icon="Odometer">分析数据</el-button>
                         <!-- 发布按钮、删除按钮 -->
-                        <el-button type="primary" :icon="Open" style="float: right" circle></el-button>
+                        <el-switch v-model="article.published" style="float: right; margin-left: 10px"/>
                         <el-button type="danger" :icon="Delete" style="float: right" circle></el-button>
                     </div>
                 </div>
