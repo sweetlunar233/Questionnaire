@@ -1,8 +1,13 @@
 <!-- 填空题 -->
 
 <template>
-    <editable-text initialText="请填空"></editable-text>
-    <br/>
+    <div>
+        <editable-text initialText="请填空"></editable-text>
+        <br/>
+        <el-input v-model="fill" size="large" placeholder="填写者内容输入区"/>
+        <br/>
+        <br/>
+    </div>
 </template>
   
 <script>

@@ -5,7 +5,7 @@
 
     <div class="left">
       <div class="title">题型</div>
-      <br />
+      <van-divider  :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"></van-divider>
 
       <div>
         <el-button @click="addSingle()" plain>
@@ -45,7 +45,7 @@
     <!-- TieZhu:问卷预览 -->
     <div class="right">
       <editable-text initial-text="问卷标题" class="title"></editable-text>
-      <el-divider />
+      <van-divider  :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"></van-divider>
 
       <div v-for="index in questionCnt" @mouseover="questionList[index-1].showToolbar = true" @mouseleave="questionList[index-1].showToolbar = false">
 
@@ -139,7 +139,7 @@ import Score from '../components/Question/Score.vue'
       this.questionCnt--;
     },
     copy(index,type){
-      this.questionList.splice(index+1,0,{"type":type,"showToolbar":false,"isNecessary":true});
+      this.questionList.splice(index+1,0,{"type":type,"showToolbar":false,"isNecessary":this.questionList[index].isNecessary});
       this.questionCnt++;
     },
    },
@@ -195,10 +195,6 @@ import Score from '../components/Question/Score.vue'
   background-position: center; /* 图片居中显示 */
   background-repeat: no-repeat; /* 背景图片不重复 */
   background-attachment: fixed; /* 背景固定，内容滚动 */
-}
-
-.necessary{
-    color: #c45656;
 }
 
 
