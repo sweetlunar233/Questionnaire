@@ -19,13 +19,6 @@
     }
 </script>
 
-<!-- <template>
-    <el-container class = "all-container">
-        <navigation/>
-    </el-container>
-    
-    
-</template> -->
 
 <template>
     <div class="all-container">
@@ -37,7 +30,7 @@
                 <div class="subtitle">欢迎来到纸翼传问欢迎来到纸翼传问欢迎来到纸翼传问欢迎来到纸翼传问欢迎来到纸翼传问</div>
                 <button id="start_btn" @click = "gotoLogin" @mouseover="btnIn" @mouseout="btnOut" class="btn">开始</button>
             </el-aside>
-          <el-main class="main"><img src="../assets/image.png"></el-main>
+          <el-main class="main"><img src="../assets/封面.png"></el-main>
         </el-container>
       </el-container>
     </div>
@@ -48,7 +41,7 @@
     .all-container {
         height: 100vh;
         background: url("../assets/bg.png");
-        // background-size: cover;
+        background-size: cover;
 
         .aside {
             display: flex;
@@ -103,7 +96,7 @@
             margin: 40px 0 0 0;
             
             img {
-                width: 700px;
+                width: 900px;
                 height: auto;
             }
         }

@@ -79,7 +79,7 @@
         align-items: center;
         background: url("../assets/bg.png") no-repeat;
         // background: #9bd3ef;
-        // background-size: cover;
+        background-size: cover;
         
 
         .slider {
@@ -91,10 +91,11 @@
             .form {
                 width: 500px;
                 height: 650px;
-                background: rgba(97, 187, 252, 0.75);
+                background: rgba(99,124,172, 0.75);
+                // background: white;
                 backdrop-filter: blur(16px) saturate(0);
                 border-radius: 20px;
-                border: 1px solid rgba(38, 27, 247, 0.18);
+                // border: 1px solid rgba(38, 27, 247, 0.18);
                 padding: 40px 60px;
                 box-shadow: rgba(11, 11, 151, 0.25) 50px 50px 100px -20px,
                             /* rgba(0, 0, 0, 0.5) 30px 30px 60px -30px, */
@@ -121,7 +122,7 @@
                     font-weight: 300;  
                     
                     span {
-                        color: pink;
+                        color: rgb(243,156,181);
                         font-weight: bold;
                     }
                 }
@@ -141,7 +142,7 @@
                         width: 100%;
                         height: 45px;
                         border: none;
-                        outline: 1.5px solid pink;
+                        outline: 1.5px solid rgb(243,156,181);;
                         background: transparent;
                         border-radius: 8px;
                         font-size: 17px;
@@ -181,7 +182,7 @@
                 button {
                     width: 100%;
                     height: 40px;
-                    background: pink;
+                    background: rgb(243,156,181);
                     color:white;
                     border: none;
                     outline: none;
@@ -219,7 +220,7 @@
                     .name {
                         font-weight: 300;
                         span {
-                            color: pink;
+                            color: rgb(243,156,181);;
                             font-weight: bold;
                         }
                     }
@@ -235,7 +236,7 @@
                 .btn {
                     text-align: left;
                     button {
-                        background: pink;
+                        background: rgb(243,156,181);;
                         font-size: 18px;
                         padding: 5px 15px;
                         border: none;
