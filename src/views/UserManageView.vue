@@ -26,7 +26,7 @@ const navigation = ref(NavigationBar);
             <el-aside width="250px" style="margin-top: 20px;">
                 <div class="el-aside__logo"></div>
                 <!-- element-plus的菜单标签 -->
-                <el-menu active-text-color="#ffd04b" background-color="#fff"  text-color="rgb(80, 134, 233)"  router>
+                <el-menu active-text-color="rgb(243,156,181)" background-color="#fff"  text-color="rgb(80, 134, 233)"  router>
                     <el-sub-menu style="margin-top: 20px">
                         <template #title>
                             <el-icon>
@@ -91,9 +91,9 @@ const navigation = ref(NavigationBar);
 
 .layout-container .el-aside {
     background-color: #fff;
-    border: #666 solid 1px;
     border-radius: 7px;
     margin-bottom: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* 鼠标悬停时阴影加深 */
 }
 
 .layout-container .el-aside__logo {
