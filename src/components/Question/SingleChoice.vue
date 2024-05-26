@@ -36,7 +36,7 @@ export default ({
       };
     },
     props:{
-        
+
     },
     methods: {
         addOption(index){

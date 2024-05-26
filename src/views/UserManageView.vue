@@ -125,30 +125,6 @@ const navigation = ref(NavigationBar);
     border-right: none;
 }
 
-// .layout-container .el-header {
-    // background-color: #fff;
-    // display: flex;
-    // align-items: center;
-    // justify-content: space-between;
-    // border-radius: 7px;
-// }
-
-// .layout-container .el-header .el-dropdown__box {
-//     display: flex;
-//     align-items: center;
-//     margin-right: 20px;
-// }
-
-// .layout-container .el-header .el-dropdown__box .el-icon {
-//     color: #999;
-//     margin-left: 10px;
-// }
-
-// .layout-container .el-header .el-dropdown__box:active,
-// .layout-container .el-header .el-dropdown__box:focus {
-//     outline: none;
-// }
-
 .layout-container .el-footer {
     display: flex;
     align-items: center;

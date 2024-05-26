@@ -1,6 +1,6 @@
 <!-- 问卷设计页面 -->
 <template>
-
+  <navigation-bar style="position: fixed;"/>
   <div class="back">
 
     <div class="left">
@@ -53,7 +53,6 @@
            @dragenter.prevent: 进入另一个可放置元素时触发，这里用来调整元素位置。 -->
 
       <div v-for="index in questionCnt" 
-      :key="question.id"
       @mouseover="questionList[index-1].showToolbar = true" 
       @mouseleave="questionList[index-1].showToolbar = false"
       draggable="true"
@@ -111,6 +110,7 @@ import SingleChoice from '../components/Question/SingleChoice.vue'
 import MultipleChoice from '../components/Question/MultipleChoice.vue'
 import FillBlank from '../components/Question/FillBlank.vue'
 import Score from '../components/Question/Score.vue'
+import NavigationBar from "@/components/NavigationBar.vue";
  
  export default({
    data(){
@@ -177,7 +177,8 @@ import Score from '../components/Question/Score.vue'
     SingleChoice,
     MultipleChoice,
     FillBlank,
-    Score
+    Score,
+    NavigationBar,
    }
  })
 </script>
@@ -187,6 +188,7 @@ import Score from '../components/Question/Score.vue'
 
 .left{
   position: fixed;
+  top: 5%;
   margin: 2%;
   border-radius: 5px;
   border: 2px;
@@ -200,13 +202,15 @@ import Score from '../components/Question/Score.vue'
 .right{
   position: relative;
   width: 73%;
-  top: 2%;
+  height: 700px;
+  top: 8%;
   left: 20%;
   border-radius: 5px;
   border: 2px;
   padding: 20px;
   box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.1);
   background-color: white;
+  overflow-y: auto;
 }
 
 .title{
@@ -218,7 +222,7 @@ import Score from '../components/Question/Score.vue'
 
 .back{
   position: relative;
-  height: 1000px;
+  height: 100vh;
   background-image: url('../assets/bg.png'); /* 设置背景图片 */
   background-size: cover; /* 确保背景图片完全覆盖容器，可能会被裁切 */
   background-position: center; /* 图片居中显示 */
