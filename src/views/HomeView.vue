@@ -57,7 +57,7 @@
                 font-size: 56px;
                 margin-bottom: 20px;
                 span {
-                    color: pink;
+                    color: rgb(243,156,181);
                     font-weight: bold;
                 }
             }
@@ -74,7 +74,7 @@
                 // font-weight: normal;
                 width: 40%;
                 height: 50px;
-                background: pink;
+                background: rgb(243,156,181);
                 color:white;
                 border: none;
                 outline: none;
