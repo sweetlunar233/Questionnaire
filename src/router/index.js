@@ -46,6 +46,11 @@ const routes = [
         path: '/userManage/filled',
         name: 'filledQuestinaire',
         component: () => import('../views/user/FilledQuestionaire.vue')
+      },
+      {
+        path: '/userManage/square',
+        name: 'square',
+        component: () => import('../views/user/SquareView.vue')
       }
     ]
   },
@@ -53,11 +58,6 @@ const routes = [
     path: '/login',
     name: 'login',
     component: () => import('../views/LoginView.vue')
-  },
-  {
-    path: '/square',
-    name: 'square',
-    component: () => import('../views/SquareView.vue')
   }
 ]
 

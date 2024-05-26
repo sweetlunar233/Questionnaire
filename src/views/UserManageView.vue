@@ -43,7 +43,7 @@ const navigation = ref(NavigationBar);
         <el-header><navigation/></el-header>
         <el-container>
             <!-- 左侧菜单 -->
-            <el-aside width="250px">
+            <el-aside width="250px" style="margin-top: 20px;">
                 <div class="el-aside__logo"></div>
                 <!-- element-plus的菜单标签 -->
                 <el-menu active-text-color="#ffd04b" background-color="#fff"  text-color="rgb(80, 134, 233)"  router>
@@ -79,7 +79,7 @@ const navigation = ref(NavigationBar);
                         </el-icon>
                         <span>个人中心</span>
                     </el-menu-item>
-                    <el-menu-item index="/square">
+                    <el-menu-item index="/userManage/square">
                         <el-icon>
                             <ChatDotRound />
                         </el-icon>
