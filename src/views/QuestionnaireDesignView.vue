@@ -40,10 +40,8 @@
           &ensp;填空题
         </el-button>
       </div>
-    </div>
-
-    <!-- TieZhu:问卷预览 -->
-    <div class="right">
+        </div>
+        <div class="right">
       <editable-text initial-text="问卷标题" class="title"></editable-text>
       <van-divider  :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"></van-divider>
 
@@ -203,6 +201,7 @@ import NavigationBar from "@/components/NavigationBar.vue";
 
 .right{
   position: relative;
+  height: 700px;
   width: 73%;
   height: 700px;
   top: 8%;
@@ -227,11 +226,8 @@ import NavigationBar from "@/components/NavigationBar.vue";
   height: 100vh;
   background-image: url('../assets/bg.png'); /* 设置背景图片 */
   background-size: cover; /* 确保背景图片完全覆盖容器，可能会被裁切 */
-  background-position: center; /* 图片居中显示 */
-  background-repeat: no-repeat; /* 背景图片不重复 */
-  background-attachment: fixed; /* 背景固定，内容滚动 */
+  background-position: center; 
+  background-repeat: repeat-y; /* 背景图片不重复 */
+  background-attachment: fixed; 
 }
-
-
-
 </style>

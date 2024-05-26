@@ -35,9 +35,6 @@ export default ({
         isDistabled:true,
       };
     },
-    props:{
-
-    },
     methods: {
         addOption(index){
             this.optionCnt++;
