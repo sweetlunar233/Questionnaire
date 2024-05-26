@@ -42,26 +42,7 @@ const articles = ref([
         "createTime": "2023-09-03 11:55:30",
         "published": true
     },
-    {
-        "id": 5,
-        "title": "陕西旅游攻略",
-        "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
-        "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
-        "state": "草稿",
-        "categoryId": 2,
-        "createTime": "2023-09-03 11:55:30",
-        "published": true
-    },
-    {
-        "id": 5,
-        "title": "陕西旅游攻略",
-        "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
-        "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
-        "state": "草稿",
-        "categoryId": 2,
-        "createTime": "2023-09-03 11:55:30",
-        "published": true
-    },
+    
 ])
 
 //分页条数据模型
@@ -99,12 +80,6 @@ const onCurrentChange = (num) => {
                     </el-option>
                 </el-select>
             </el-form-item>
-            <!-- <el-form-item label="发布状态：">
-                <el-select placeholder="请选择">
-                    <el-option label="已发布" value="已发布"></el-option>
-                    <el-option label="草稿" value="草稿"></el-option>
-                </el-select>
-            </el-form-item> -->
             <el-form-item>
                 <el-button type="primary" class="searchbutton">搜索</el-button>
                 <el-button >重置</el-button>
@@ -116,7 +91,6 @@ const onCurrentChange = (num) => {
                     <!-- 上部分 -->
                     <div class="card-header">
                         <span style="margin-left: 5px">标题</span>
-                        <el-button type="text" :icon="View" style="margin-left: 20px">预览</el-button>
                         <span style="float: right" class="right">发布日期: YYYY-MM-DD</span>
                         <span style="float: right" class="right">答卷数量: XX</span>
                         <span style="float: right" class="right">是否发布: 是/否</span>
@@ -127,6 +101,7 @@ const onCurrentChange = (num) => {
                     <div class="card-footer">
                         <!-- 编辑按钮、发送按钮、分析按钮 -->
                         <el-button type="text" :icon="Edit">编辑问卷</el-button>
+                        <el-button type="text" :icon="View">预览</el-button>
                         <el-button type="text" :icon="Link">发送问卷</el-button>
                         <el-button type="text" :icon="Odometer">分析数据</el-button>
                         <!-- 发布按钮、删除按钮 -->
@@ -134,19 +109,8 @@ const onCurrentChange = (num) => {
                         <el-button type="danger" :icon="Delete" style="float: right" circle></el-button>
                     </div>
                 </div>
-                
-                <!-- <div slot="header" class="clearfix">
-                <span>{{ article.title }}</span>
-                <el-button :icon="Edit" type="primary" circle class="edit-button"></el-button>
-                <el-button :icon="Delete" type="danger" circle class="delete-button"></el-button>
-                </div>
-                <div>{{ article.categoryName }}</div>
-                <div>{{ article.createTime }}</div>
-                <div>{{ article.state }}</div> -->
             </el-card>
-            <!-- <template #empty>
-                <el-empty description="没有数据" />
-            </template> -->
+            
         </div>
         <!-- 分页条 -->
         <el-pagination :page-sizes="[3, 5, 10, 15]"
@@ -205,5 +169,4 @@ const onCurrentChange = (num) => {
 .searchform .searchbutton{
     margin-right: 5px;
 }
-
 </style>
