@@ -8,6 +8,8 @@
 </template>
   
 <script>
+import { ElMessage } from 'element-plus';
+
   export default {
     props: {
       initialText: {
@@ -28,9 +30,21 @@
       },
       finishEditing() {
         this.isEditing = false;
-        this.text = this.editableText;
-      }
-    }
+        if(this.editableText.length == 0){
+          this.editableText = this.text;
+          this.warning();
+        }
+        else{
+          this.text = this.editableText;
+        }
+      },
+      warning(){
+        ElMessage({
+          message:'长度不能为空',
+          type:'warning',
+        });
+      },
+    },
   }
 </script>
 
