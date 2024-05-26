@@ -190,7 +190,7 @@ import Score from '../components/Question/Score.vue'
 .back{
   position: relative;
   height: 1000px;
-  background-image: url('../assets/Questionnaire/QuestionnaireBackground.png'); /* 设置背景图片 */
+  background-image: url('../assets/bg.png'); /* 设置背景图片 */
   background-size: cover; /* 确保背景图片完全覆盖容器，可能会被裁切 */
   background-position: center; /* 图片居中显示 */
   background-repeat: no-repeat; /* 背景图片不重复 */

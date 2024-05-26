@@ -105,7 +105,7 @@ const navigation = ref(NavigationBar);
 <style scoped lang="scss">
 .layout-container {
     height: 100vh;
-    background: url("../assets/stacked-peaks-haikei.png");
+    background: url("../assets/bg.png");
 }
 
 .layout-container .el-aside {
@@ -154,7 +154,5 @@ const navigation = ref(NavigationBar);
     font-size: 14px;
     color: #666;
 }
-
-
  </style>
 
