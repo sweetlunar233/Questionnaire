@@ -76,6 +76,17 @@ const onCurrentChange = (num) => {
     pageNum.value = num
 }
 
+//编辑问卷传输问卷id的函数
+import { useRouter } from 'vue-router';
+const r = useRouter();
+const goToQuestionnaireDesign = (questionnaireId) => {
+  r.push({
+    path: '/questionnaireDesign',
+    query: {
+      questionnaireId: questionnaireId
+    }
+  });
+}
 
 </script>
 <template>
@@ -123,7 +134,7 @@ const onCurrentChange = (num) => {
                     <!-- 下部分 -->
                     <div class="card-footer">
                         <!-- 编辑按钮、发送按钮、分析按钮 -->
-                        <el-button type="text" :icon="Edit">编辑问卷</el-button>
+                        <el-button type="text" :icon="Edit" @click="goToQuestionnaireDesign(123)">编辑问卷</el-button>
                         <el-button type="text" :icon="Link">发送问卷</el-button>
                         <!-- <el-button type="text" :icon="Odometer">分析数据</el-button> -->
                         <!-- 发布按钮、删除按钮 -->

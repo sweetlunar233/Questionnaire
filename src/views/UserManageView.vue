@@ -11,6 +11,9 @@ import {
     ChatDotRound
 } from '@element-plus/icons-vue'
 import avatar from '@/assets/default.png'
+import { ref } from "vue";
+import NavigationBar from '../components/NavigationBar.vue';
+const navigation = ref(NavigationBar);
 
 </script>
 
@@ -18,10 +21,8 @@ import avatar from '@/assets/default.png'
     <!-- element-plus中的容器 -->
     <el-container class="layout-container">
         <!-- 头部区域 -->
-        <el-header>
+        <!-- <el-header>
             <div class="customerName"><strong>用户名！！！</strong></div>
-            <!-- 下拉菜单 -->
-            <!-- command: 条目被点击后会触发,在事件函数上可以声明一个参数,接收条目对应的指令 -->
             <el-dropdown placement="bottom-end">
                 <span class="el-dropdown__box">
                     <el-avatar :src=avatar />
@@ -38,7 +39,8 @@ import avatar from '@/assets/default.png'
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
-        </el-header>
+        </el-header> -->
+        <el-header><navigation/></el-header>
         <el-container>
             <!-- 左侧菜单 -->
             <el-aside width="250px">
@@ -100,7 +102,7 @@ import avatar from '@/assets/default.png'
     </el-container>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .layout-container {
     height: 100vh;
     background: url("../assets/stacked-peaks-haikei.png");
@@ -121,36 +123,29 @@ import avatar from '@/assets/default.png'
     border-right: none;
 }
 
-.layout-container .el-header {
-    background-color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-radius: 7px;
-}
+// .layout-container .el-header {
+    // background-color: #fff;
+    // display: flex;
+    // align-items: center;
+    // justify-content: space-between;
+    // border-radius: 7px;
+// }
 
-.layout-container .el-header .customerName {
-    font-size: 20px;
-    font-weight: 700;
-    color: #333;
-    margin-left: 30px;
-}
+// .layout-container .el-header .el-dropdown__box {
+//     display: flex;
+//     align-items: center;
+//     margin-right: 20px;
+// }
 
-.layout-container .el-header .el-dropdown__box {
-    display: flex;
-    align-items: center;
-    margin-right: 20px;
-}
+// .layout-container .el-header .el-dropdown__box .el-icon {
+//     color: #999;
+//     margin-left: 10px;
+// }
 
-.layout-container .el-header .el-dropdown__box .el-icon {
-    color: #999;
-    margin-left: 10px;
-}
-
-.layout-container .el-header .el-dropdown__box:active,
-.layout-container .el-header .el-dropdown__box:focus {
-    outline: none;
-}
+// .layout-container .el-header .el-dropdown__box:active,
+// .layout-container .el-header .el-dropdown__box:focus {
+//     outline: none;
+// }
 
 .layout-container .el-footer {
     display: flex;
