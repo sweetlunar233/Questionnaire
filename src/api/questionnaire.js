@@ -14,3 +14,9 @@ export function GetFilledQs(username){
     data.username = username;
     return get("questionnaire/GetFilledQs",data);
 }
+
+export function DeleteQs(id){
+    let data = {};
+    data.id = id;
+    return post("questionnaire/DeleteQs",id);
+}

@@ -88,6 +88,63 @@ const goToQuestionnaireDesign = (questionnaireId) => {
   });
 }
 
+
+
+
+
+
+
+
+const initDraft = (username) =>{
+    var promise = GetCreateQs(username,"Draft");
+    promise.then((result)=>{
+        var count=0;
+        result.data.forEach(element => {
+            articles.value.push(element);
+            count++;
+        });
+    })
+}
+initDraft("胡彦喆");
+
+import {ElMessageBox, ElMessage} from 'element-plus'
+const deleteQs = (id) =>{
+    ElMessageBox.confirm(
+        '你确认删除该问卷吗？',
+        '温馨提示',
+        {
+            confirmButtonText: '确认',
+            cancelButtonText: '取消',
+            type: 'warning',
+        }
+    )
+        .then(() => {
+            //用户点击了确认
+            var promise = DeleteQs(id);
+            ElMessage({
+                type: 'success',
+                message: '删除成功',
+            })
+            initDraft();
+        })
+        .catch(() => {
+            //用户点击了取消
+            ElMessage({
+                type: 'info',
+                message: '取消删除',
+            })
+        })
+}
+
+
+
+
+
+
+
+
+
+
 </script>
 <template>
     <el-card class="page-container">
@@ -139,22 +196,10 @@ const goToQuestionnaireDesign = (questionnaireId) => {
                         <!-- <el-button type="text" :icon="Odometer">分析数据</el-button> -->
                         <!-- 发布按钮、删除按钮 -->
                         <!-- <el-button type="primary" :icon="Check" style="float: right" circle></el-button> -->
-                        <el-button type="danger" :icon="Delete" style="float: right" circle></el-button>
+                        <el-button type="danger" :icon="Delete" style="float: right" circle @click="deleteQs(article.id)"></el-button>
                     </div>
                 </div>
-                
-                <!-- <div slot="header" class="clearfix">
-                <span>{{ article.title }}</span>
-                <el-button :icon="Edit" type="primary" circle class="edit-button"></el-button>
-                <el-button :icon="Delete" type="danger" circle class="delete-button"></el-button>
-                </div>
-                <div>{{ article.categoryName }}</div>
-                <div>{{ article.createTime }}</div>
-                <div>{{ article.state }}</div> -->
             </el-card>
-            <!-- <template #empty>
-                <el-empty description="没有数据" />
-            </template> -->
         </div>
         <!-- 分页条 -->
         <el-pagination :page-sizes="[3, 5, 10, 15]"
