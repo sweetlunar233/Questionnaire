@@ -66,9 +66,7 @@
 
         display: flex;
         // align-items: center;
-        border: red,1px solid;
         height: 90px;
-        // border: red 1px solid;
         // position: fixed; /* 将导航栏固定在页面上 */
         top: 0; /* 从页面顶部开始定位 */
         left: 0; /* 从页面左侧开始定位 */
@@ -80,6 +78,7 @@
         img {
             width: 60px;
             cursor: pointer;
+            margin-top: 5px;
             // border: red solid 1px;
         }
 
@@ -106,7 +105,7 @@
             cursor: pointer;
             display: flex;
             border: none;
-            font-size: 20px;
+            font-size: 18px;
             align-items: center;
             margin: 5px 0 10px 0;
             outline: none;

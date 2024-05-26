@@ -1,6 +1,60 @@
 <script setup>
     import { ref } from 'vue';
-    
+    import NavigationBar from '../components/NavigationBar.vue';
+    const navigation = ref(NavigationBar);
+
+    const questionnaires = ref([
+    {
+        "id": 5,
+        "title": "陕西旅游攻略",
+        "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
+        "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
+        "state": "草稿",
+        "categoryId": 2,
+        "createTime": "2023-09-03 11:55:30",
+        "updateTime": "2023-09-03 11:55:30"
+    },
+    {
+        "id": 5,
+        "title": "陕西旅游攻略",
+        "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
+        "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
+        "state": "草稿",
+        "categoryId": 2,
+        "createTime": "2023-09-03 11:55:30",
+        "updateTime": "2023-09-03 11:55:30"
+    },
+    {
+        "id": 5,
+        "title": "陕西旅游攻略",
+        "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
+        "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
+        "state": "草稿",
+        "categoryId": 2,
+        "createTime": "2023-09-03 11:55:30",
+        "updateTime": "2023-09-03 11:55:30"
+    },
+    {
+        "id": 5,
+        "title": "陕西旅游攻略",
+        "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
+        "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
+        "state": "草稿",
+        "categoryId": 2,
+        "createTime": "2023-09-03 11:55:30",
+        "updateTime": "2023-09-03 11:55:30"
+    },
+    {
+        "id": 5,
+        "title": "陕西旅游攻略",
+        "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
+        "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
+        "state": "草稿",
+        "categoryId": 2,
+        "createTime": "2023-09-03 11:55:30",
+        "updateTime": "2023-09-03 11:55:30"
+    },
+])
 </script>
 
 <template>
@@ -8,30 +62,12 @@
     <el-container class="layout-container">
         <!-- 头部区域 -->
         <el-header>
-            <div class="customerName"><strong>用户名！！！</strong></div>
-            <!-- 下拉菜单 -->
-            <!-- command: 条目被点击后会触发,在事件函数上可以声明一个参数,接收条目对应的指令 -->
-            <el-dropdown placement="bottom-end">
-                <span class="el-dropdown__box">
-                    <el-avatar :src=avatar />
-                    <el-icon>
-                        <CaretBottom />
-                    </el-icon>
-                </span>
-                <template #dropdown>
-                    <el-dropdown-menu>
-                        <el-dropdown-item :icon="User">基本资料</el-dropdown-item>
-                        <el-dropdown-item :icon="Crop">更换头像</el-dropdown-item>
-                        <el-dropdown-item :icon="EditPen">重置密码</el-dropdown-item>
-                        <el-dropdown-item :icon="SwitchButton">退出登录</el-dropdown-item>
-                    </el-dropdown-menu>
-                </template>
-            </el-dropdown>
+            <navigation/>
         </el-header>
         <el-main>
-            <el-row>
+            <el-row :gutter="20">
                 <!-- 循环遍历问卷数据，展示每一个问卷卡片 -->
-                <el-col :span="8" v-for="questionnaire in questionnaires" :key="questionnaire.id">
+                <el-col :span="8" v-for="(questionnaire,index) in questionnaires" :key="index">
                 <el-card class="questionnaire-card" shadow="hover">
                     <!-- 问卷卡片的内容 -->
                     <div class="questionnaire-info">
@@ -40,7 +76,7 @@
                     </div>
                     <!-- 编辑问卷按钮 -->
                     <div class="edit-button">
-                    <el-button type="primary" @click="editQuestionnaire(questionnaire.id)">编辑问卷</el-button>
+                    <el-button type="primary" >编辑问卷</el-button>
                     </div>
                 </el-card>
                 </el-col>
@@ -52,25 +88,8 @@
 <style scoped>
 .layout-container {
     height: 100vh;
-    background: url("../assets/stacked-peaks-haikei.png");
-}
-
-.layout-container .el-header .customerName {
-    font-size: 20px;
-    font-weight: 700;
-    color: #333;
-    margin-left: 30px;
-}
-
-.layout-container .el-header .el-dropdown__box {
-    display: flex;
-    align-items: center;
-    margin-right: 20px;
-}
-
-.layout-container .el-header .el-dropdown__box:active,
-.layout-container .el-header .el-dropdown__box:focus {
-    outline: none;
+    background: url("../assets/bg.png");
+    background-size: cover;
 }
  </style>
 

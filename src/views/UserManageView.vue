@@ -46,7 +46,7 @@ const navigation = ref(NavigationBar);
             <el-aside width="250px">
                 <div class="el-aside__logo"></div>
                 <!-- element-plus的菜单标签 -->
-                <el-menu active-text-color="#ffd04b" background-color="#232323"  text-color="#fff" router>
+                <el-menu active-text-color="#ffd04b" background-color="#fff"  text-color="rgb(80, 134, 233)"  router>
                     <el-sub-menu style="margin-top: 20px">
                         <template #title>
                             <el-icon>
@@ -106,10 +106,12 @@ const navigation = ref(NavigationBar);
 .layout-container {
     height: 100vh;
     background: url("../assets/bg.png");
+    background-size: cover;
 }
 
 .layout-container .el-aside {
-    background-color: #232323;
+    background-color: #fff;
+    border: #666 solid 1px;
     border-radius: 7px;
 }
 
