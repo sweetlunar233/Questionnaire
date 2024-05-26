@@ -12,33 +12,17 @@ import {
 } from '@element-plus/icons-vue'
 import avatar from '@/assets/default.png'
 
+import { ref } from "vue";
+import NavigationBar from "@/components/NavigationBar.vue";
+const navigation = ref(NavigationBar);
+
 </script>
 
 <template>
     <!-- element-plus中的容器 -->
     <el-container class="layout-container">
         <!-- 头部区域 -->
-        <el-header>
-            <div class="customerName"><strong>用户名！！！</strong></div>
-            <!-- 下拉菜单 -->
-            <!-- command: 条目被点击后会触发,在事件函数上可以声明一个参数,接收条目对应的指令 -->
-            <el-dropdown placement="bottom-end">
-                <span class="el-dropdown__box">
-                    <el-avatar :src=avatar />
-                    <el-icon>
-                        <CaretBottom />
-                    </el-icon>
-                </span>
-                <template #dropdown>
-                    <el-dropdown-menu>
-                        <el-dropdown-item :icon="User">基本资料</el-dropdown-item>
-                        <el-dropdown-item :icon="Crop">更换头像</el-dropdown-item>
-                        <el-dropdown-item :icon="EditPen">重置密码</el-dropdown-item>
-                        <el-dropdown-item :icon="SwitchButton">退出登录</el-dropdown-item>
-                    </el-dropdown-menu>
-                </template>
-            </el-dropdown>
-        </el-header>
+        <el-header><navigation/></el-header>
         <el-container>
             <!-- 左侧菜单 -->
             <el-aside width="250px">
@@ -103,7 +87,7 @@ import avatar from '@/assets/default.png'
 <style scoped>
 .layout-container {
     height: 100vh;
-    background: url("../assets/stacked-peaks-haikei.png");
+    background: url("../assets/bg.png");
 }
 
 .layout-container .el-aside {
@@ -122,7 +106,7 @@ import avatar from '@/assets/default.png'
 }
 
 .layout-container .el-header {
-    background-color: #fff;
+    /* background-color: #fff; */
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -159,7 +143,5 @@ import avatar from '@/assets/default.png'
     font-size: 14px;
     color: #666;
 }
-
-
  </style>
 
