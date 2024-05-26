@@ -113,6 +113,7 @@ const navigation = ref(NavigationBar);
     background-color: #fff;
     border: #666 solid 1px;
     border-radius: 7px;
+    margin-bottom: 30px;
 }
 
 .layout-container .el-aside__logo {
@@ -150,11 +151,13 @@ const navigation = ref(NavigationBar);
 // }
 
 .layout-container .el-footer {
+    height: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 14px;
     color: #666;
+    margin-bottom: 10px;
 }
  </style>
 
