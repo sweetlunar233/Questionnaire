@@ -47,7 +47,7 @@
 <style lang="scss" scoped>
     .all-container {
         height: 100vh;
-        background: url("../assets/stacked-peaks-haikei.png");
+        background: url("../assets/bg.png");
         // background-size: cover;
 
         .aside {

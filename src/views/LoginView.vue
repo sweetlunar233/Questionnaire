@@ -77,7 +77,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background: url("../assets/stacked-peaks-haikei.png") no-repeat;
+        background: url("../assets/bg.png") no-repeat;
         // background: #9bd3ef;
         // background-size: cover;
         

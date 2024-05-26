@@ -31,9 +31,9 @@ import avatar from '@/assets/default.png'
                 </span>
                 <template #dropdown>
                     <el-dropdown-menu>
-                        <el-dropdown-item :icon="User">基本资料</el-dropdown-item>
+                        <!-- <el-dropdown-item :icon="User">基本资料</el-dropdown-item>
                         <el-dropdown-item :icon="Crop">更换头像</el-dropdown-item>
-                        <el-dropdown-item :icon="EditPen">重置密码</el-dropdown-item>
+                        <el-dropdown-item :icon="EditPen">重置密码</el-dropdown-item> -->
                         <el-dropdown-item :icon="SwitchButton">退出登录</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
@@ -103,7 +103,7 @@ import avatar from '@/assets/default.png'
 <style scoped>
 .layout-container {
     height: 100vh;
-    background: url("../assets/stacked-peaks-haikei.png");
+    background: url("../assets/bg.png");
 }
 
 .layout-container .el-aside {

@@ -46,16 +46,16 @@
             登录 / 注册
         </button> -->
         <el-dropdown>
-            <span class="el-dropdown-link">
-                账号名
-                <el-icon class="el-icon--right">
-                    <arrow-down />
-                </el-icon>
+            <span class="username">
+            用户名
+            <el-icon class="el-icon--right">
+                <arrow-down />
+            </el-icon>
             </span>
             <template #dropdown>
-                <el-dropdown-menu>
-                    <el-dropdown-item>退出登录</el-dropdown-item>
-                </el-dropdown-menu>
+            <el-dropdown-menu class="dropdown_menu">
+                <el-dropdown-item>退出登录</el-dropdown-item>
+            </el-dropdown-menu>
             </template>
         </el-dropdown>
     </el-header>
@@ -66,6 +66,7 @@
         display: flex;
         // align-items: center;
         height: 90px;
+        // border: red 1px solid;
         position: fixed; /* 将导航栏固定在页面上 */
         top: 0; /* 从页面顶部开始定位 */
         left: 0; /* 从页面左侧开始定位 */
@@ -98,10 +99,21 @@
             margin: 5px 10px 0 0px;
         }
 
-        .el-dropdown-link {
+        .username {
             cursor: pointer;
-            // color: var(--el-color-primary);
-            // display: flex;
+            display: flex;
+            border: none;
+            font-size: 20px;
+            align-items: center;
+            margin: 0 0 45px 0;
+            outline: none;
+        }
+
+        .dropdown_menu {
+            position: absolute; /* 设置子元素为绝对定位 */
+            top: 100%; /* 设置子元素距离父元素底部的距离 */
+            left: 0; /* 设置子元素左侧与父元素左侧对齐 */
+            z-index: 999; /* 设置子元素的层级 */
         }
     }
 
