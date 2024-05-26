@@ -47,7 +47,21 @@
       <editable-text initial-text="问卷标题" class="title"></editable-text>
       <van-divider  :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"></van-divider>
 
-      <div v-for="index in questionCnt" @mouseover="questionList[index-1].showToolbar = true" @mouseleave="questionList[index-1].showToolbar = false">
+      <!-- @dragstart: 拖动开始时触发，记录被拖动的题目索引。
+           @dragover.prevent: 阻止默认行为，使得元素可以被放置。
+           @drop: 放置元素时触发，处理元素放置后的逻辑。
+           @dragenter.prevent: 进入另一个可放置元素时触发，这里用来调整元素位置。 -->
+
+      <div v-for="index in questionCnt" 
+      :key="question.id"
+      @mouseover="questionList[index-1].showToolbar = true" 
+      @mouseleave="questionList[index-1].showToolbar = false"
+      draggable="true"
+      @dragstart="dragStart(index-1)"
+      @dragover.prevent
+      @drop="drop(index-1)"
+      @dragenter.prevent="dragEnter(index-1)"
+      >
 
         <!-- TieZhu:“是否必填”功能 -->
         <el-icon color="#c45656" style="position: absolute; left: 1%;" v-if="questionList[index-1].isNecessary==true"><StarFilled/>&ensp;</el-icon>
@@ -104,6 +118,7 @@ import Score from '../components/Question/Score.vue'
       input:'',
       questionCnt: 0,
       questionList: [],
+      draggedIndex:-1,
     }
    },
    methods: {
@@ -142,6 +157,20 @@ import Score from '../components/Question/Score.vue'
       this.questionList.splice(index+1,0,{"type":type,"showToolbar":false,"isNecessary":this.questionList[index].isNecessary});
       this.questionCnt++;
     },
+    dragStart(index){
+      this.draggedIndex = index;
+    },
+    dragEnter(index){
+      if(index != this.draggedIndex){
+        const itemToMove = this.questionList[this.draggedIndex];
+        this.questionList.splice(this.draggedIndex,1)
+        this.questionList.splice(index,0,itemToMove);
+        this.draggedIndex = index;
+      }
+    },
+    drop(index){
+      this.draggedIndex = -1;
+    }
    },
    components:{
     EditableText,
