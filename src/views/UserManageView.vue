@@ -20,26 +20,6 @@ const navigation = ref(NavigationBar);
 <template>
     <!-- element-plus中的容器 -->
     <el-container class="layout-container">
-        <!-- 头部区域 -->
-        <!-- <el-header>
-            <div class="customerName"><strong>用户名！！！</strong></div>
-            <el-dropdown placement="bottom-end">
-                <span class="el-dropdown__box">
-                    <el-avatar :src=avatar />
-                    <el-icon>
-                        <CaretBottom />
-                    </el-icon>
-                </span>
-                <template #dropdown>
-                    <el-dropdown-menu>
-                        <el-dropdown-item :icon="User">基本资料</el-dropdown-item>
-                        <el-dropdown-item :icon="Crop">更换头像</el-dropdown-item>
-                        <el-dropdown-item :icon="EditPen">重置密码</el-dropdown-item>
-                        <el-dropdown-item :icon="SwitchButton">退出登录</el-dropdown-item>
-                    </el-dropdown-menu>
-                </template>
-            </el-dropdown>
-        </el-header> -->
         <el-header><navigation/></el-header>
         <el-container>
             <!-- 左侧菜单 -->
@@ -124,30 +104,6 @@ const navigation = ref(NavigationBar);
 .layout-container .el-aside .el-menu {
     border-right: none;
 }
-
-// .layout-container .el-header {
-    // background-color: #fff;
-    // display: flex;
-    // align-items: center;
-    // justify-content: space-between;
-    // border-radius: 7px;
-// }
-
-// .layout-container .el-header .el-dropdown__box {
-//     display: flex;
-//     align-items: center;
-//     margin-right: 20px;
-// }
-
-// .layout-container .el-header .el-dropdown__box .el-icon {
-//     color: #999;
-//     margin-left: 10px;
-// }
-
-// .layout-container .el-header .el-dropdown__box:active,
-// .layout-container .el-header .el-dropdown__box:focus {
-//     outline: none;
-// }
 
 .layout-container .el-footer {
     display: flex;
