@@ -59,6 +59,91 @@ const onCurrentChange = (num) => {
     pageNum.value = num
 }
 
+//编辑问卷传输问卷id的函数
+import { useRouter } from 'vue-router';
+const r = useRouter();
+const goToQuestionnaireDesign = (questionnaireId) => {
+  r.push({
+    path: '/questionnaireDesign',
+    query: {
+      questionnaireId: questionnaireId
+    }
+  });
+}
+const goToQuestionnaireFill = (questionnaireId) => {
+  r.push({
+    path: '/questionnaireFill',
+    query: {
+      questionnaireId: questionnaireId
+    }
+  });
+}
+
+
+
+
+
+
+
+import {ElMessageBox, ElMessage} from 'element-plus'
+import {GetCreatedQs, DeleteQs, UpdateIsOpening} from '../../api/questionnaire.js'
+
+const initDraft = (username) =>{
+    var promise = GetCreatedQs(username,"Released");
+    promise.then((result)=>{
+        var count=0;
+        result.data.forEach(element => {
+            articles.value.push(element);
+            count++;
+        });
+        total.value = count;
+    })
+}
+initDraft("胡彦喆");
+
+
+const deleteQs = (id) =>{
+    ElMessageBox.confirm(
+        '你确认删除该问卷吗？',
+        '温馨提示',
+        {
+            confirmButtonText: '确认',
+            cancelButtonText: '取消',
+            type: 'warning',
+        }
+    )
+        .then(() => {
+            //用户点击了确认
+            var promise = DeleteQs(id);
+            ElMessage({
+                type: 'success',
+                message: '删除成功',
+            })
+            initDraft();
+        })
+        .catch(() => {
+            //用户点击了取消
+            ElMessage({
+                type: 'info',
+                message: '取消删除',
+            })
+        })
+}
+
+const updateIsOpening = (id) =>{
+    var promise = UpdateIsOpening(id);
+}
+
+
+
+
+
+
+
+
+
+
+
 
 </script>
 <template>
@@ -67,7 +152,7 @@ const onCurrentChange = (num) => {
             <div class="header">
                 <span>问卷管理</span>
                 <div class="extra">
-                    <el-button type="primary">创建问卷</el-button>
+                    <el-button type="primary" @click="goToQuestionnaireDesign(-1)">创建问卷</el-button>
                 </div>
             </div>
         </template>
@@ -90,23 +175,23 @@ const onCurrentChange = (num) => {
                 <div>
                     <!-- 上部分 -->
                     <div class="card-header">
-                        <span style="margin-left: 5px">标题</span>
-                        <span style="float: right" class="right">发布日期: YYYY-MM-DD</span>
-                        <span style="float: right" class="right">答卷数量: XX</span>
-                        <span style="float: right" class="right">是否发布: 是/否</span>
-                        <span style="float: right" class="right">ID: XXX</span>
+                        <span style="margin-left: 5px">{{ article.Title }}</span>
+                        <span style="float: right" class="right">发布日期: {{ article.PublishDate }}</span>
+                        <span style="float: right" class="right" v-if="article.IsOpening">已发布</span>
+                        <span style="float: right" class="right" v-else>已关闭</span>
+                        <span style="float: right" class="right">ID: {{article.SurveyID}}</span>
                     </div>
 
                     <!-- 下部分 -->
                     <div class="card-footer">
                         <!-- 编辑按钮、发送按钮、分析按钮 -->
-                        <el-button type="text" :icon="Edit">编辑问卷</el-button>
-                        <el-button type="text" :icon="View">预览</el-button>
+                        <el-button type="text" :icon="Edit" @click="goToQuestionnaireDesign(article.SurveyID)" :disabled="article.IsOpening">编辑问卷</el-button>
+                        <el-button type="text" :icon="View" @click="goToQuestionnaireFill(article.SurveyID)">预览</el-button>
                         <el-button type="text" :icon="Link">发送问卷</el-button>
                         <el-button type="text" :icon="Odometer">分析数据</el-button>
                         <!-- 发布按钮、删除按钮 -->
-                        <el-switch v-model="article.published" style="float: right; margin-left: 10px"/>
-                        <el-button type="danger" :icon="Delete" style="float: right" circle></el-button>
+                        <el-switch v-model="article.IsOpening" style="float: right; margin-left: 10px" @change="updateIsOpening(article.SurveyID)"/>
+                        <el-button type="danger" :icon="Delete" style="float: right" circle @click="deleteQs(article.SurveyID)"></el-button>
                     </div>
                 </div>
             </el-card>

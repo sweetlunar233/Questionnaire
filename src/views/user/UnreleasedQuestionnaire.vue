@@ -103,6 +103,7 @@ const initDraft = (username) =>{
             articles.value.push(element);
             count++;
         });
+        total.value = count;
     })
 }
 initDraft("胡彦喆");
@@ -152,7 +153,7 @@ const deleteQs = (id) =>{
             <div class="header">
                 <span>问卷管理</span>
                 <div class="extra">
-                    <el-button type="primary">创建问卷</el-button>
+                    <el-button type="primary" @click="goToQuestionnaireDesign(-1)">创建问卷</el-button>
                 </div>
             </div>
         </template>
@@ -181,22 +182,22 @@ const deleteQs = (id) =>{
                 <div>
                     <!-- 上部分 -->
                     <div class="card-header">
-                        <span style="margin-left: 5px">标题</span>
-                        <span style="float: right" class="right">创建日期: YYYY-MM-DD</span>
+                        <span style="margin-left: 5px">{{article.Title}}</span>
+                        <span style="float: right" class="right">创建日期: {{article.PublishDate}}</span>
                         <!-- <span style="float: right" class="right">答卷数量: XX</span>
                         <span style="float: right" class="right">是否发布: 是/否</span> -->
-                        <span style="float: right" class="right">ID: XXX</span>
+                        <span style="float: right" class="right">ID: {{article.SurveyID}}</span>
                     </div>
 
                     <!-- 下部分 -->
                     <div class="card-footer">
                         <!-- 编辑按钮、发送按钮、分析按钮 -->
-                        <el-button type="text" :icon="Edit" @click="goToQuestionnaireDesign(123)">编辑问卷</el-button>
+                        <el-button type="text" :icon="Edit" @click="goToQuestionnaireDesign(article.SurveyID)">编辑问卷</el-button>
                         <el-button type="text" :icon="Link">发送问卷</el-button>
                         <!-- <el-button type="text" :icon="Odometer">分析数据</el-button> -->
                         <!-- 发布按钮、删除按钮 -->
                         <!-- <el-button type="primary" :icon="Check" style="float: right" circle></el-button> -->
-                        <el-button type="danger" :icon="Delete" style="float: right" circle @click="deleteQs(article.id)"></el-button>
+                        <el-button type="danger" :icon="Delete" style="float: right" circle @click="deleteQs(article.SurveyID)"></el-button>
                     </div>
                 </div>
             </el-card>

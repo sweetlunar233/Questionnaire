@@ -20,3 +20,9 @@ export function DeleteQs(id){
     data.id = id;
     return post("questionnaire/DeleteQs",id);
 }
+
+export function UpdateIsOpening(id){
+    let data = {};
+    data.id = id;
+    return post("questionnaire/UpdateIsOpening",id);
+}
