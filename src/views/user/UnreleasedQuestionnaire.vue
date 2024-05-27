@@ -93,10 +93,10 @@ const goToQuestionnaireDesign = (questionnaireId) => {
 
 
 
-
+import {GetCreatedQs, DeleteQs} from '../../api/questionnaire.js'
 
 const initDraft = (username) =>{
-    var promise = GetCreateQs(username,"Draft");
+    var promise = GetCreatedQs(username,"Draft");
     promise.then((result)=>{
         var count=0;
         result.data.forEach(element => {
