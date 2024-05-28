@@ -29,7 +29,7 @@ const categorys = ref([
 const categoryId = ref('')
 
 //文章列表数据模型
-const articles = ref([
+const questionnaires = ref([
     {
         "id": 5,
         "title": "陕西旅游攻略",
@@ -67,27 +67,23 @@ const pageNum = ref(1)//当前页
 const total = ref(20)//总条数
 const pageSize = ref(3)//每页条数
 
+total.value = questionnaires.value.length
+
 //当每页条数发生了变化，调用此函数
 const onSizeChange = (size) => {
-    pageSize.value = size
+    pageSize.value = size;
+    initCreated("胡彦喆");
 }
 //当前页码发生变化，调用此函数
 const onCurrentChange = (num) => {
-    pageNum.value = num
+    pageNum.value = num;
+    initCreated("胡彦喆");
 }
 
 
 //编辑问卷传输问卷id的函数
 import { useRouter } from 'vue-router';
 const r = useRouter();
-const goToQuestionnaireDesign = (questionnaireId) => {
-  r.push({
-    path: '/questionnaireDesign',
-    query: {
-      questionnaireId: questionnaireId
-    }
-  });
-}
 const goToQuestionnaireFill = (questionnaireId) => {
   r.push({
     path: '/questionnaireFill',
@@ -107,15 +103,31 @@ const goToQuestionnaireFill = (questionnaireId) => {
 
 
 import {ElMessageBox, ElMessage} from 'element-plus'
-import {GetCreatedQs, DeleteQs} from '../../api/questionnaire.js'
+import {GetFilledQs, DeleteQs} from '../../api/questionnaire.js'
 
 const initFilled = (username) =>{
-    var promise = GetCreatedQs(username,"Released");
+    var promise = GetFilledQs(username,"Released");
     promise.then((result)=>{
-        var count=0;
+        var categoryName = "";
+        if(categoryId.value != ""){
+            categorys.value.forEach(category => {
+                if (category.id === categoryId) {
+                    categoryName = category.categoryName;
+                }
+            });
+        }
+        var count = 0;
+        var i = 1;
         result.data.forEach(element => {
-            articles.value.push(element);
+            if(i > pageSize.value * (pageNum.value - 1))
+            {
+                if(i <= pageSize.value * pageNum.value){
+                    if(categoryName != "" && element.Category != categoryName) return;
+                    questionnaires.value.push(element);
+                }
+            }
             count++;
+            i++;
         });
         total.value = count;
     })
@@ -140,7 +152,7 @@ const deleteQs = (id) =>{
                 type: 'success',
                 message: '删除成功',
             })
-            initDraft();
+            initDraft("胡彦喆");
         })
         .catch(() => {
             //用户点击了取消
@@ -188,19 +200,19 @@ const deleteQs = (id) =>{
             </el-form-item>
         </el-form>
         <div class="card-container">
-            <el-card v-for="(article, index) in articles" :key="index" class="article-card" style="margin-bottom: 20px;">
+            <el-card v-for="(questionnaire, index) in questionnaires" :key="index" class="article-card" style="margin-bottom: 20px;">
                 <div>
                     <!-- 上部分 -->
                     <div class="card-header">
-                        <span style="margin-left: 5px">{{ article.Title }}</span>
-                        <span style="float: right" class="right">填写日期: {{ article.PublishDate }}</span>
-                        <span style="float: right" class="right">ID: {{article.SurveyID}}</span>
+                        <span style="margin-left: 5px">{{ questionnaire.Title }}</span>
+                        <span style="float: right" class="right">填写日期: {{ questionnaire.PublishDate }}</span>
+                        <span style="float: right" class="right">ID: {{questionnaire.SurveyID}}</span>
                     </div>
 
                     <!-- 下部分 -->
                     <div class="card-footer">
-                        <el-button type="text" :icon="Edit" @click="goToQuestionnaireFill(article.SurveyID)">查看填写</el-button>
-                        <el-button type="danger" :icon="Delete" style="float: right" circle @click="deleteQs(article.SurveyID)"></el-button>
+                        <el-button type="text" :icon="Edit" @click="goToQuestionnaireFill(questionnaire.SurveyID)">查看填写</el-button>
+                        <el-button type="danger" :icon="Delete" style="float: right" circle @click="deleteQs(questionnaire.SurveyID)"></el-button>
                     </div>
                 </div>
             </el-card>

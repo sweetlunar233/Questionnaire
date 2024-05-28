@@ -31,7 +31,7 @@ const categorys = ref([
 const categoryId = ref('')
 
 //文章列表数据模型
-const articles = ref([
+const questionnaires = ref([
     {
         "id": 5,
         "title": "陕西旅游攻略",
@@ -50,13 +50,17 @@ const pageNum = ref(1)//当前页
 const total = ref(20)//总条数
 const pageSize = ref(3)//每页条数
 
+total.value = questionnaires.value.length
+
 //当每页条数发生了变化，调用此函数
 const onSizeChange = (size) => {
-    pageSize.value = size
+    pageSize.value = size;
+    initCreated("胡彦喆");
 }
 //当前页码发生变化，调用此函数
 const onCurrentChange = (num) => {
-    pageNum.value = num
+    pageNum.value = num;
+    initCreated("胡彦喆");
 }
 
 //编辑问卷传输问卷id的函数
@@ -85,16 +89,33 @@ const goToQuestionnaireFill = (questionnaireId) => {
 
 
 
+
 import {ElMessageBox, ElMessage} from 'element-plus'
 import {GetCreatedQs, DeleteQs, UpdateIsOpening} from '../../api/questionnaire.js'
 
 const initCreated = (username) =>{
     var promise = GetCreatedQs(username,"Released");
     promise.then((result)=>{
-        var count=0;
+        var categoryName = "";
+        if(categoryId.value != ""){
+            categorys.value.forEach(category => {
+                if (category.id === categoryId) {
+                    categoryName = category.categoryName;
+                }
+            });
+        }
+        var count = 0;
+        var i = 1;
         result.data.forEach(element => {
-            articles.value.push(element);
+            if(i > pageSize.value * (pageNum.value - 1))
+            {
+                if(i <= pageSize.value * pageNum.value){
+                    if(categoryName != "" && element.Category != categoryName) return;
+                    questionnaires.value.push(element);
+                }
+            }
             count++;
+            i++;
         });
         total.value = count;
     })
@@ -167,31 +188,31 @@ const updateIsOpening = (id) =>{
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" class="searchbutton">搜索</el-button>
-                <el-button >重置</el-button>
+                <el-button @click="categoryId=''">重置</el-button>
             </el-form-item>
         </el-form>
         <div class="card-container">
-            <el-card v-for="(article, index) in articles" :key="index" class="article-card" style="margin-bottom: 20px;">
+            <el-card v-for="(questionnaire, index) in questionnaires" :key="index" class="article-card" style="margin-bottom: 20px;">
                 <div>
                     <!-- 上部分 -->
                     <div class="card-header">
-                        <span style="margin-left: 5px">{{ article.Title }}</span>
-                        <span style="float: right" class="right">发布日期: {{ article.PublishDate }}</span>
-                        <span style="float: right" class="right" v-if="article.IsOpening">已发布</span>
+                        <span style="margin-left: 5px">{{ questionnaire.Title }}</span>
+                        <span style="float: right" class="right">发布日期: {{ questionnaire.PublishDate }}</span>
+                        <span style="float: right" class="right" v-if="questionnaire.IsOpening">已发布</span>
                         <span style="float: right" class="right" v-else>已关闭</span>
-                        <span style="float: right" class="right">ID: {{article.SurveyID}}</span>
+                        <span style="float: right" class="right">ID: {{questionnaire.SurveyID}}</span>
                     </div>
 
                     <!-- 下部分 -->
                     <div class="card-footer">
                         <!-- 编辑按钮、发送按钮、分析按钮 -->
-                        <el-button type="text" :icon="Edit" @click="goToQuestionnaireDesign(article.SurveyID)" :disabled="article.IsOpening">编辑问卷</el-button>
-                        <el-button type="text" :icon="View" @click="goToQuestionnaireFill(article.SurveyID)">预览</el-button>
+                        <el-button type="text" :icon="Edit" @click="goToQuestionnaireDesign(questionnaire.SurveyID)" :disabled="questionnaire.IsOpening">编辑问卷</el-button>
+                        <el-button type="text" :icon="View" @click="goToQuestionnaireFill(questionnaire.SurveyID)">预览</el-button>
                         <el-button type="text" :icon="Link">发送问卷</el-button>
                         <el-button type="text" :icon="Odometer">分析数据</el-button>
                         <!-- 发布按钮、删除按钮 -->
-                        <el-switch v-model="article.IsOpening" style="float: right; margin-left: 10px" @change="updateIsOpening(article.SurveyID)"/>
-                        <el-button type="danger" :icon="Delete" style="float: right" circle @click="deleteQs(article.SurveyID)"></el-button>
+                        <el-switch v-model="questionnaire.IsOpening" style="float: right; margin-left: 10px" @change="updateIsOpening(questionnaire.SurveyID)"/>
+                        <el-button type="danger" :icon="Delete" style="float: right" circle @click="deleteQs(questionnaire.SurveyID)"></el-button>
                     </div>
                 </div>
             </el-card>

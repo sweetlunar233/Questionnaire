@@ -64,6 +64,8 @@ const pageNum = ref(1)//当前页
 const total = ref(20)//总条数
 const pageSize = ref(3)//每页条数
 
+total.value = questionnaires.value.length
+
 //当每页条数发生了变化，调用此函数
 const onSizeChange = (size) => {
     pageSize.value = size
@@ -103,18 +105,25 @@ const goToQuestionnaireFill = (questionnaireId) => {
 
 import {GetAllReleasedQs} from '../../api/questionnaire.js'
 
-const initAllReleased = (username) =>{
+const initAllReleased = () =>{
     var promise = GetAllReleasedQs();
     promise.then((result)=>{
-        var count=0;
+        var count = 0;
+        var i = 1;
         result.data.forEach(element => {
-            questionnaires.value.push(element);
+            if(i > pageSize.value * (pageNum.value - 1))
+            {
+                if(i <= pageSize.value * pageNum.value){
+                    questionnaires.value.push(element);
+                }
+            }
             count++;
+            i++;
         });
         total.value = count;
     })
 }
-initAllReleased("胡彦喆");
+initAllReleased();
 
 
 
