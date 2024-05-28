@@ -1,12 +1,9 @@
 <!-- 问卷设计页面 -->
 <template>
-  <el-container class="back">
-    <el-header>
+  <navigation-bar style="position: fixed;"/>
+  <div class="back">
 
-    </el-header>
-    <el-container>
-      <el-aside>
-        <div class="left">
+    <div class="left">
       <div class="title">题型</div>
       <van-divider  :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"></van-divider>
 
@@ -44,8 +41,6 @@
         </el-button>
       </div>
         </div>
-      </el-aside>
-      <el-main>
         <div class="right">
       <editable-text initial-text="问卷标题" class="title"></editable-text>
       <van-divider  :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"></van-divider>
@@ -102,18 +97,11 @@
         </div>
 
       </div>
-        </div>
-      </el-main>
-    </el-container>
-  </el-container>
-  <div >
-
-
-
-    <!-- TieZhu:问卷预览 -->
-
+      
+    </div>
 
   </div>
+  
 </template>
 
 <script>
@@ -122,6 +110,7 @@ import SingleChoice from '../components/Question/SingleChoice.vue'
 import MultipleChoice from '../components/Question/MultipleChoice.vue'
 import FillBlank from '../components/Question/FillBlank.vue'
 import Score from '../components/Question/Score.vue'
+import NavigationBar from "@/components/NavigationBar.vue";
  
  export default({
    data(){
@@ -188,7 +177,8 @@ import Score from '../components/Question/Score.vue'
     SingleChoice,
     MultipleChoice,
     FillBlank,
-    Score
+    Score,
+    NavigationBar,
    }
  })
 </script>
@@ -198,6 +188,7 @@ import Score from '../components/Question/Score.vue'
 
 .left{
   position: fixed;
+  top: 5%;
   margin: 2%;
   border-radius: 5px;
   border: 2px;
@@ -212,7 +203,8 @@ import Score from '../components/Question/Score.vue'
   position: relative;
   height: 700px;
   width: 73%;
-  top: 2%;
+  height: 700px;
+  top: 8%;
   left: 20%;
   border-radius: 5px;
   border: 2px;

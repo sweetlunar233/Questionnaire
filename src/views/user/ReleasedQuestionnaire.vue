@@ -4,11 +4,13 @@ import {
     Delete,
     Link,
     Odometer,
-    Check
+    Open,
+    View
 } from '@element-plus/icons-vue'
 
 import { ref } from 'vue'
 
+const value1 = ref(true)
 //文章分类数据模型
 const categorys = ref([
     {
@@ -38,28 +40,9 @@ const articles = ref([
         "state": "草稿",
         "categoryId": 2,
         "createTime": "2023-09-03 11:55:30",
-        "updateTime": "2023-09-03 11:55:30"
+        "published": true
     },
-    {
-        "id": 5,
-        "title": "陕西旅游攻略",
-        "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
-        "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
-        "state": "草稿",
-        "categoryId": 2,
-        "createTime": "2023-09-03 11:55:30",
-        "updateTime": "2023-09-03 11:55:30"
-    },
-    {
-        "id": 5,
-        "title": "陕西旅游攻略",
-        "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
-        "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
-        "state": "草稿",
-        "categoryId": 2,
-        "createTime": "2023-09-03 11:55:30",
-        "updateTime": "2023-09-03 11:55:30"
-    },
+    
 ])
 
 //分页条数据模型
@@ -76,33 +59,112 @@ const onCurrentChange = (num) => {
     pageNum.value = num
 }
 
+//编辑问卷传输问卷id的函数
+import { useRouter } from 'vue-router';
+const r = useRouter();
+const goToQuestionnaireDesign = (questionnaireId) => {
+  r.push({
+    path: '/questionnaireDesign',
+    query: {
+      questionnaireId: questionnaireId
+    }
+  });
+}
+const goToQuestionnaireFill = (questionnaireId) => {
+  r.push({
+    path: '/questionnaireFill',
+    query: {
+      questionnaireId: questionnaireId
+    }
+  });
+}
+
+
+
+
+
+
+
+import {ElMessageBox, ElMessage} from 'element-plus'
+import {GetCreatedQs, DeleteQs, UpdateIsOpening} from '../../api/questionnaire.js'
+
+const initDraft = (username) =>{
+    var promise = GetCreatedQs(username,"Released");
+    promise.then((result)=>{
+        var count=0;
+        result.data.forEach(element => {
+            articles.value.push(element);
+            count++;
+        });
+        total.value = count;
+    })
+}
+initDraft("胡彦喆");
+
+
+const deleteQs = (id) =>{
+    ElMessageBox.confirm(
+        '你确认删除该问卷吗？',
+        '温馨提示',
+        {
+            confirmButtonText: '确认',
+            cancelButtonText: '取消',
+            type: 'warning',
+        }
+    )
+        .then(() => {
+            //用户点击了确认
+            var promise = DeleteQs(id);
+            ElMessage({
+                type: 'success',
+                message: '删除成功',
+            })
+            initDraft();
+        })
+        .catch(() => {
+            //用户点击了取消
+            ElMessage({
+                type: 'info',
+                message: '取消删除',
+            })
+        })
+}
+
+const updateIsOpening = (id) =>{
+    var promise = UpdateIsOpening(id);
+}
+
+
+
+
+
+
+
+
+
+
+
 
 </script>
 <template>
     <el-card class="page-container">
         <template #header>
             <div class="header">
-                <span>已填写问卷</span>
-                <!-- <div class="extra">
-                    <el-button type="primary">添加文章</el-button>
-                </div> -->
+                <span>问卷管理</span>
+                <div class="extra">
+                    <el-button type="primary" @click="goToQuestionnaireDesign(-1)">创建问卷</el-button>
+                </div>
             </div>
         </template>
         <!-- 搜索表单 -->
         <el-form inline class="searchform">
             <div style="margin-right: auto"></div>
-            <el-form-item label="问卷分类：">
+            <el-form-item label="文章分类：">
                 <el-select placeholder="请选择" style="width: 150px" v-model="categoryId">
                     <el-option v-for="c in categorys" :key="c.id" :label="c.categoryName" :value="c.id">
                     </el-option>
                 </el-select>
             </el-form-item>
-            <!-- <el-form-item label="发布状态：">
-                <el-select placeholder="请选择">
-                    <el-option label="已发布" value="已发布"></el-option>
-                    <el-option label="草稿" value="草稿"></el-option>
-                </el-select>
-            </el-form-item> -->
             <el-form-item>
                 <el-button type="primary" class="searchbutton">搜索</el-button>
                 <el-button >重置</el-button>
@@ -113,36 +175,27 @@ const onCurrentChange = (num) => {
                 <div>
                     <!-- 上部分 -->
                     <div class="card-header">
-                        <span style="margin-left: 5px">标题</span>
-                        <span style="float: right" class="right">填写日期: YYYY-MM-DD</span>
-                        <span style="float: right" class="right">ID: XXX</span>
+                        <span style="margin-left: 5px">{{ article.Title }}</span>
+                        <span style="float: right" class="right">发布日期: {{ article.PublishDate }}</span>
+                        <span style="float: right" class="right" v-if="article.IsOpening">已发布</span>
+                        <span style="float: right" class="right" v-else>已关闭</span>
+                        <span style="float: right" class="right">ID: {{article.SurveyID}}</span>
                     </div>
 
                     <!-- 下部分 -->
                     <div class="card-footer">
                         <!-- 编辑按钮、发送按钮、分析按钮 -->
-                        <!-- <el-button type="text" :icon="Edit">编辑问卷</el-button>
+                        <el-button type="text" :icon="Edit" @click="goToQuestionnaireDesign(article.SurveyID)" :disabled="article.IsOpening">编辑问卷</el-button>
+                        <el-button type="text" :icon="View" @click="goToQuestionnaireFill(article.SurveyID)">预览</el-button>
                         <el-button type="text" :icon="Link">发送问卷</el-button>
-                        <el-button type="text" :icon="Odometer">分析数据</el-button> -->
-                        <el-button type="text" :icon="Edit">查看填写</el-button>
+                        <el-button type="text" :icon="Odometer">分析数据</el-button>
                         <!-- 发布按钮、删除按钮 -->
-                        <!-- <el-button type="primary" :icon="Check" style="float: right" circle></el-button> -->
-                        <el-button type="danger" :icon="Delete" style="float: right" circle></el-button>
+                        <el-switch v-model="article.IsOpening" style="float: right; margin-left: 10px" @change="updateIsOpening(article.SurveyID)"/>
+                        <el-button type="danger" :icon="Delete" style="float: right" circle @click="deleteQs(article.SurveyID)"></el-button>
                     </div>
                 </div>
-                
-                <!-- <div slot="header" class="clearfix">
-                <span>{{ article.title }}</span>
-                <el-button :icon="Edit" type="primary" circle class="edit-button"></el-button>
-                <el-button :icon="Delete" type="danger" circle class="delete-button"></el-button>
-                </div>
-                <div>{{ article.categoryName }}</div>
-                <div>{{ article.createTime }}</div>
-                <div>{{ article.state }}</div> -->
             </el-card>
-            <!-- <template #empty>
-                <el-empty description="没有数据" />
-            </template> -->
+            
         </div>
         <!-- 分页条 -->
         <el-pagination :page-sizes="[3, 5, 10, 15]"
@@ -201,5 +254,4 @@ const onCurrentChange = (num) => {
 .searchform .searchbutton{
     margin-right: 5px;
 }
-
 </style>

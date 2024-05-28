@@ -35,7 +35,6 @@ export default ({
         isDistabled:true,
       };
     },
-
     methods: {
         addOption(index){
             this.optionCnt++;

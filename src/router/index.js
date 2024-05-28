@@ -35,17 +35,17 @@ const routes = [
       {
         path: '/userManage/unreleased',
         name: 'unreleasedQuestinaire',
-        component: () => import('../views/user/UnreleasedQuestionaire.vue')
+        component: () => import('../views/user/UnreleasedQuestionnaire.vue')
       },
       {
         path: '/userManage/released',
         name: 'releasedQuestinaire',
-        component: () => import('../views/user/ReleasedQuestionaire.vue')
+        component: () => import('../views/user/ReleasedQuestionnaire.vue')
       },
       {
         path: '/userManage/filled',
         name: 'filledQuestinaire',
-        component: () => import('../views/user/FilledQuestionaire.vue')
+        component: () => import('../views/user/FilledQuestionnaire.vue')
       },
       {
         path: '/userManage/square',
