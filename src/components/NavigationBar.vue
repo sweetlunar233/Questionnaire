@@ -40,6 +40,9 @@
         <div @click = "gotoHome" @mouseover="logoIn('logo')" @mouseout="logoOut('logo')">
             <img id="logo" src="../assets/logo.png" alt="Element logo"/>
         </div>
+        <span class="title">
+            纸翼传问
+        </span>
         <div class="flex-grow"></div>
         <!-- <button id="login" class="btn" @click = "gotoLogin" v-if="!isHomePage"
         @mouseover="logoIn('login')" @mouseout="logoOut('login')">
@@ -63,9 +66,8 @@
 
 <style lang = "scss">
     .navigationBar {
-
         display: flex;
-        // align-items: center;
+        align-items: center;
         height: 90px;
         // position: fixed; /* 将导航栏固定在页面上 */
         top: 0; /* 从页面顶部开始定位 */
@@ -80,6 +82,10 @@
             cursor: pointer;
             margin-top: 5px;
             // border: red solid 1px;
+        }
+        .title {
+            font-size: 18px;
+            
         }
 
         .zoom-btn {
