@@ -15,6 +15,11 @@ export function GetFilledQs(username){
     return get("questionnaire/GetFilledQs",data);
 }
 
+export function GetAllReleasedQs(){
+    let data = {};
+    return get("questionnaire/GetFilledQs",data);
+}
+
 export function DeleteQs(id){
     let data = {};
     data.id = id;

@@ -109,7 +109,7 @@ const goToQuestionnaireFill = (questionnaireId) => {
 import {ElMessageBox, ElMessage} from 'element-plus'
 import {GetCreatedQs, DeleteQs} from '../../api/questionnaire.js'
 
-const initDraft = (username) =>{
+const initFilled = (username) =>{
     var promise = GetCreatedQs(username,"Released");
     promise.then((result)=>{
         var count=0;
@@ -120,7 +120,7 @@ const initDraft = (username) =>{
         total.value = count;
     })
 }
-initDraft("胡彦喆");
+initFilled("胡彦喆");
 
 
 const deleteQs = (id) =>{
