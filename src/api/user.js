@@ -1,15 +1,15 @@
 import { post,get } from "./api"
 
-export function GetUser(username,password){
+export function getUserMessage(username){
     let data = {};
     data.username = username;
-    data.password = password;
-    return get("/user/login",data);
+    return get("/user/getUserMessage",data);
 }
 
-export function postUser(username,password){
+export function postUserMessage(username,password, email){
     let data = {};
     data.username = username;
     data.password = password;
-    return post("/user/login",data);
+    data.email = email;
+    return post("/user/postUserMessage",data);
 }

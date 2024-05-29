@@ -57,6 +57,7 @@
             </span>
             <template #dropdown>
             <el-dropdown-menu class="dropdown_menu">
+                <el-dropdown-item>纸币：</el-dropdown-item>
                 <el-dropdown-item>退出登录</el-dropdown-item>
             </el-dropdown-menu>
             </template>
@@ -122,6 +123,7 @@
             top: 100%; /* 设置子元素距离父元素底部的距离 */
             left: 0; /* 设置子元素左侧与父元素左侧对齐 */
             z-index: 999; /* 设置子元素的层级 */
+            // justify-content: center;
         }
     }
 
