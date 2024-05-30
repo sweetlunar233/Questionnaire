@@ -152,7 +152,7 @@ const deleteQs = (id) =>{
                 type: 'success',
                 message: '删除成功',
             })
-            initDraft("胡彦喆");
+            initFilled("胡彦喆");
         })
         .catch(() => {
             //用户点击了取消

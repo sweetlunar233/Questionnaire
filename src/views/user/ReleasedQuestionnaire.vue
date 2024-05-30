@@ -140,7 +140,7 @@ const deleteQs = (id) =>{
                 type: 'success',
                 message: '删除成功',
             })
-            initDraft();
+            initCreated();
         })
         .catch(() => {
             //用户点击了取消
