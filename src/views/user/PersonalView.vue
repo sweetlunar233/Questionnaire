@@ -15,10 +15,10 @@ const checkPassword = (rule, value, callback) => {
 // 定义变量和规则
 const rules = {
     nickname: [
-        { required: true, message: '请输入用户昵称', trigger: 'blur' },
+        { required: true, message: '请输入用户名', trigger: 'blur' },
         {
-            pattern: /^\S{2,10}$/,
-            message: '昵称必须是2-10位的非空字符串',
+            pattern: /^\S{1,20}$/,
+            message: '用户名必须为1到20个非空字符',
             trigger: 'blur'
         }
     ],
@@ -28,7 +28,11 @@ const rules = {
     ],
     newPassword: [
         { required: true, message: '请输入新密码', trigger: 'blur' },
-        { min: 6, message: '密码长度不能少于6位', trigger: 'blur' }
+        {
+            pattern: /^\S{5,25}$/,
+            message: '密码必须为5到25位非空字符',
+            trigger: 'blur'
+        }
     ],
     confirmPassword: [
         { required: true, message: '请确认密码', trigger: 'blur' },
@@ -118,7 +122,7 @@ const cancelPassword = () => {
                     <el-form-item label="用户ID">
                         <el-input v-model="userInfo.userid" disabled></el-input>
                     </el-form-item>
-                    <el-form-item label="用户昵称" prop="nickname">
+                    <el-form-item label="用户名" prop="nickname">
                         <el-input v-model="userInfo.nickname"></el-input>
                     </el-form-item>
                     <el-form-item label="用户邮箱" prop="email">
