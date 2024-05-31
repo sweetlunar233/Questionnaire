@@ -22,11 +22,6 @@ const routes = [
     component: () => import('../views/QuestionnaireFillView.vue')
   },
   {
-    path: '/personal',
-    name: 'personal',
-    component: () => import('../views/PersonalView.vue')
-  },
-  {
     path: '/userManage',
     name: 'userManage',
     component: () => import('../views/UserManageView.vue'),
@@ -51,6 +46,11 @@ const routes = [
         path: '/userManage/square',
         name: 'square',
         component: () => import('../views/user/SquareView.vue')
+      },
+      {
+        path: '/userManage/personal',
+        name: 'personal',
+        component: () => import('../views/user/PersonalView.vue')
       }
     ]
   },
