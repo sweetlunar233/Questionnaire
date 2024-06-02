@@ -198,7 +198,7 @@ const updateIsOpening = (id) =>{
             <div class="header">
                 <span>问卷管理</span>
                 <div class="extra">
-                    <el-button type="primary" @click="goToQuestionnaireDesign(-1)">创建问卷</el-button>
+                    <el-button type="primary" @click="goToQuestionnaireDesign(-1)" style="background-color: rgb(80, 134, 233);border: 0;">创建问卷</el-button>
                 </div>
             </div>
         </template>
@@ -212,7 +212,7 @@ const updateIsOpening = (id) =>{
                 </el-select>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" class="searchbutton" @click="initCreated(store.state.nowuser.username)">搜索</el-button>
+                <el-button type="primary" class="searchbutton" @click="initCreated(store.state.nowuser.username)" style="background-color: rgb(80, 134, 233);border: 0;">搜索</el-button>
                 <el-button @click="categoryId=''">重置</el-button>
             </el-form-item>
         </el-form>

@@ -292,5 +292,4 @@ const deleteQs = (id) =>{
     margin-right: 5px;
 }
 
-
 </style>
