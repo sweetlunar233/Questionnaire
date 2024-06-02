@@ -63,10 +63,10 @@
         <!-- TieZhu:“是否必填”功能 -->
         <el-icon color="#c45656" style="position: absolute; left: 1%;" v-if="questionList[index-1].isNecessary==true"><StarFilled/>&ensp;</el-icon>
 
-        <single-choice v-if="questionList[index-1].type==1"></single-choice>
-        <multiple-choice v-if="questionList[index-1].type==2"></multiple-choice>
-        <fill-blank v-if="questionList[index-1].type==3"></fill-blank>
-        <score v-if="questionList[index-1].type==4"></score>
+        <single-choice v-if="questionList[index-1].type==1" :message="index-1"></single-choice>
+        <multiple-choice v-if="questionList[index-1].type==2" :message="index-1"></multiple-choice>
+        <fill-blank v-if="questionList[index-1].type==3" :message="index-1"></fill-blank>
+        <score v-if="questionList[index-1].type==4" :message="index-1"></score>
 
         <div v-if="questionList[index-1].showToolbar">
           <el-divider content-position="left" border-style="dashed">
@@ -110,7 +110,8 @@ import SingleChoice from '../components/Question/SingleChoice.vue'
 import MultipleChoice from '../components/Question/MultipleChoice.vue'
 import FillBlank from '../components/Question/FillBlank.vue'
 import Score from '../components/Question/Score.vue'
-import NavigationBar from "@/components/NavigationBar.vue";
+import NavigationBar from "@/components/NavigationBar.vue"
+import store from '@/store'
  
  export default({
    data(){
@@ -124,21 +125,25 @@ import NavigationBar from "@/components/NavigationBar.vue";
    methods: {
     //TieZhu:添加单选题
     addSingle(){
+      store.commit("addQs",{"type":1,"question":"请选择一个选项","optionCnt":1,"optionList":["选项"]});
       this.questionCnt++;
       this.questionList.push({"type":1,"showToolbar":false,"isNecessary":true});
     },
     //TieZhu:添加多选题
     addMultiple(){
+      store.commit("addQs",{"type":2,"question":"请选择以下选项（多选）","optionCnt":1,"optionList":["选项"]});
       this.questionCnt++;
       this.questionList.push({"type":2,"showToolbar":false,"isNecessary":true});
     },
     //TieZhu:添加填空题
     addFill(){
+      store.commit("addQs",{"type":3,"question":"请填空"});
       this.questionCnt++;
       this.questionList.push({"type":3,"showToolbar":false,"isNecessary":true});
     },
     //TieZhu:添加评分题
     addScore(){
+      store.commit("addQs",{"type":3,"question":"请评分"});
       this.questionCnt++;
       this.questionList.push({"type":4,"showToolbar":false,"isNecessary":true});
     },
@@ -151,10 +156,12 @@ import NavigationBar from "@/components/NavigationBar.vue";
     },
     deleteQs(index){
       this.questionList.splice(index,1);
+      store.commit("deleteQs",index);
       this.questionCnt--;
     },
-    copy(index,type){
-      this.questionList.splice(index+1,0,{"type":type,"showToolbar":false,"isNecessary":this.questionList[index].isNecessary});
+    copy(index){
+      this.questionList.splice(index+1,0,this.questionList[index]);
+      store.commit("copyQs",index);
       this.questionCnt++;
     },
     dragStart(index){
@@ -165,6 +172,8 @@ import NavigationBar from "@/components/NavigationBar.vue";
         const itemToMove = this.questionList[this.draggedIndex];
         this.questionList.splice(this.draggedIndex,1)
         this.questionList.splice(index,0,itemToMove);
+        store.commit("deleteQs",this.draggedIndex);
+        store.commit("addQsOn",index,this.itemToMove);
         this.draggedIndex = index;
       }
     },

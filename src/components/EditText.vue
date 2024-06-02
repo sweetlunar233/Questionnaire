@@ -8,6 +8,7 @@
 </template>
   
 <script>
+import store from '@/store';
 import { ElMessage } from 'element-plus';
 
   export default {
@@ -36,6 +37,13 @@ import { ElMessage } from 'element-plus';
         }
         else{
           this.text = this.editableText;
+          if(this.type=="question"){
+            console.log("23232323");
+            store.commit("updateQsQuestion",this.message,this.text);
+          }
+          else{
+            store.commit("updateOption",this.message,this.index,this.text);
+          }
         }
       },
       warning(){
@@ -45,6 +53,11 @@ import { ElMessage } from 'element-plus';
         });
       },
     },
+    props:{
+      type:String,
+      message:Number,
+      index:Number,
+    }
   }
 </script>
 
