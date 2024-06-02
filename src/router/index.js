@@ -47,11 +47,6 @@ const routes = [
         path: '/userManage/square',
         name: 'square',
         component: () => import('../views/user/SquareView.vue')
-      },
-      {
-        path: '/userManage/personal',
-        name: 'personal',
-        component: () => import('../views/user/PersonalView.vue')
       }
     ]
   },
@@ -63,7 +58,15 @@ const routes = [
   {
     path: '/personal',
     name: 'personal',
-    component: () => import('../views/PersonalView.vue')
+    component: () => import('../views/PersonalView.vue'),
+    // redirect: '/personal/message',
+    children:[
+      { 
+        path: 'personal/message',
+        name: 'personalMessage',
+        component: () => import('../views/personal/PersonalMessageView.vue')
+      }
+    ]
   }
 ]
 

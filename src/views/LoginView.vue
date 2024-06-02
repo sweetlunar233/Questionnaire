@@ -59,20 +59,6 @@
             //跳转到登陆界面，等待用户登陆邮箱验证，注册成功在邮箱中显示
             ElMessage.success("请前往邮箱验证后登录");
             isLogin.value = 1;
-
-            // console.log(result.data.username);
-            console.log(33333);
-            //不确定这里要怎么写！假装result.data里存了true或false
-
-            if (result == "True") {
-                ElMessage.success("注册成功");
-                //全局用户修改为当前注册用户
-                store.state.nowuser.username = registerData.value.username;
-                gotoUserManage();
-            }
-            else {
-                ElMessage.error("注册失败,用户名已存在");
-            }
         })
     }
 
@@ -91,56 +77,24 @@
             return;
         }
 
-        var promise = getUserMessage(loginData.value.username);
+        var promise = postUserMessage(loginData.value.username, loginData.value.password, false);
         promise.then((result)=>{
-
-            //result是一个json文件
-            if(result == "False") {
-                ElMessage.error("用户名不存在");
+            if (result == "1") {
+                ElMessage.error("用户名不存在,请先注册");
+                
+            }else if(result == "2"){
+                ElMessage.error("该账户的密码不正确");
             }
             else {
-                if(result.password == loginData.value.password) {
-                    updateNowuser(result);
-                    ElMessage.success("登录成功");
-                    gotoUserManage();
-                }
-                else {
-                    ElMessage.error("密码错误");
-                }
+                //全局用户修改为当前注册用户
+                store.state.nowuser.username = registerData.value.username;
+                gotoUserManage();
             }
         })
         .catch ( (error) => {
             console.log("catch");
         })
     }
-    //check password2
-    // const checkpassword2 = (rule, value, callback) => {
-    //     if (value === "") {
-    //         callback(new Error("请再次输入密码"));
-    //     } else if (value !== registerData.value.password) {
-    //         callback(new Error("两次输入的密码不一致!"));
-    //     } else {
-    //         callback();
-    //     }
-    // }
-
-    // const registerRules = {
-    //     username: [
-    //         {required: true, message: "请输入用户名", trigger: "blur"},
-    //         {min: 1, max: 50, message: "长度在 1 到 50 个非空字符", trigger: "blur"}
-    //     ],
-    //     password: [
-    //         {required: true, message: "请输入密码", trigger: "blur"},
-    //         {min: 5, max: 25, message: "长度在 5 到 25 个非空字符", trigger: "blur"}
-    //     ],
-    //     password2: [
-    //         {validator: checkpassword2, trigger: "blur"}
-    //     ],
-    //     password: [
-    //         {required: true, message: "请输入验证邮箱", trigger: "blur"},
-    //     ]
-    // }
-
 </script>
 
 <template>
@@ -160,7 +114,7 @@
                         <span class="label">用户名</span>
                     </div>
                     <div class="inputf">
-                        <input type="text" placeholder="请输入密码" v-model="loginData.password"/>
+                        <input type="password" placeholder="请输入密码" v-model="loginData.password"/>
                         <span class="label">密码</span>
                     </div>
                     <button id="login_btn" @mouseover="btnIn('login_btn')" @mouseout="btnOut('login_btn')" @click="login">登录</button>
@@ -178,11 +132,11 @@
                         <span class="label">邮箱</span>
                     </div>
                     <div class="inputf">
-                        <input type="text" placeholder="请输入密码" v-model="registerData.password" />
+                        <input type="password" placeholder="请输入密码" v-model="registerData.password" />
                         <span class="label">密码</span>
                     </div>
                     <div class="inputf">
-                        <input type="text" placeholder="请再次输入密码" v-model="registerData.password2" />
+                        <input type="password" placeholder="请再次输入密码" v-model="registerData.password2" />
                         <span class="label">确认密码</span>
                     </div>
                     <button id="register_btn" @mouseover="btnIn('register_btn')" @mouseout="btnOut('register_btn')" @click = "register">注册</button>
@@ -210,7 +164,7 @@
 <style lang="scss">
     .all_container {
         height: 100vh;
-        background: url("../assets/bg.png");
+        background: url("../assets/bg7.jpg");
         background-size: cover;
 
         .login-container{
@@ -233,7 +187,7 @@
                 .form {
                     width: 500px;
                     height: 650px;
-                    background: rgba(99,124,172, 0.75);
+                    background: rgba(99,124,172, 0.85);
                     // background: white;
                     backdrop-filter: blur(16px) saturate(0);
                     border-radius: 20px;
