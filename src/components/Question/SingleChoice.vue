@@ -34,7 +34,7 @@ export default ({
         optionList:[],
         optionCnt:0,
         isDistabled:true,
-        text:store.state.qs[this.message].question,
+        text:"",
       };
     },
     methods: {
@@ -65,6 +65,7 @@ export default ({
         for(let i=0;i<store.state.qs[this.message].optionCnt;i++){
             this.optionList.push({"showBar":false,"content":store.state.qs[this.message].optionList[i]});
         }
+        this.text = store.state.qs[this.message].question;
         this.optionCnt = store.state.qs[this.message].optionCnt;
     }
 })

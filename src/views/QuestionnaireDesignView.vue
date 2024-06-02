@@ -173,7 +173,7 @@ import store from '@/store'
         this.questionList.splice(this.draggedIndex,1)
         this.questionList.splice(index,0,itemToMove);
         store.commit("deleteQs",this.draggedIndex);
-        store.commit("addQsOn",index,this.itemToMove);
+        store.commit("addQsOn",index,store.state.qs[this.draggedIndex]);
         this.draggedIndex = index;
       }
     },

@@ -16,7 +16,10 @@ import { ElMessage } from 'element-plus';
       initialText: {
         type: String,
         default: '问题描述'
-      }
+      },
+      type:String,
+      message:Number,
+      index:Number,
     },
     data() {
       return {
@@ -38,7 +41,6 @@ import { ElMessage } from 'element-plus';
         else{
           this.text = this.editableText;
           if(this.type=="question"){
-            console.log("23232323");
             store.commit("updateQsQuestion",this.message,this.text);
           }
           else{
@@ -53,11 +55,6 @@ import { ElMessage } from 'element-plus';
         });
       },
     },
-    props:{
-      type:String,
-      message:Number,
-      index:Number,
-    }
   }
 </script>
 
