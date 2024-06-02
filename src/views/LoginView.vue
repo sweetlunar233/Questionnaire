@@ -89,7 +89,7 @@
             return;
         }
 
-        var promise = getUserMessage(loginData.value.username, "/login");
+        var promise = getUserMessage(loginData.value.username);
         promise.then((result)=>{
             console.log(result.data);
             console.log(23232);

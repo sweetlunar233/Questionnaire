@@ -49,15 +49,14 @@ const changePasswordVisible = ref(false)
 
 
 
-import {getUserMessage, updateUserInfo, updateUserPassword} from "../../api/user.js"
+import {getUserMessagePersonal, updateUserInfo, updateUserPassword} from "../../api/user.js"
 
 const GetUserMessage = (username) => {
-    var promise = getUserMessage(username);
+    var promise = getUserMessagePersonal(username);
     promise.then((result)=>{
-        userInfo.value.userid = result.data.userid;
-        userInfo.value.username = result.data.username;
-        userInfo.value.email = result.data.email;
-        userInfo.value.money = result.data.money;
+        userInfo.value.username = result.username;
+        userInfo.value.email = result.email;
+        userInfo.value.money = result.money;
     })
 }
 GetUserMessage(store.state.nowuser.username);
@@ -66,8 +65,16 @@ const UpdateUserInfo = (username, useremail) => {
     store.state.nowuser.email = useremail;
     var promise = updateUserInfo(username, useremail);
     promise.then((result)=>{
-        GetUserMessage(store.state.nowuser.username);
-        ElMessage.success("修改成功")
+        if(result.message === "True")
+        {
+            GetUserMessage(store.state.nowuser.username);
+            ElMessage.success("修改成功")
+        }
+        else
+        {
+            ElMessage.error(result.content);
+        }
+        
     })
 }
 
@@ -76,7 +83,14 @@ const submitPassword = (username, password) => {
     store.state.nowuser.password = password;
     var promise = updateUserPassword(username, password);
     promise.then((result)=>{
-        ElMessage.success('密码修改成功！');
+        if(result.message === "True")
+        {
+            ElMessage.success("修改成功")
+        }
+        else
+        {
+            ElMessage.error(result.content);
+        }
         // 清空表单数据
         newPassword.value = '';
         confirmPassword.value = '';
@@ -113,8 +127,8 @@ const cancelPassword = () => {
             <el-col :span="12">
                 <el-form :model="userInfo" :rules="rules" label-width="100px" size="large">
                     <!-- 每一个都要加上v-model -->
-                    <el-form-item label="用户名" disabled>
-                        <el-input v-model="userInfo.username"></el-input>
+                    <el-form-item label="用户名">
+                        <el-input v-model="userInfo.username" disabled></el-input>
                     </el-form-item>
                     <el-form-item label="用户邮箱" prop="email">
                         <el-input v-model="userInfo.email"></el-input>

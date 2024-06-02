@@ -98,10 +98,10 @@ const goToQuestionnaireDesign = (questionnaireId) => {
 
 
 
-import {GetCreatedQs, DeleteQs} from '../../api/questionnaire.js'
+import {GetUnreleasedQs, DeleteUnreleasedQs} from '../../api/questionnaire.js'
 
 const initDraft = (username) =>{
-    var promise = GetCreatedQs(username,"Draft");
+    var promise = GetUnreleasedQs(username);
     promise.then((result)=>{
         var categoryName = "";
         if(categoryId.value != ""){
@@ -142,12 +142,22 @@ const deleteQs = (id) =>{
     )
         .then(() => {
             //用户点击了确认
-            var promise = DeleteQs(id);
-            ElMessage({
-                type: 'success',
-                message: '删除成功',
+            var promise = DeleteUnreleasedQs(id);
+            promise.then((result)=>{
+                if(result.message === "True"){
+                    ElMessage({
+                        type: 'success',
+                        message: '删除成功',
+                    })
+                }
+                else{
+                    ElMessage({
+                        type: 'error',
+                        message: result.content,
+                    })
+                }
+                initDraft(store.state.nowuser.username);
             })
-            initDraft(store.state.nowuser.username);
         })
         .catch(() => {
             //用户点击了取消

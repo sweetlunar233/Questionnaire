@@ -92,10 +92,10 @@ const goToQuestionnaireFill = (questionnaireId) => {
 
 
 import {ElMessageBox, ElMessage} from 'element-plus'
-import {GetCreatedQs, DeleteQs, UpdateIsOpening} from '../../api/questionnaire.js'
+import {GetReleasedQs, DeleteReleasedQs, UpdateIsOpening} from '../../api/questionnaire.js'
 
 const initCreated = (username) =>{
-    var promise = GetCreatedQs(username,"Released");
+    var promise = GetReleasedQs(username);
     promise.then((result)=>{
         var categoryName = "";
         if(categoryId.value != ""){
@@ -136,12 +136,22 @@ const deleteQs = (id) =>{
     )
         .then(() => {
             //用户点击了确认
-            var promise = DeleteQs(id);
-            ElMessage({
-                type: 'success',
-                message: '删除成功',
+            var promise = DeleteReleasedQs(id);
+            promise.then((result)=>{
+                if(result.message === "True"){
+                    ElMessage({
+                        type: 'success',
+                        message: '删除成功',
+                    })
+                }
+                else{
+                    ElMessage({
+                        type: 'error',
+                        message: result.content,
+                    })
+                }
+                initCreated(store.state.nowuser.username);
             })
-            initCreated(store.state.nowuser.username);
         })
         .catch(() => {
             //用户点击了取消
@@ -154,6 +164,20 @@ const deleteQs = (id) =>{
 
 const updateIsOpening = (id) =>{
     var promise = UpdateIsOpening(id);
+    promise.then((result)=>{
+        if(result.message === "True"){
+            // ElMessage({
+            //     type: 'success',
+            //     message: '操作成功',
+            // })
+        }
+        else{
+            ElMessage({
+                type: 'error',
+                message: result.content,
+            })
+        }
+    })
 }
 
 
