@@ -16,6 +16,15 @@
         router.push('/');
     }
 
+    const goBack = () => {
+        router.go(-1); // 返回上一页
+    };
+
+    // const showBackButton = () => {
+    //     // 根据当前路由判断是否显示返回按钮
+    //     return router.currentRoute.value.path !== '/userManage';
+    // };
+
     function logoIn(elementId) {
         document.getElementById(elementId).classList.add("zoom-btn");
     }
@@ -38,17 +47,13 @@
 
 <template>
     <el-header class = "navigationBar">
-        <div @click = "gotoHome" @mouseover="logoIn('logo')" @mouseout="logoOut('logo')">
+        <div @click = "goBack" @mouseover="logoIn('logo')" @mouseout="logoOut('logo')">
             <img id="logo" src="../assets/logo.png" alt="Element logo"/>
         </div>
         <div class="title">
             <span>纸翼</span>传问
         </div>
         <div class="flex-grow"></div>
-        <!-- <button id="login" class="btn" @click = "gotoLogin" v-if="!isHomePage"
-        @mouseover="logoIn('login')" @mouseout="logoOut('login')">
-            登录 / 注册
-        </button> -->
         <el-dropdown>
             <span class="username">
                 {{ store.state.nowuser.username }}
@@ -59,7 +64,7 @@
             <template #dropdown>
             <el-dropdown-menu class="dropdown_menu">
                 <el-dropdown-item>纸币：{{ store.state.nowuser.money }}</el-dropdown-item>
-                <el-dropdown-item>退出登录</el-dropdown-item>
+                <el-dropdown-item @click="gotoHome">退出登录</el-dropdown-item>
             </el-dropdown-menu>
             </template>
         </el-dropdown>
@@ -85,7 +90,7 @@
             margin-top: 5px;
             // border: red solid 1px;
         }
-        
+
         .title {
             font-size: 26px;
             margin-left: 9px;

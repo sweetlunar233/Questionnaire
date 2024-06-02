@@ -18,10 +18,12 @@
         document.getElementById(elementId).classList.remove("zoom-btn");
     }
 
-    // function updateNowuser(username) {
-    //     store.state.nowuser.username = username;
-
-    // }
+    function updateNowuser(result) {
+        store.state.nowuser.username = result.username;
+        store.state.nowuser.password = result.password;
+        store.state.nowuser.email = result.email;
+        store.state.nowuser.money = result.money;
+    }
 
     import { getUserMessage, postUserMessage } from "@/api/user";
     import { ElMessage } from "element-plus";
@@ -55,17 +57,9 @@
         var promise = postUserMessage(registerData.value.username, registerData.value.password, registerData.value.email);
         promise.then((result)=>{
 
-            //不确定这里要怎么写！假装result.data里存了true或false
-
-            if (result.data[0] == true) {
-                ElMessage.success("注册成功");
-                //全局用户修改为当前注册用户
-                store.state.nowuser.username = registerData.value.username;
-                gotoUserManage();
-            }
-            else {
-                ElMessage.error("注册失败,用户名已存在");
-            }
+            //跳转到登陆界面，等待用户登陆邮箱验证，注册成功在邮箱中显示
+            ElMessage.success("请前往邮箱验证后登录");
+            isLogin.value = 1;
         })
     }
 
@@ -87,17 +81,20 @@
         var promise = getUserMessage(loginData.value.username);
         promise.then((result)=>{
 
-            //不确定这里要怎么写！假装result.data里存了true或false
-
-            // if (result.data.password == loginData.value.password && result.data.username == loginData.value.username) {
-            //     ElMessage.success("登录成功");
-            //     //全局用户修改为当前登录用户
-            //     //GlobalUser = registerData.value.username;
-            //     gotoUserManage();
-            // }
-            // else {
-            //     ElMessage.error("登录失败,用户名不存在");
-            // }
+            //result是一个json文件
+            if(result == "False") {
+                ElMessage.error("用户名不存在");
+            }
+            else {
+                if(result.password == loginData.value.password) {
+                    updateNowuser(result);
+                    ElMessage.success("登录成功");
+                    gotoUserManage();
+                }
+                else {
+                    ElMessage.error("密码错误");
+                }
+            }
         })
     }
     //check password2

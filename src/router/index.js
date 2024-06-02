@@ -1,3 +1,4 @@
+import { name } from 'element-plus/dist/locale/zh-cn'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
@@ -58,6 +59,11 @@ const routes = [
     path: '/login',
     name: 'login',
     component: () => import('../views/LoginView.vue')
+  },
+  {
+    path: '/personal',
+    name: 'personal',
+    component: () => import('../views/PersonalView.vue')
   }
 ]
 
