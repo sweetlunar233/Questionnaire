@@ -188,7 +188,7 @@ const updateIsOpening = (id) =>{
                 </el-select>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" class="searchbutton" @click="initCreated('胡彦喆')">搜索</el-button>
+                <el-button type="primary" class="searchbutton" @click="initCreated(store.state.nowuser.username)">搜索</el-button>
                 <el-button @click="categoryId=''">重置</el-button>
             </el-form-item>
         </el-form>
