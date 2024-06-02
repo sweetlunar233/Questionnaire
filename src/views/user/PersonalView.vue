@@ -63,6 +63,7 @@ const GetUserMessage = (username) => {
 GetUserMessage(store.state.nowuser.username);
 
 const UpdateUserInfo = (username, useremail) => {
+    store.state.nowuser.email = useremail;
     var promise = updateUserInfo(username, useremail);
     promise.then((result)=>{
         GetUserMessage(store.state.nowuser.username);
@@ -72,6 +73,7 @@ const UpdateUserInfo = (username, useremail) => {
 
 // 提交修改密码的函数
 const submitPassword = (username, password) => {
+    store.state.nowuser.password = password;
     var promise = updateUserPassword(username, password);
     promise.then((result)=>{
         ElMessage.success('密码修改成功！');
