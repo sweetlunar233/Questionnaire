@@ -53,12 +53,16 @@
         }
         //传给后端
         var promise = postUserMessage(registerData.value.username, registerData.value.password, registerData.value.email);
-        
+        console.log(22222);
         promise.then((result)=>{
             console.log(result);
+            console.log(result.username);
+            console.log(result.email);
+            // console.log(result.data.username);
+            console.log(33333);
             //不确定这里要怎么写！假装result.data里存了true或false
 
-            if (result.data[0] == true) {
+            if (result == "True") {
                 ElMessage.success("注册成功");
                 //全局用户修改为当前注册用户
                 store.state.nowuser.username = registerData.value.username;
@@ -85,9 +89,11 @@
             return;
         }
 
-        var promise = getUserMessage(loginData.value.username);
+        var promise = getUserMessage(loginData.value.username, "/login");
         promise.then((result)=>{
-
+            console.log(result.data);
+            console.log(23232);
+            console.log(result);
             //不确定这里要怎么写！假装result.data里存了true或false
 
             // if (result.data.password == loginData.value.password && result.data.username == loginData.value.username) {
@@ -99,6 +105,9 @@
             // else {
             //     ElMessage.error("登录失败,用户名不存在");
             // }
+        })
+        .catch ( (error) => {
+            console.log("catch");
         })
     }
     //check password2

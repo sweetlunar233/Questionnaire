@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const serveAddress = "49.232.201.229";
+const serveAddress = "http://127.0.0.1:8000";
 
 export function post(url,data){
     return new Promise((resolve,reject) => {
