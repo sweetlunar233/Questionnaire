@@ -8,6 +8,7 @@ import {
 } from '@element-plus/icons-vue'
 
 import { ref } from 'vue'
+import store from '../../store';
 
 //文章分类数据模型
 const categorys = ref([
@@ -72,12 +73,12 @@ total.value = questionnaires.value.length
 //当每页条数发生了变化，调用此函数
 const onSizeChange = (size) => {
     pageSize.value = size;
-    initCreated("胡彦喆");
+    initCreated(store.state.nowuser.username);
 }
 //当前页码发生变化，调用此函数
 const onCurrentChange = (num) => {
     pageNum.value = num;
-    initCreated("胡彦喆");
+    initCreated(store.state.nowuser.username);
 }
 
 //编辑问卷传输问卷id的函数
@@ -126,7 +127,7 @@ const initDraft = (username) =>{
         total.value = count;
     })
 }
-initDraft("胡彦喆");
+initDraft(store.state.nowuser.username);
 
 import {ElMessageBox, ElMessage} from 'element-plus'
 const deleteQs = (id) =>{
@@ -146,7 +147,7 @@ const deleteQs = (id) =>{
                 type: 'success',
                 message: '删除成功',
             })
-            initDraft();
+            initDraft(store.state.nowuser.username);
         })
         .catch(() => {
             //用户点击了取消

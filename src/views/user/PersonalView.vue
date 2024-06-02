@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
+import store from '../../store';
 
 
 // 校验确认密码是否与新密码一致的函数
@@ -59,12 +60,12 @@ const GetUserMessage = (username) => {
         userInfo.value.money = result.data.money;
     })
 }
-GetUserMessage("胡彦喆");
+GetUserMessage(store.state.nowuser.username);
 
 const UpdateUserInfo = (username, useremail) => {
     var promise = updateUserInfo(username, useremail);
     promise.then((result)=>{
-        GetUserMessage("胡彦喆");
+        GetUserMessage(store.state.nowuser.username);
         ElMessage.success("修改成功")
     })
 }
