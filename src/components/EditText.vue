@@ -8,6 +8,7 @@
 </template>
   
 <script>
+import store from '@/store';
 import { ElMessage } from 'element-plus';
 
   export default {
@@ -15,7 +16,10 @@ import { ElMessage } from 'element-plus';
       initialText: {
         type: String,
         default: '问题描述'
-      }
+      },
+      type:String,
+      message:Number,
+      index:Number,
     },
     data() {
       return {
@@ -36,6 +40,12 @@ import { ElMessage } from 'element-plus';
         }
         else{
           this.text = this.editableText;
+          if(this.type=="question"){
+            store.commit("updateQsQuestion",this.message,this.text);
+          }
+          else{
+            store.commit("updateOption",this.message,this.index,this.text);
+          }
         }
       },
       warning(){

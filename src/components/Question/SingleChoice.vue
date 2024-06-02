@@ -2,13 +2,13 @@
 
 <template>
     <div>
-        <editable-text initialText="请选择一个选项"></editable-text>
+        <editable-text :initialText="text" :type="'question'" :message="message"></editable-text>
         
         <van-radio-group v-model="radio" v-for="index in optionCnt">
             <div @mouseover="optionList[index-1].showBar=true" @mouseleave="optionList[index-1].showBar=false">
                 <br/>
                 <van-radio :name="index" checked-color="#0283EF" label-disabled="true">
-                    <editable-text :initialText="optionList[index-1].content"></editable-text>
+                    <editable-text :initialText="optionList[index-1].content" :type="'option'" :message="message" :index="index-1"></editable-text>
                 </van-radio>
                 <br/>
                 <el-button-group v-if="optionList[index-1].showBar">
@@ -25,20 +25,23 @@
   
 <script>
 import EditableText from '../EditText.vue'
+import store from '@/store';
 
 export default ({
     data() {
       return {
         radio:'',
-        optionList:[{"showBar":false,"content":"选项"}],
-        optionCnt:1,
+        optionList:[],
+        optionCnt:0,
         isDistabled:true,
+        text:"",
       };
     },
     methods: {
         addOption(index){
             this.optionCnt++;
             this.optionList.splice(index+1,0,{"showBar":false,"content":"选项"});
+            store.commit("addOption",this.message,index);
             if(this.optionCnt==2){
                 this.isDistabled = false;
             }
@@ -46,16 +49,24 @@ export default ({
         deleteOption(index){
             this.optionCnt--;
             this.optionList.splice(index,1);
+            store.commit("deleteOption",this.message,index);
             if(this.optionCnt==1){
                 this.isDistabled = true;
             }
         },
-        editOption(index){
-
-        }
     },
     components: {
         EditableText
+    },
+    props:{
+        message:Number,
+    },
+    mounted(){
+        for(let i=0;i<store.state.qs[this.message].optionCnt;i++){
+            this.optionList.push({"showBar":false,"content":store.state.qs[this.message].optionList[i]});
+        }
+        this.text = store.state.qs[this.message].question;
+        this.optionCnt = store.state.qs[this.message].optionCnt;
     }
 })
 </script>
