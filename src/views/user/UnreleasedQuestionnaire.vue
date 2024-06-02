@@ -194,7 +194,7 @@ const deleteQs = (id) =>{
                 </el-select>
             </el-form-item> -->
             <el-form-item>
-                <el-button type="primary" class="searchbutton" @click="initCreated(store.state.nowuser.username)">搜索</el-button>
+                <el-button type="primary" class="searchbutton" @click="initCreated(store.state.nowuser.username)" style="background-color: rgb(80, 134, 233);border: 0;">搜索</el-button>
                 <el-button >重置</el-button>
             </el-form-item>
         </el-form>
@@ -226,7 +226,7 @@ const deleteQs = (id) =>{
         <!-- 分页条 -->
         <el-pagination :page-sizes="[3, 5, 10, 15]"
         layout="jumper, total, sizes, prev, pager, next" background :total="total" @size-change="onSizeChange"
-        @current-change="onCurrentChange" style="margin-top: 20px; justify-content: flex-end" />
+        @current-change="onCurrentChange" style="margin-top: 20px; justify-content: flex-end;" />
     </el-card>
 </template>
 <style scoped>
