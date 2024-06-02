@@ -4,6 +4,7 @@
     import { ref, watchEffect} from 'vue';
     import { useRouter } from 'vue-router';
     import { ArrowDown } from '@element-plus/icons-vue'
+    import store from '../store';
 
     const router = useRouter();
 
@@ -50,14 +51,14 @@
         </button> -->
         <el-dropdown>
             <span class="username">
-            用户名
+                {{ store.state.nowuser.username }}
             <el-icon class="el-icon--right">
                 <arrow-down />
             </el-icon>
             </span>
             <template #dropdown>
             <el-dropdown-menu class="dropdown_menu">
-                <el-dropdown-item>纸币：</el-dropdown-item>
+                <el-dropdown-item>纸币：{{ store.state.nowuser.money }}</el-dropdown-item>
                 <el-dropdown-item>退出登录</el-dropdown-item>
             </el-dropdown-menu>
             </template>

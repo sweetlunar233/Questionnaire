@@ -3,6 +3,12 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     qs:[],
+    nowuser: {
+      username: "",
+      password: "",
+      email: "",
+      money: 0,
+    },
   },
   getters: {
   },
@@ -36,6 +42,23 @@ export default createStore({
     //更新选项文本
     updateOption(state,index,index2,option){
       state.qs[index].optionList[index2] = option;
+    },
+    
+    //修改username
+    updateUsername(state,username){
+      state.nowuser.username = username;
+    },
+    //修改password
+    updatePassword(state,password){
+      state.nowuser.password = password;
+    },
+    //修改email
+    updateEmail(state,email){
+      state.nowuser.email = email;
+    },
+    //修改money
+    updateMoney(state,money){
+      state.nowuser.money = money;
     },
   },
   actions: {
