@@ -92,10 +92,10 @@ const goToQuestionnaireFill = (questionnaireId) => {
 
 
 import {ElMessageBox, ElMessage} from 'element-plus'
-import {GetCreatedQs, DeleteQs, UpdateIsOpening} from '../../api/questionnaire.js'
+import {GetReleasedQs, DeleteReleasedQs, UpdateIsOpening} from '../../api/questionnaire.js'
 
 const initCreated = (username) =>{
-    var promise = GetCreatedQs(username,"Released");
+    var promise = GetReleasedQs(username);
     promise.then((result)=>{
         var categoryName = "";
         if(categoryId.value != ""){
@@ -136,12 +136,22 @@ const deleteQs = (id) =>{
     )
         .then(() => {
             //用户点击了确认
-            var promise = DeleteQs(id);
-            ElMessage({
-                type: 'success',
-                message: '删除成功',
+            var promise = DeleteReleasedQs(id);
+            promise.then((result)=>{
+                if(result.message === "True"){
+                    ElMessage({
+                        type: 'success',
+                        message: '删除成功',
+                    })
+                }
+                else{
+                    ElMessage({
+                        type: 'error',
+                        message: result.content,
+                    })
+                }
+                initCreated(store.state.nowuser.username);
             })
-            initCreated(store.state.nowuser.username);
         })
         .catch(() => {
             //用户点击了取消
@@ -154,6 +164,20 @@ const deleteQs = (id) =>{
 
 const updateIsOpening = (id) =>{
     var promise = UpdateIsOpening(id);
+    promise.then((result)=>{
+        if(result.message === "True"){
+            // ElMessage({
+            //     type: 'success',
+            //     message: '操作成功',
+            // })
+        }
+        else{
+            ElMessage({
+                type: 'error',
+                message: result.content,
+            })
+        }
+    })
 }
 
 
@@ -174,7 +198,7 @@ const updateIsOpening = (id) =>{
             <div class="header">
                 <span>问卷管理</span>
                 <div class="extra">
-                    <el-button type="primary" @click="goToQuestionnaireDesign(-1)">创建问卷</el-button>
+                    <el-button type="primary" @click="goToQuestionnaireDesign(-1)" style="background-color: rgb(80, 134, 233);border: 0;">创建问卷</el-button>
                 </div>
             </div>
         </template>
@@ -188,7 +212,7 @@ const updateIsOpening = (id) =>{
                 </el-select>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" class="searchbutton" @click="initCreated('胡彦喆')">搜索</el-button>
+                <el-button type="primary" class="searchbutton" @click="initCreated(store.state.nowuser.username)" style="background-color: rgb(80, 134, 233);border: 0;">搜索</el-button>
                 <el-button @click="categoryId=''">重置</el-button>
             </el-form-item>
         </el-form>

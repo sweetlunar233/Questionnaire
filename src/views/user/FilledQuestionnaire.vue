@@ -104,10 +104,10 @@ const goToQuestionnaireFill = (questionnaireId) => {
 
 
 import {ElMessageBox, ElMessage} from 'element-plus'
-import {GetFilledQs, DeleteQs} from '../../api/questionnaire.js'
+import {GetFilledQs, DeleteFilledQs} from '../../api/questionnaire.js'
 
 const initFilled = (username) =>{
-    var promise = GetFilledQs(username,"Released");
+    var promise = GetFilledQs(username);
     promise.then((result)=>{
         var categoryName = "";
         if(categoryId.value != ""){
@@ -148,12 +148,22 @@ const deleteQs = (id) =>{
     )
         .then(() => {
             //用户点击了确认
-            var promise = DeleteQs(id);
-            ElMessage({
-                type: 'success',
-                message: '删除成功',
+            var promise = DeleteFilledQs(id);
+            promise.then((result)=>{
+                if(result.message === "True"){
+                    ElMessage({
+                        type: 'success',
+                        message: '删除成功',
+                    })
+                }
+                else{
+                    ElMessage({
+                        type: 'error',
+                        message: result.content,
+                    })
+                }
+                initFilled(store.state.nowuser.username);
             })
-            initFilled(store.state.nowuser.username);
         })
         .catch(() => {
             //用户点击了取消
@@ -196,7 +206,7 @@ const deleteQs = (id) =>{
                 </el-select>
             </el-form-item> -->
             <el-form-item>
-                <el-button type="primary" class="searchbutton" @click="initCreated('胡彦喆')">搜索</el-button>
+                <el-button type="primary" class="searchbutton" @click="initCreated(store.state.nowuser.username)" style="background-color: rgb(80, 134, 233);border: 0;">搜索</el-button>
                 <el-button >重置</el-button>
             </el-form-item>
         </el-form>
