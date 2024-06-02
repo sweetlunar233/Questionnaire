@@ -1,7 +1,6 @@
 import axios from "axios";
-import store from "@/store";
 
-const serveAddress = "";
+const serveAddress = "49.232.201.229";
 
 export function post(url,data){
     return new Promise((resolve,reject) => {

@@ -47,8 +47,9 @@
         }
         //传给后端
         var promise = postUserMessage(registerData.value.username, registerData.value.password, registerData.value.email);
+        
         promise.then((result)=>{
-
+            console.log(result);
             //不确定这里要怎么写！假装result.data里存了true或false
 
             if (result.data[0] == true) {
