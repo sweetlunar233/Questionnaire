@@ -70,8 +70,8 @@ const GetUserMessage = (username) => {
 }
 GetUserMessage("胡彦喆");
 
-const UpdateUserInfo = (username, useremail) => {
-    var promise = updateUserInfo(username, useremail);
+const UpdateUserInfo = (userid, username, useremail) => {
+    var promise = updateUserInfo(userid, username, useremail);
     promise.then((result)=>{
         GetUserMessage("胡彦喆");
         ElMessage.success("修改成功")
@@ -79,8 +79,8 @@ const UpdateUserInfo = (username, useremail) => {
 }
 
 // 提交修改密码的函数
-const submitPassword = (password) => {
-    var promise = updateUserPassword(password);
+const submitPassword = (userid, password) => {
+    var promise = updateUserPassword(userid, password);
     promise.then((result)=>{
         ElMessage.success('密码修改成功！');
         // 清空表单数据
@@ -132,7 +132,7 @@ const cancelPassword = () => {
                         <el-input v-model="userInfo.money" disabled></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="UpdateUserInfo(userInfo.nickname, userInfo.email)">提交修改</el-button>
+                        <el-button type="primary" @click="UpdateUserInfo(userInfo.userid, userInfo.nickname, userInfo.email)">提交修改</el-button>
                         <el-button type="primary" @click="changePasswordVisible = true"  class="changePassword">修改密码</el-button>
                     </el-form-item>
                 </el-form>
@@ -140,7 +140,7 @@ const cancelPassword = () => {
         </el-row>
         <!-- 修改密码弹窗 -->
         <el-dialog title="修改密码" v-model="changePasswordVisible" @update:visible="val => changePasswordVisible = val">
-            <el-form :model="{ newPassword, confirmPassword }" :rules="rules" label-width="100px">
+            <el-form :model="{ newPassword, confirmPassword }" :rules="rules" label-width="100px" class="password">
                 <el-form-item label="新密码" prop="newPassword">
                     <el-input type="password" v-model="newPassword"></el-input>
                 </el-form-item>
@@ -150,7 +150,7 @@ const cancelPassword = () => {
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancelPassword">取消</el-button>
-                <el-button type="primary" @click="submitPassword(newPassword)">提交</el-button>
+                <el-button type="primary" @click="submitPassword(userInfo.useridnewPassword)">提交</el-button>
             </div>
         </el-dialog>
     </el-card>
@@ -172,5 +172,9 @@ const cancelPassword = () => {
 }
 .page-container .changePassword{
     margin-left: 30px;
+}
+
+.password{
+    margin-right: 50px;
 }
 </style>
