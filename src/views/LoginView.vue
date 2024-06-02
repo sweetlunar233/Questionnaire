@@ -1,8 +1,9 @@
 <script setup>
     import { ref } from "vue";
-    import NavigationBar from "@/components/NavigationBar.vue";
+    import NavigationBarWithoutUser from "@/components/NavigationBarWithoutUser.vue";
     import { useRouter } from 'vue-router';
-    const navigation = ref(NavigationBar);
+    import store from "@/store";
+    const navigation2 = ref(NavigationBarWithoutUser);
     const isLogin = ref(1);
     const router = useRouter();
 
@@ -16,6 +17,11 @@
     function btnOut(elementId) {
         document.getElementById(elementId).classList.remove("zoom-btn");
     }
+
+    // function updateNowuser(username) {
+    //     store.state.nowuser.username = username;
+
+    // }
 
     import { getUserMessage, postUserMessage } from "@/api/user";
     import { ElMessage } from "element-plus";
@@ -55,7 +61,7 @@
             if (result.data[0] == true) {
                 ElMessage.success("注册成功");
                 //全局用户修改为当前注册用户
-                //GlobalUser = registerData.value.username;
+                store.state.nowuser.username = registerData.value.username;
                 gotoUserManage();
             }
             else {
@@ -129,7 +135,7 @@
     <div class="all_container">
         <el-container>
             <el-header>
-                <navigation/>
+                <navigation2/>
             </el-header>
             <el-container class="login-container">
                 <div class="slider">

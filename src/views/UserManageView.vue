@@ -34,13 +34,13 @@ const navigation = ref(NavigationBar);
                             </el-icon>
                             <span>已创建问卷</span>
                         </template>
-                        <el-menu-item index="/userManage/unreleased">
+                        <el-menu-item index="/userManage/unreleased" class = "item">
                             <el-icon>
                                 <EditPen />
                             </el-icon>
                             <span>草稿箱</span>
                         </el-menu-item>
-                        <el-menu-item index="/userManage/released">
+                        <el-menu-item index="/userManage/released" class = "item">
                             <el-icon>
                                 <CaretBottom />
                             </el-icon>
@@ -90,7 +90,8 @@ const navigation = ref(NavigationBar);
 }
 
 .layout-container .el-aside {
-    background-color: #fff;
+    height: 70%;
+    background-color: rgba(255,255,255,0.5);
     border-radius: 7px;
     margin-bottom: 30px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* 鼠标悬停时阴影加深 */
@@ -104,6 +105,11 @@ const navigation = ref(NavigationBar);
 
 .layout-container .el-aside .el-menu {
     border-right: none;
+    background-color: rgba(255,255,255,0.5);
+}
+
+.layout-container .el-aside .el-menu .el-sub-menu .item {
+    background-color: rgba(255,255,255,0.5) ;
 }
 
 .layout-container .el-footer {
