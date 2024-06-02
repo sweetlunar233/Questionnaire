@@ -53,7 +53,7 @@ const navigation = ref(NavigationBar);
                         </el-icon>
                         <span>已填写问卷</span>
                     </el-menu-item>
-                    <el-menu-item index="/personal">
+                    <el-menu-item index="/userManage/personal">
                         <el-icon>
                             <UserFilled />
                         </el-icon>

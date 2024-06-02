@@ -40,6 +40,9 @@
         <div @click = "gotoHome" @mouseover="logoIn('logo')" @mouseout="logoOut('logo')">
             <img id="logo" src="../assets/logo.png" alt="Element logo"/>
         </div>
+        <span class="title">
+            纸翼传问
+        </span>
         <div class="flex-grow"></div>
         <!-- <button id="login" class="btn" @click = "gotoLogin" v-if="!isHomePage"
         @mouseover="logoIn('login')" @mouseout="logoOut('login')">
@@ -54,6 +57,7 @@
             </span>
             <template #dropdown>
             <el-dropdown-menu class="dropdown_menu">
+                <el-dropdown-item>纸币：</el-dropdown-item>
                 <el-dropdown-item>退出登录</el-dropdown-item>
             </el-dropdown-menu>
             </template>
@@ -63,9 +67,8 @@
 
 <style lang = "scss">
     .navigationBar {
-
         display: flex;
-        // align-items: center;
+        align-items: center;
         height: 90px;
         // position: fixed; /* 将导航栏固定在页面上 */
         top: 0; /* 从页面顶部开始定位 */
@@ -80,6 +83,10 @@
             cursor: pointer;
             margin-top: 5px;
             // border: red solid 1px;
+        }
+        .title {
+            font-size: 18px;
+            
         }
 
         .zoom-btn {
@@ -116,6 +123,7 @@
             top: 100%; /* 设置子元素距离父元素底部的距离 */
             left: 0; /* 设置子元素左侧与父元素左侧对齐 */
             z-index: 999; /* 设置子元素的层级 */
+            // justify-content: center;
         }
     }
 

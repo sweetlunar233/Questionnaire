@@ -1,8 +1,14 @@
 <script setup>
     import { ref } from "vue";
     import NavigationBar from "@/components/NavigationBar.vue";
+    import { useRouter } from 'vue-router';
     const navigation = ref(NavigationBar);
     const isLogin = ref(1);
+    const router = useRouter();
+
+    const gotoUserManage = () => {
+        router.push('/userManage');
+    };
 
     function btnIn(elementId) {
         document.getElementById(elementId).classList.add("zoom-btn");
@@ -10,6 +16,112 @@
     function btnOut(elementId) {
         document.getElementById(elementId).classList.remove("zoom-btn");
     }
+
+    import { getUserMessage, postUserMessage } from "@/api/user";
+    import { ElMessage } from "element-plus";
+
+    const registerData = ref({
+        username: "",
+        password: "",
+        password2: "",
+        email: ""
+    })
+
+    const register = () => {
+        //格式校验
+        if (!/^\S{1,20}$/.test(registerData.value.username)) {
+            ElMessage.error('用户名必须为1到20个非空字符');
+            return;
+        }
+        if (!/^.+@.+\..+$/.test(registerData.value.email)) {
+            ElMessage.error('邮箱格式不正确');
+            return;
+        }
+        if (!/^.{5,25}$/.test(registerData.value.password)) {
+            ElMessage.error('密码必须为5到25位非空字符');
+            return;
+        }
+        if (registerData.value.password != registerData.value.password2) {
+            ElMessage.error("两次密码不一致");
+            return;
+        }
+        //传给后端
+        var promise = postUserMessage(registerData.value.username, registerData.value.password, registerData.value.email);
+        promise.then((result)=>{
+
+            //不确定这里要怎么写！假装result.data里存了true或false
+
+            if (result.data[0] == true) {
+                ElMessage.success("注册成功");
+                //全局用户修改为当前注册用户
+                //GlobalUser = registerData.value.username;
+                gotoUserManage();
+            }
+            else {
+                ElMessage.error("注册失败,用户名已存在");
+            }
+        })
+    }
+
+    const loginData = ref({
+        username: "",
+        password: ""
+    })
+
+    const login = () => {
+        if (!/^\S{1,20}$/.test(loginData.value.username)) {
+            ElMessage.error('用户名必须为1到20个非空字符');
+            return;
+        }
+        if (!/^.{5,25}$/.test(loginData.value.password)) {
+            ElMessage.error('密码必须为5到25位非空字符');
+            return;
+        }
+
+        var promise = getUserMessage(loginData.value.username);
+        promise.then((result)=>{
+
+            //不确定这里要怎么写！假装result.data里存了true或false
+
+            // if (result.data.password == loginData.value.password && result.data.username == loginData.value.username) {
+            //     ElMessage.success("登录成功");
+            //     //全局用户修改为当前登录用户
+            //     //GlobalUser = registerData.value.username;
+            //     gotoUserManage();
+            // }
+            // else {
+            //     ElMessage.error("登录失败,用户名不存在");
+            // }
+        })
+    }
+    //check password2
+    // const checkpassword2 = (rule, value, callback) => {
+    //     if (value === "") {
+    //         callback(new Error("请再次输入密码"));
+    //     } else if (value !== registerData.value.password) {
+    //         callback(new Error("两次输入的密码不一致!"));
+    //     } else {
+    //         callback();
+    //     }
+    // }
+
+    // const registerRules = {
+    //     username: [
+    //         {required: true, message: "请输入用户名", trigger: "blur"},
+    //         {min: 1, max: 50, message: "长度在 1 到 50 个非空字符", trigger: "blur"}
+    //     ],
+    //     password: [
+    //         {required: true, message: "请输入密码", trigger: "blur"},
+    //         {min: 5, max: 25, message: "长度在 5 到 25 个非空字符", trigger: "blur"}
+    //     ],
+    //     password2: [
+    //         {validator: checkpassword2, trigger: "blur"}
+    //     ],
+    //     password: [
+    //         {required: true, message: "请输入验证邮箱", trigger: "blur"},
+    //     ]
+    // }
+
 </script>
 
 <template>
@@ -21,42 +133,42 @@
             <el-container class="login-container">
                 <div class="slider">
                 <!-- 登录界面 -->
-                <div :class = "isLogin === 1 ? 'form' : 'form hidden'">
+                <div :class = "isLogin === 1 ? 'form' : 'form hidden'" :model="loginData" >
                     <div class="title"><span>欢迎</span>回来</div>
                     <div class="subtitle">登录你的账号</div>
                     <div class="inputf">
-                        <input type="text" placeholder="请输入用户名"/>
+                        <input type="text" placeholder="请输入用户名" v-model="loginData.username"/>
                         <span class="label">用户名</span>
                     </div>
                     <div class="inputf">
-                        <input type="text" placeholder="请输入密码"/>
+                        <input type="text" placeholder="请输入密码" v-model="loginData.password"/>
                         <span class="label">密码</span>
                     </div>
-                    <button id="login_btn" @mouseover="btnIn('login_btn')" @mouseout="btnOut('login_btn')">登录</button>
+                    <button id="login_btn" @mouseover="btnIn('login_btn')" @mouseout="btnOut('login_btn')" @click="login">登录</button>
                 </div>
                 <!-- 注册界面 -->
-                <div :class = "isLogin === 0 ? 'form' : 'form hidden'">
+                <div :class = "isLogin === 0 ? 'form' : 'form hidden'" :model="registerData" >
                     <div class="title">开始</div>
                     <div class="subtitle">创建你的账号</div>
                     <div class="inputf">
-                        <input type="text" placeholder="请输入用户名"/>
+                        <input type="text" placeholder="请输入用户名" v-model="registerData.username" />
                         <span class="label">用户名</span>
                     </div>
                     <div class="inputf">
-                        <input type="text" placeholder="请输入验证邮箱"/>
+                        <input type="text" placeholder="请输入验证邮箱" v-model="registerData.email" />
                         <span class="label">邮箱</span>
                     </div>
                     <div class="inputf">
-                        <input type="text" placeholder="请输入密码"/>
+                        <input type="text" placeholder="请输入密码" v-model="registerData.password" />
                         <span class="label">密码</span>
                     </div>
                     <div class="inputf">
-                        <input type="text" placeholder="请再次输入密码"/>
+                        <input type="text" placeholder="请再次输入密码" v-model="registerData.password2" />
                         <span class="label">确认密码</span>
                     </div>
-                    <button id="register_btn" @mouseover="btnIn('register_btn')" @mouseout="btnOut('register_btn')">注册</button>
+                    <button id="register_btn" @mouseover="btnIn('register_btn')" @mouseout="btnOut('register_btn')" @click = "register">注册</button>
                 </div>
-
+                <!-- card介绍界面 -->
                 <div :class = "isLogin === 1 ? 'card' : 'card active'">
                     <div class="head">
                         <div class="name">纸翼<span>传问</span></div>

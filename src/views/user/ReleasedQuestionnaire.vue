@@ -1,0 +1,278 @@
+<script setup>
+import {
+    Edit,
+    Delete,
+    Link,
+    Odometer,
+    Open,
+    View
+} from '@element-plus/icons-vue'
+
+import { ref } from 'vue'
+
+const value1 = ref(true)
+//文章分类数据模型
+const categorys = ref([
+    {
+        "id": 1,
+        "categoryName": "生活"
+    },
+    {
+        "id": 2,
+        "categoryName": "娱乐"
+    },
+    {
+        "id": 3,
+        "categoryName": "学习"
+    }
+])
+
+//用户搜索时选中的分类id
+const categoryId = ref('')
+
+//文章列表数据模型
+const questionnaires = ref([
+    {
+        "id": 5,
+        "title": "陕西旅游攻略",
+        "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
+        "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
+        "state": "草稿",
+        "categoryId": 2,
+        "createTime": "2023-09-03 11:55:30",
+        "published": true
+    },
+    
+])
+
+//分页条数据模型
+const pageNum = ref(1)//当前页
+const total = ref(20)//总条数
+const pageSize = ref(3)//每页条数
+
+total.value = questionnaires.value.length
+
+//当每页条数发生了变化，调用此函数
+const onSizeChange = (size) => {
+    pageSize.value = size;
+    initCreated("胡彦喆");
+}
+//当前页码发生变化，调用此函数
+const onCurrentChange = (num) => {
+    pageNum.value = num;
+    initCreated("胡彦喆");
+}
+
+//编辑问卷传输问卷id的函数
+import { useRouter } from 'vue-router';
+const r = useRouter();
+const goToQuestionnaireDesign = (questionnaireId) => {
+  r.push({
+    path: '/questionnaireDesign',
+    query: {
+      questionnaireId: questionnaireId
+    }
+  });
+}
+const goToQuestionnaireFill = (questionnaireId) => {
+  r.push({
+    path: '/questionnaireFill',
+    query: {
+      questionnaireId: questionnaireId
+    }
+  });
+}
+
+
+
+
+
+
+
+
+import {ElMessageBox, ElMessage} from 'element-plus'
+import {GetCreatedQs, DeleteQs, UpdateIsOpening} from '../../api/questionnaire.js'
+
+const initCreated = (username) =>{
+    var promise = GetCreatedQs(username,"Released");
+    promise.then((result)=>{
+        var categoryName = "";
+        if(categoryId.value != ""){
+            categorys.value.forEach(category => {
+                if (category.id === categoryId) {
+                    categoryName = category.categoryName;
+                }
+            });
+        }
+        var count = 0;
+        var i = 1;
+        result.data.forEach(element => {
+            if(i > pageSize.value * (pageNum.value - 1))
+            {
+                if(i <= pageSize.value * pageNum.value){
+                    if(categoryName != "" && element.Category != categoryName) return;
+                    questionnaires.value.push(element);
+                }
+            }
+            count++;
+            i++;
+        });
+        total.value = count;
+    })
+}
+initCreated("胡彦喆");
+
+
+const deleteQs = (id) =>{
+    ElMessageBox.confirm(
+        '你确认删除该问卷吗？',
+        '温馨提示',
+        {
+            confirmButtonText: '确认',
+            cancelButtonText: '取消',
+            type: 'warning',
+        }
+    )
+        .then(() => {
+            //用户点击了确认
+            var promise = DeleteQs(id);
+            ElMessage({
+                type: 'success',
+                message: '删除成功',
+            })
+            initCreated();
+        })
+        .catch(() => {
+            //用户点击了取消
+            ElMessage({
+                type: 'info',
+                message: '取消删除',
+            })
+        })
+}
+
+const updateIsOpening = (id) =>{
+    var promise = UpdateIsOpening(id);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+<template>
+    <el-card class="page-container">
+        <template #header>
+            <div class="header">
+                <span>问卷管理</span>
+                <div class="extra">
+                    <el-button type="primary" @click="goToQuestionnaireDesign(-1)">创建问卷</el-button>
+                </div>
+            </div>
+        </template>
+        <!-- 搜索表单 -->
+        <el-form inline class="searchform">
+            <div style="margin-right: auto"></div>
+            <el-form-item label="文章分类：">
+                <el-select placeholder="请选择" style="width: 150px" v-model="categoryId">
+                    <el-option v-for="c in categorys" :key="c.id" :label="c.categoryName" :value="c.id">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" class="searchbutton" @click="initCreated('胡彦喆')">搜索</el-button>
+                <el-button @click="categoryId=''">重置</el-button>
+            </el-form-item>
+        </el-form>
+        <div class="card-container">
+            <el-card v-for="(questionnaire, index) in questionnaires" :key="index" class="article-card" style="margin-bottom: 20px;">
+                <div>
+                    <!-- 上部分 -->
+                    <div class="card-header">
+                        <span style="margin-left: 5px">{{ questionnaire.Title }}</span>
+                        <span style="float: right" class="right">发布日期: {{ questionnaire.PublishDate }}</span>
+                        <span style="float: right" class="right" v-if="questionnaire.IsOpening">已发布</span>
+                        <span style="float: right" class="right" v-else>已关闭</span>
+                        <span style="float: right" class="right">ID: {{questionnaire.SurveyID}}</span>
+                    </div>
+
+                    <!-- 下部分 -->
+                    <div class="card-footer">
+                        <!-- 编辑按钮、发送按钮、分析按钮 -->
+                        <el-button type="text" :icon="Edit" @click="goToQuestionnaireDesign(questionnaire.SurveyID)" :disabled="questionnaire.IsOpening">编辑问卷</el-button>
+                        <el-button type="text" :icon="View" @click="goToQuestionnaireFill(questionnaire.SurveyID)">预览</el-button>
+                        <el-button type="text" :icon="Link">发送问卷</el-button>
+                        <el-button type="text" :icon="Odometer">分析数据</el-button>
+                        <!-- 发布按钮、删除按钮 -->
+                        <el-switch v-model="questionnaire.IsOpening" style="float: right; margin-left: 10px" @change="updateIsOpening(questionnaire.SurveyID)"/>
+                        <el-button type="danger" :icon="Delete" style="float: right" circle @click="deleteQs(questionnaire.SurveyID)"></el-button>
+                    </div>
+                </div>
+            </el-card>
+            
+        </div>
+        <!-- 分页条 -->
+        <el-pagination :page-sizes="[3, 5, 10, 15]"
+        layout="jumper, total, sizes, prev, pager, next" background :total="total" @size-change="onSizeChange"
+        @current-change="onCurrentChange" style="margin-top: 20px; justify-content: flex-end" />
+    </el-card>
+</template>
+<style scoped>
+.page-container {
+    min-height: 100%;
+    box-sizing: border-box;
+}
+
+.page-container .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 20px;
+}
+
+.article-card {
+  /* 其他样式 */
+  transition: box-shadow 0.3s ease; /* 添加过渡效果 */
+  
+}
+
+.article-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* 鼠标悬停时阴影加深 */
+}
+
+.card-header {
+  padding-bottom: 10px;
+}
+
+.card-footer {
+  padding-top: 15px;
+  border-top: 1px solid #ebeef5;
+}
+
+.right{
+    font-size: 13px;
+    padding-left: 7px;
+    padding-right: 7px;
+    border-right: 1px solid #ebeef5;
+}
+
+.right:first-child{
+    border-right: 0px;
+}
+
+.searchform{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.searchform .searchbutton{
+    margin-right: 5px;
+}
+</style>

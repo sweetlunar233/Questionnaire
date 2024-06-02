@@ -15,8 +15,9 @@ import { ref } from 'vue'
 const questionnaires = ref([
     {
         "id": 5,
-        "title": "陕西旅游攻略",
-        "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
+        "Title": "陕西旅游攻略",
+        "Reward": "100",
+        "Description": "陕西旅游攻略陕西旅游攻略陕西旅游攻略陕西旅游攻略陕西旅游攻略陕西旅游攻略陕西旅游攻略",
         "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
         "state": "草稿",
         "categoryId": 2,
@@ -25,8 +26,9 @@ const questionnaires = ref([
     },
     {
         "id": 5,
-        "title": "陕西旅游攻略",
-        "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
+        "Title": "陕西旅游攻略",
+        "Reward": "100",
+        "Description": "陕西旅游攻略陕西旅游攻略陕西旅游攻略陕西旅游攻略陕西旅游攻略陕西旅游攻略陕西旅游攻略",
         "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
         "state": "草稿",
         "categoryId": 2,
@@ -35,8 +37,9 @@ const questionnaires = ref([
     },
     {
         "id": 5,
-        "title": "陕西旅游攻略",
-        "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
+        "Title": "陕西旅游攻略",
+        "Reward": "100",
+        "Description": "陕西旅游攻略陕西旅游攻略陕西旅游攻略陕西旅游攻略陕西旅游攻略陕西旅游攻略陕西旅游攻略",
         "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
         "state": "草稿",
         "categoryId": 2,
@@ -45,8 +48,9 @@ const questionnaires = ref([
     },
     {
         "id": 5,
-        "title": "陕西旅游攻略",
-        "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
+        "Title": "陕西旅游攻略",
+        "Reward": "100",
+        "Description": "陕西旅游攻略陕西旅游攻略陕西旅游攻略陕西旅游攻略陕西旅游攻略陕西旅游攻略陕西旅游攻略",
         "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
         "state": "草稿",
         "categoryId": 2,
@@ -60,6 +64,8 @@ const pageNum = ref(1)//当前页
 const total = ref(20)//总条数
 const pageSize = ref(3)//每页条数
 
+total.value = questionnaires.value.length
+
 //当每页条数发生了变化，调用此函数
 const onSizeChange = (size) => {
     pageSize.value = size
@@ -70,6 +76,62 @@ const onCurrentChange = (num) => {
 }
 
 
+//截取Description前四十个字
+const truncateDescription = (description) => {
+    if (description.length > 40) {
+    return description.slice(0, 40) + '……';
+    } else {
+    return description;
+    }
+};
+
+//编辑问卷传输问卷id的函数
+import { useRouter } from 'vue-router';
+const r = useRouter();
+const goToQuestionnaireFill = (questionnaireId) => {
+  r.push({
+    path: '/questionnaireFill',
+    query: {
+      questionnaireId: questionnaireId
+    }
+  });
+}
+
+
+
+
+
+
+
+import {GetAllReleasedQs} from '../../api/questionnaire.js'
+
+const initAllReleased = () =>{
+    var promise = GetAllReleasedQs();
+    promise.then((result)=>{
+        var count = 0;
+        var i = 1;
+        result.data.forEach(element => {
+            if(i > pageSize.value * (pageNum.value - 1))
+            {
+                if(i <= pageSize.value * pageNum.value){
+                    questionnaires.value.push(element);
+                }
+            }
+            count++;
+            i++;
+        });
+        total.value = count;
+    })
+}
+initAllReleased();
+
+
+
+
+
+
+
+
 </script>
 <template>
     <el-card class="page-container">
@@ -78,12 +140,11 @@ const onCurrentChange = (num) => {
             <el-col :span="8" v-for="(questionnaire, index) in questionnaires" :key="index">
                 <el-card class="questionnaire-card">
                     <div class="questionnaire-info">
-                        <h3>{{ questionnaire.title }}</h3>
-                        <p>{{ questionnaire.content }}</p>
+                        <h2 class="info">{{ questionnaire.Title }}</h2>
+                        <p class="info">{{ truncateDescription(questionnaire.Description) }}</p>
+                        <h3 class="info">悬赏奖励： {{ questionnaire.Reward }}纸币</h3>
                         <div class="questionnaire-actions">
-                            <el-button type="text" icon="el-icon-edit" @click="editQuestionnaire(questionnaire)">编辑</el-button>
-                            <el-button type="text" icon="el-icon-delete" @click="deleteQuestionnaire(questionnaire)">删除</el-button>
-                            <el-button type="text" icon="el-icon-view" @click="viewQuestionnaire(questionnaire)">查看</el-button>
+                            <el-button type="primary" style="float: right;font-size: 17px" size="large" @click="goToQuestionnaireFill(questionnaire.SurveyID)">填写</el-button>
                         </div>
                     </div>
                 </el-card>
@@ -112,23 +173,29 @@ const onCurrentChange = (num) => {
     width: 350px; /* 调整卡片宽度 */
     height: 270px; /* 调整卡片高度，使其近似正方形 */
     margin-bottom: 20px;
+    transition: box-shadow 0.3s ease; /* 添加过渡效果 */
+}
+
+.questionnaire-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* 鼠标悬停时阴影加深 */
 }
 
 .questionnaire-info {
-    height: 100%; /* 让信息部分占满整个卡片高度 */
+    /* height: 100%; 让信息部分占满整个卡片高度 */
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: -10px;
+}
+
+.questionnaire-info .info{
+    margin-bottom: 3px;
 }
 
 .questionnaire-actions {
-    margin-top: 10px;
-}
-
-.questionnaire-cover {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
+    margin-top: 15px;
+    margin-right: 5px;
 }
 
 
