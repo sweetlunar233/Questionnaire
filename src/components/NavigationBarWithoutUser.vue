@@ -45,24 +45,6 @@
             <span>纸翼</span>传问
         </div>
         <div class="flex-grow"></div>
-        <!-- <button id="login" class="btn" @click = "gotoLogin" v-if="!isHomePage"
-        @mouseover="logoIn('login')" @mouseout="logoOut('login')">
-            登录 / 注册
-        </button> -->
-        <el-dropdown>
-            <span class="username">
-                {{ store.state.nowuser.username }}
-            <el-icon class="el-icon--right">
-                <arrow-down />
-            </el-icon>
-            </span>
-            <template #dropdown>
-            <el-dropdown-menu class="dropdown_menu">
-                <el-dropdown-item>纸币：{{ store.state.nowuser.money }}</el-dropdown-item>
-                <el-dropdown-item>退出登录</el-dropdown-item>
-            </el-dropdown-menu>
-            </template>
-        </el-dropdown>
     </el-header>
 </template>
 
@@ -85,7 +67,7 @@
             margin-top: 5px;
             // border: red solid 1px;
         }
-        
+
         .title {
             font-size: 26px;
             margin-left: 9px;
@@ -100,41 +82,11 @@
             transition: transform 0.3s ease-in-out; /* 添加过渡效果 */
         }
 
-        .btn {
-            // width: 5%;
-            height: 40px;
-            background: rgb(97, 187, 252);
-            color:white;
-            border: none;
-            outline: none;
-            border-radius: 5px;
-            // letter-spacing: 10px;
-            font-size: 18px;
-            cursor: pointer;
-            margin: 5px 10px 0 0px;
-        }
-
-        .username {
-            cursor: pointer;
-            display: flex;
-            border: none;
-            font-size: 18px;
-            align-items: center;
-            margin: 5px 0 10px 0;
-            outline: none;
-        }
-
-        .dropdown_menu {
-            position: absolute; /* 设置子元素为绝对定位 */
-            top: 100%; /* 设置子元素距离父元素底部的距离 */
-            left: 0; /* 设置子元素左侧与父元素左侧对齐 */
-            z-index: 999; /* 设置子元素的层级 */
-            // justify-content: center;
+        .flex-grow {
+            flex-grow: 1;
         }
     }
 
-    .flex-grow {
-        flex-grow: 1;
-    }
+    
 </style>
   
