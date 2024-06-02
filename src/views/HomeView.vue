@@ -28,7 +28,7 @@
     
             <div class="title">纸翼<span>传问</span></div>
             <div class="subtitle">欢迎来到纸翼传问欢迎来到纸翼传问欢迎来到纸翼传问欢迎来到纸翼传问欢迎来到纸翼传问</div>
-            <el-button id="start_btn" @click = "gotoLogin" @mouseover="btnIn" @mouseout="btnOut" class="button" type="primary">开始</el-button>
+            <el-button id="start_btn" @click = "gotoLogin" @mouseover="btnIn" @mouseout="btnOut" class="button" >开始</el-button>
 
         </el-container>
       </el-container>
@@ -56,6 +56,7 @@
             .title {
                 font-size: 56px;
                 margin-bottom: 20px;
+                color: white;
                 span {
                     color: rgb(243,156,181);
                     font-weight: bold;
@@ -67,10 +68,11 @@
                 margin-bottom: 50px;
                 padding: 40px;
                 text-align: justify;
+                color: white;
+                font-weight: bold;
             }
 
-            .button {
-            }
+            
         }
 
         .main {
@@ -105,10 +107,12 @@
             /* padding: 0.75em 1em; */
             padding-bottom: 70px;
             width:15%;
-            color: lightblue;
+            color: rgb(255, 92, 228);
             /* border: 0.15em solid blue; */
             border-radius: 1em;
-            transition: 4s;
+            transition: 3s;
+            background-color: rgb(238, 188, 235);
+            border: 4px rgb(255, 92, 228) solid;
         }
 
         .button:before,
@@ -121,7 +125,7 @@
             aspect-ratio: 1;
             border: none;
             border-radius: 40%;
-            background-color: rgba(0, 0, 255, 0.25);
+            background-color: rgba(183, 0, 255, 0.25);
             transition: 4s;
         }
 
@@ -138,6 +142,7 @@
         .button:hover,
         .button:focus {
             color: white;
+            border: 4px white solid;
         }
 
         .button:hover:before,
@@ -145,6 +150,6 @@
         .button:focus:before,
         .button:focus:after {
             transform: none;
-            background-color: rgba(0, 0, 255, 0.75);
+            background-color: rgba(255, 150, 185, 0.75);
         }
 </style>

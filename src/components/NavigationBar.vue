@@ -13,6 +13,7 @@
     };
 
     const gotoHome = () => {
+        store.state.nowuser.username = "";
         router.push('/');
     }
 
@@ -94,6 +95,7 @@
         .title {
             font-size: 26px;
             margin-left: 9px;
+            color: white;
             span {
                 color: rgb(243,156,181);
                 font-weight: bold;

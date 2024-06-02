@@ -48,6 +48,12 @@ const routes = [
         name: 'square',
         component: () => import('../views/user/SquareView.vue')
       }
+      ,
+      {
+        path: '/userManage/personal',
+        name: 'personal1',
+        component: () => import('../views/user/PersonalView.vue')
+      }
     ]
   },
   {

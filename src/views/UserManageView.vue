@@ -11,10 +11,21 @@ import {
     ChatDotRound,
     Share
 } from '@element-plus/icons-vue'
-import avatar from '@/assets/default.png'
 import { ref } from "vue";
 import NavigationBar from '../components/NavigationBar.vue';
+import store from '../store';
+import {ElMessage} from 'element-plus'
+import { useRouter } from 'vue-router';
+const router = useRouter();
 const navigation = ref(NavigationBar);
+
+// const loginCheck = () => {
+//     if(store.state.nowuser.username === ""){
+//         ElMessage.error("请先登录");
+//         router.push("/");
+//     }
+// }
+// loginCheck();
 
 </script>
 
