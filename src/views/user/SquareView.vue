@@ -9,6 +9,7 @@ import {
 } from '@element-plus/icons-vue'
 
 import { ref } from 'vue'
+import store from '../../store';
 
 
 //文章列表数据模型
