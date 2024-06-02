@@ -1,3 +1,4 @@
+import { name } from 'element-plus/dist/locale/zh-cn'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
@@ -46,11 +47,6 @@ const routes = [
         path: '/userManage/square',
         name: 'square',
         component: () => import('../views/user/SquareView.vue')
-      },
-      {
-        path: '/userManage/personal',
-        name: 'personal',
-        component: () => import('../views/user/PersonalView.vue')
       }
     ]
   },
@@ -58,6 +54,19 @@ const routes = [
     path: '/login',
     name: 'login',
     component: () => import('../views/LoginView.vue')
+  },
+  {
+    path: '/personal',
+    name: 'personal',
+    component: () => import('../views/PersonalView.vue'),
+    // redirect: '/personal/message',
+    children:[
+      { 
+        path: 'personal/message',
+        name: 'personalMessage',
+        component: () => import('../views/personal/PersonalMessageView.vue')
+      }
+    ]
   }
 ]
 

@@ -39,7 +39,7 @@
 <style lang="scss" scoped>
     .all-container {
         height: 100vh;
-        background: url("../assets/bg.png");
+        background: url("../assets/bg6.png");
         background-size: cover;
 
         .aside {
