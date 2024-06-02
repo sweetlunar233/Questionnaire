@@ -59,10 +59,10 @@ const routes = [
     path: '/personal',
     name: 'personal',
     component: () => import('../views/PersonalView.vue'),
-    // redirect: '/personal/message',
+    redirect: '/personal/message',
     children:[
       { 
-        path: 'personal/message',
+        path: '/personal/message',
         name: 'personalMessage',
         component: () => import('../views/personal/PersonalMessageView.vue')
       }

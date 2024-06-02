@@ -11,72 +11,93 @@
     <el-container class="container">
         <el-header><navigation/></el-header>
         <el-container>
-            <el-aside class = "aside"> 
-                <div class="option">
-                    <div class="optionIconContainer"><img src="@/assets/personalMessageIcon.png" class="optionIcon"></div>
-                    
+            <div class = "aside"> 
+                <button class = "option">
+                    <img src="@/assets/personalMessageIcon.png" style="width: 50px; height: 50px;"/>
                     <span>个人信息</span>
-                    <div class="flex-grow"></div>
-                </div>
-                <div class="option">
-                    <div class="optionIconContainer"><img src="@/assets/shopIcon.png" class="optionIcon"></div>
-                    
+                </button>
+                <button class = "option">
+                    <img src="@/assets/shopIcon.png" style="width: 50px; height: 50px;"/>
                     <span>商城</span>
-                    <div class="flex-grow"></div>
-                </div>
-            </el-aside>
+                </button>
+            </div>
             <el-main>
-                <!-- <router-view/> -->
+                <router-view/>
             </el-main>
         </el-container>
+        
     </el-container>
 
 </template>
 
-<style>
+<style lang="scss">
     .container {
         height: 100vh;
         background:  url("@/assets/bg2.png");
         background-size: cover;
 
         .aside {
-            width: 30%;
-            height: 80%;
-
+            width: 400px;
+            height: 98%;
+            display: flex;
+            flex-direction: column;
+            
+            // border: blue solid 2px;
+            align-items: center;
+            margin-top: 60px;
+            
             .option {
-                border: red solid 1px;
-                display: flex;
+                width: 60%;
+                height: 10%;
+                // padding: 1em 2em;
+                border: none;
+                border-radius: 5px;
+                font-weight: bold;
+                letter-spacing: 5px;
+                text-transform: uppercase;
+                cursor: pointer;
+                color: #2c9caf;
+                transition: all 1000ms;
+                font-size: 25px;
+                position: relative;
+                overflow: hidden;
+                outline: 2px solid #2c9caf;
+                margin: 20px 0 20px 0;
+                background-color: rgba(0, 0, 0, 0);
+                justify-content: center;
                 align-items: center;
-                justify-content: flex-end;
-                width: 140px;
-                height: 100px;
-                background-color: white;
-                border-radius: 10px;
-                margin: 10px;
-                padding: 0, 10px, 0, 10px;
-                
-                .optionIconContainer {
-                    margin: 0, 20px,0, 20px;
-
-                    .optionIcon {
-                        width: 50px;
-                        /* border: red solid 1px; */
-                        
-                    }
-                }
-                
+                display: flex;
 
                 span {
-                    /* border: blue solid 1px; */
-                    font-size: 20px;
-                    font-weight: bold;
-                    margin: 0, 0, 0, 0;
-                }
-
-                .flex-grow {
-                    flex-grow: 1;
+                    margin-left: 10px;
                 }
             }
+
+            .option:hover {
+                color: #ffffff;
+                transform: scale(1.1);
+                outline: 2px solid #70bdca;
+                box-shadow: 4px 5px 17px -4px #268391;
+            }
+
+            .option::before {
+                content: "";
+                position: absolute;
+                left: -50px;
+                top: 0;
+                width: 0;
+                height: 100%;
+                background-color: #2c9caf;
+                transform: skewX(45deg);
+                z-index: -1;
+                transition: width 1000ms;
+            }
+
+            .option:hover::before {
+                width: 250%;
+            }
+
         }
     }
+
 </style>

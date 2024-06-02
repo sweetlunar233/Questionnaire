@@ -79,15 +79,15 @@
 
         var promise = postUserMessage(loginData.value.username, loginData.value.password, false);
         promise.then((result)=>{
-            if (result == "1") {
+            if (result.message == "1") {
                 ElMessage.error("用户名不存在,请先注册");
                 
-            }else if(result == "2"){
+            }else if(result.message == "2"){
                 ElMessage.error("该账户的密码不正确");
             }
-            else {
+            else { //result.message == 0, 登录成功
                 //全局用户修改为当前注册用户
-                store.state.nowuser.username = registerData.value.username;
+                updateNowuser(result);
                 gotoUserManage();
             }
         })

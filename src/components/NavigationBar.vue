@@ -120,6 +120,7 @@
         }
 
         .username {
+            color: white;
             cursor: pointer;
             display: flex;
             border: none;
