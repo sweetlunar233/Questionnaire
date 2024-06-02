@@ -14,17 +14,16 @@ export function postUserMessage(username,password, email){
     return post("/user/postUserMessage",data);
 }
 
-export function updateUserInfo(userid, username, email){
+export function updateUserInfo(username, email){
     let data = {};
-    data.userid = userid;
     data.username = username;
     data.email = email;
     return post("/user/updateUserInfo",data);
 }
 
-export function updateUserPassword(userid, password){
+export function updateUserPassword(username, password){
     let data = {};
-    data.userid = userid;
+    data.username = username;
     data.password = password;
     return post("/user/updateUserPassword",data);
 }

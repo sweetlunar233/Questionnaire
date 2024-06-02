@@ -35,8 +35,7 @@ const rules = {
 // 定义用户信息和密码相关变量
 const userInfo = ref({
     // 初始化用户信息
-    userid: "",
-    nickname: "",
+    username: "",
     email: "",
     money: ""
 })
@@ -55,15 +54,15 @@ const GetUserMessage = (username) => {
     var promise = getUserMessage(username);
     promise.then((result)=>{
         userInfo.value.userid = result.data.userid;
-        userInfo.value.nickname = result.data.nickname;
+        userInfo.value.username = result.data.username;
         userInfo.value.email = result.data.email;
         userInfo.value.money = result.data.money;
     })
 }
 GetUserMessage("胡彦喆");
 
-const UpdateUserInfo = (userid, username, useremail) => {
-    var promise = updateUserInfo(userid, username, useremail);
+const UpdateUserInfo = (username, useremail) => {
+    var promise = updateUserInfo(username, useremail);
     promise.then((result)=>{
         GetUserMessage("胡彦喆");
         ElMessage.success("修改成功")
@@ -71,8 +70,8 @@ const UpdateUserInfo = (userid, username, useremail) => {
 }
 
 // 提交修改密码的函数
-const submitPassword = (userid, password) => {
-    var promise = updateUserPassword(userid, password);
+const submitPassword = (username, password) => {
+    var promise = updateUserPassword(username, password);
     promise.then((result)=>{
         ElMessage.success('密码修改成功！');
         // 清空表单数据
@@ -112,7 +111,7 @@ const cancelPassword = () => {
                 <el-form :model="userInfo" :rules="rules" label-width="100px" size="large">
                     <!-- 每一个都要加上v-model -->
                     <el-form-item label="用户名" disabled>
-                        <el-input v-model="userInfo.nickname"></el-input>
+                        <el-input v-model="userInfo.username"></el-input>
                     </el-form-item>
                     <el-form-item label="用户邮箱" prop="email">
                         <el-input v-model="userInfo.email"></el-input>
@@ -121,7 +120,7 @@ const cancelPassword = () => {
                         <el-input v-model="userInfo.money" disabled></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="UpdateUserInfo(userInfo.userid, userInfo.nickname, userInfo.email)">提交修改</el-button>
+                        <el-button type="primary" @click="UpdateUserInfo(userInfo.username, userInfo.email)">提交修改</el-button>
                         <el-button type="primary" @click="changePasswordVisible = true"  class="changePassword">修改密码</el-button>
                     </el-form-item>
                 </el-form>
@@ -139,7 +138,7 @@ const cancelPassword = () => {
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancelPassword">取消</el-button>
-                <el-button type="primary" @click="submitPassword(userInfo.useridnewPassword)">提交</el-button>
+                <el-button type="primary" @click="submitPassword(userInfo.username, newPassword)">提交</el-button>
             </div>
         </el-dialog>
     </el-card>
