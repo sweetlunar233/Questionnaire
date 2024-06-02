@@ -9,15 +9,14 @@
   
 <script>
 import store from '@/store';
-import { ElMessage } from 'element-plus';
 
   export default {
     props: {
       initialText: {
         type: String,
-        default: '问题描述'
+        default: '问题描述',
       },
-      type:String,
+      kind:String,
       message:Number,
       index:Number,
     },
@@ -40,11 +39,12 @@ import { ElMessage } from 'element-plus';
         }
         else{
           this.text = this.editableText;
-          if(this.type=="question"){
-            store.commit("updateQsQuestion",this.message,this.text);
+          if(this.kind=="question"){
+            store.commit("updateQsQuestion",{"index":this.message,"question":this.text});
+            console.log(store.state.qs);
           }
           else{
-            store.commit("updateOption",this.message,this.index,this.text);
+            store.commit("updateOption",{"index":this.message,"index2":this.index,"option":this.text});
           }
         }
       },
