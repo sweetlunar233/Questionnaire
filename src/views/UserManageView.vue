@@ -86,7 +86,7 @@ const navigation = ref(NavigationBar);
 <style scoped lang="scss">
 .layout-container {
     height: 100vh;
-    background: url("../assets/bg.png");
+    background: url("../assets/bg5.jpg");
     background-size: cover;
 }
 
