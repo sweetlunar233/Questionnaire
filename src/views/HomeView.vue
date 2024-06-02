@@ -1,10 +1,10 @@
 <!-- 首页 -->
 <script setup>
-    import NavigationBar from '../components/NavigationBar.vue';
+    import NavigationBarWithoutUser from '../components/NavigationBarWithoutUser.vue';
     import { ref } from "vue";
     import { useRouter } from 'vue-router';
     
-    const navigation = ref(NavigationBar);
+    const navigation2 = ref(NavigationBarWithoutUser);
 
     const router = useRouter();
     const gotoLogin = () => {
@@ -23,7 +23,7 @@
 <template>
     <div class="all-container">
       <el-container>
-        <el-header><navigation/></el-header>
+        <el-header><navigation2/></el-header>
         <el-container>
             <el-aside class="aside">
                 <div class="title">纸翼<span>传问</span></div>
@@ -96,8 +96,9 @@
             margin: 40px 0 0 0;
             
             img {
-                width: 900px;
+                width: 750px;
                 height: auto;
+                margin-right: 20px;
             }
         }
     }

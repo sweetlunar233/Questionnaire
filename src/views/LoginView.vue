@@ -1,9 +1,9 @@
 <script setup>
     import { ref } from "vue";
-    import NavigationBar from "@/components/NavigationBar.vue";
+    import NavigationBarWithoutUser from "@/components/NavigationBarWithoutUser.vue";
     import { useRouter } from 'vue-router';
     import store from "@/store";
-    const navigation = ref(NavigationBar);
+    const navigation2 = ref(NavigationBarWithoutUser);
     const isLogin = ref(1);
     const router = useRouter();
 
@@ -134,7 +134,7 @@
     <div class="all_container">
         <el-container>
             <el-header>
-                <navigation/>
+                <navigation2/>
             </el-header>
             <el-container class="login-container">
                 <div class="slider">
