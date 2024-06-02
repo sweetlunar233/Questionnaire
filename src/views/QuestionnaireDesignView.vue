@@ -53,7 +53,7 @@
       <div v-for="index in questionCnt" 
       @mouseover="questionList[index-1].showToolbar = true" 
       @mouseleave="questionList[index-1].showToolbar = false"
-      draggable="true"
+      draggable=true
       @dragstart="dragStart(index-1)"
       @dragover.prevent
       @drop="drop(index-1)"
@@ -125,34 +125,37 @@ import store from '@/store'
    methods: {
     //TieZhu:添加单选题
     addSingle(){
-      store.commit("addQs",{"type":1,"question":"请选择一个选项","optionCnt":1,"optionList":["选项"]});
+      store.commit("addQsOn",{"index":this.questionCnt,"ele":{"type":1,"isNecessary":true,"question":"请选择一个选项","optionCnt":1,"optionList":["选项"]}});
+      console.log(store.state.qs);
       this.questionCnt++;
       this.questionList.push({"type":1,"showToolbar":false,"isNecessary":true});
     },
     //TieZhu:添加多选题
     addMultiple(){
-      store.commit("addQs",{"type":2,"question":"请选择以下选项（多选）","optionCnt":1,"optionList":["选项"]});
+      store.commit("addQsOn",{"index":this.questionCnt,"ele":{"type":2,"isNecessary":true,"question":"请选择以下选项（多选）","optionCnt":1,"optionList":["选项"]}});
       this.questionCnt++;
       this.questionList.push({"type":2,"showToolbar":false,"isNecessary":true});
     },
     //TieZhu:添加填空题
     addFill(){
-      store.commit("addQs",{"type":3,"question":"请填空"});
+      store.commit("addQsOn",{"index":this.questionCnt,"ele":{"type":3,"isNecessary":true,"question":"请填空"}});
       this.questionCnt++;
       this.questionList.push({"type":3,"showToolbar":false,"isNecessary":true});
     },
     //TieZhu:添加评分题
     addScore(){
-      store.commit("addQs",{"type":3,"question":"请评分"});
+      store.commit("addQsOn",{"index":this.questionCnt-1,"ele":{"type":4,"isNecessary":true,"question":"请评分"}});
       this.questionCnt++;
       this.questionList.push({"type":4,"showToolbar":false,"isNecessary":true});
     },
     //TieZhu:工具栏功能
     necessary(index){
       this.questionList[index].isNecessary=true;
+      store.commit("updateIsNecessary",{"index":index,"isNecessary":true});
     },
     unnecessary(index){
       this.questionList[index].isNecessary=false;
+      store.commit("updateIsNecessary",{"index":index,"isNecessary":false});
     },
     deleteQs(index){
       this.questionList.splice(index,1);
@@ -169,11 +172,13 @@ import store from '@/store'
     },
     dragEnter(index){
       if(index != this.draggedIndex){
-        const itemToMove = this.questionList[this.draggedIndex];
+        const itemToMove = this.questionList[this.draggedIndex],stateToMove = store.state.qs[this.draggedIndex];
+        console.log(store.state.qs);
         this.questionList.splice(this.draggedIndex,1)
-        this.questionList.splice(index,0,itemToMove);
+        this.questionList.splice(index-1,0,itemToMove);
         store.commit("deleteQs",this.draggedIndex);
-        store.commit("addQsOn",index,store.state.qs[this.draggedIndex]);
+        store.commit("addQsOn",{"index":index,"ele":stateToMove});
+        console.log(store.state.qs);
         this.draggedIndex = index;
       }
     },

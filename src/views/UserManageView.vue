@@ -8,7 +8,8 @@ import {
     EditPen,
     SwitchButton,
     CaretBottom,
-    ChatDotRound
+    ChatDotRound,
+    Share
 } from '@element-plus/icons-vue'
 import avatar from '@/assets/default.png'
 import { ref } from "vue";
@@ -26,7 +27,7 @@ const navigation = ref(NavigationBar);
             <el-aside width="250px" style="margin-top: 20px;">
                 <div class="el-aside__logo"></div>
                 <!-- element-plus的菜单标签 -->
-                <el-menu active-text-color="rgb(243,156,181)" background-color="#fff"  text-color="rgb(80, 134, 233)"  router>
+                <el-menu active-text-color="rgb(243,156,181)" background-color="rgba(255, 255, 255, 0)"  text-color="rgb(80, 134, 233)"  router>
                     <el-sub-menu style="margin-top: 20px">
                         <template #title>
                             <el-icon>
@@ -34,15 +35,15 @@ const navigation = ref(NavigationBar);
                             </el-icon>
                             <span>已创建问卷</span>
                         </template>
-                        <el-menu-item index="/userManage/unreleased" class = "item">
+                        <el-menu-item index="/userManage/unreleased" class="item with-background-color">
                             <el-icon>
                                 <EditPen />
                             </el-icon>
                             <span>草稿箱</span>
                         </el-menu-item>
-                        <el-menu-item index="/userManage/released" class = "item">
+                        <el-menu-item index="/userManage/released" class="item with-background-color">
                             <el-icon>
-                                <CaretBottom />
+                                <Share />
                             </el-icon>
                             <span>已发布</span>
                         </el-menu-item>
@@ -90,8 +91,8 @@ const navigation = ref(NavigationBar);
 }
 
 .layout-container .el-aside {
-    height: 70%;
-    background-color: rgba(255,255,255,0.5);
+    height: 80%;
+    background-color: rgba(255, 255, 255, 0.5);
     border-radius: 7px;
     margin-bottom: 30px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* 鼠标悬停时阴影加深 */
@@ -99,17 +100,21 @@ const navigation = ref(NavigationBar);
 
 .layout-container .el-aside__logo {
     height: 160px;
-    background: url('@/assets/mylogo.gif') no-repeat center / 120px auto;
+    background: url('@/assets/aside.png') no-repeat center / 180px auto;
     margin-top: 20px;
 }
 
 .layout-container .el-aside .el-menu {
     border-right: none;
-    background-color: rgba(255,255,255,0.5);
+    background-color: rgba(255,255,255,0);
 }
 
-.layout-container .el-aside .el-menu .el-sub-menu .item {
-    background-color: rgba(255,255,255,0.5) ;
+.with-background-color {
+    background-color: rgba(255, 255, 255, 0); /* 设置背景颜色，可以根据需求自行调整 */
+}
+
+.with-background-color:hover {
+    background-color: rgba(0,0,0,0.03);
 }
 
 .layout-container .el-footer {

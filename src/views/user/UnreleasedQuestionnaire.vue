@@ -98,10 +98,10 @@ const goToQuestionnaireDesign = (questionnaireId) => {
 
 
 
-import {GetCreatedQs, DeleteQs} from '../../api/questionnaire.js'
+import {GetUnreleasedQs, DeleteUnreleasedQs} from '../../api/questionnaire.js'
 
 const initDraft = (username) =>{
-    var promise = GetCreatedQs(username,"Draft");
+    var promise = GetUnreleasedQs(username);
     promise.then((result)=>{
         var categoryName = "";
         if(categoryId.value != ""){
@@ -142,12 +142,22 @@ const deleteQs = (id) =>{
     )
         .then(() => {
             //用户点击了确认
-            var promise = DeleteQs(id);
-            ElMessage({
-                type: 'success',
-                message: '删除成功',
+            var promise = DeleteUnreleasedQs(id);
+            promise.then((result)=>{
+                if(result.message === "True"){
+                    ElMessage({
+                        type: 'success',
+                        message: '删除成功',
+                    })
+                }
+                else{
+                    ElMessage({
+                        type: 'error',
+                        message: result.content,
+                    })
+                }
+                initDraft(store.state.nowuser.username);
             })
-            initDraft(store.state.nowuser.username);
         })
         .catch(() => {
             //用户点击了取消
@@ -174,7 +184,7 @@ const deleteQs = (id) =>{
             <div class="header">
                 <span>问卷管理</span>
                 <div class="extra">
-                    <el-button type="primary" @click="goToQuestionnaireDesign(-1)">创建问卷</el-button>
+                    <el-button type="primary" @click="goToQuestionnaireDesign(-1)" style="background-color: rgb(80, 134, 233);border: 0;">创建问卷</el-button>
                 </div>
             </div>
         </template>
@@ -194,7 +204,7 @@ const deleteQs = (id) =>{
                 </el-select>
             </el-form-item> -->
             <el-form-item>
-                <el-button type="primary" class="searchbutton" @click="initCreated('胡彦喆')">搜索</el-button>
+                <el-button type="primary" class="searchbutton" @click="initCreated(store.state.nowuser.username)" style="background-color: rgb(80, 134, 233);border: 0;">搜索</el-button>
                 <el-button >重置</el-button>
             </el-form-item>
         </el-form>
@@ -226,13 +236,14 @@ const deleteQs = (id) =>{
         <!-- 分页条 -->
         <el-pagination :page-sizes="[3, 5, 10, 15]"
         layout="jumper, total, sizes, prev, pager, next" background :total="total" @size-change="onSizeChange"
-        @current-change="onCurrentChange" style="margin-top: 20px; justify-content: flex-end" />
+        @current-change="onCurrentChange" style="margin-top: 20px; justify-content: flex-end;" />
     </el-card>
 </template>
 <style scoped>
 .page-container {
     min-height: 100%;
     box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 0.7);
 }
 
 .page-container .header {
@@ -280,5 +291,6 @@ const deleteQs = (id) =>{
 .searchform .searchbutton{
     margin-right: 5px;
 }
+
 
 </style>
