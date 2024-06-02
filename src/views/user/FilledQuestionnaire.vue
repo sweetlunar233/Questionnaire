@@ -206,7 +206,7 @@ const deleteQs = (id) =>{
                 </el-select>
             </el-form-item> -->
             <el-form-item>
-                <el-button type="primary" class="searchbutton" @click="initCreated(store.state.nowuser.username)">搜索</el-button>
+                <el-button type="primary" class="searchbutton" @click="initCreated(store.state.nowuser.username)" style="background-color: rgb(80, 134, 233);border: 0;">搜索</el-button>
                 <el-button >重置</el-button>
             </el-form-item>
         </el-form>
