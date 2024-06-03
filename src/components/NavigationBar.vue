@@ -17,6 +17,10 @@
         router.push('/');
     }
 
+    const gotoPersonal = () => {
+        router.push('/personal');
+    }
+
     const goBack = () => {
         router.go(-1); // 返回上一页
     };
@@ -56,15 +60,19 @@
         </div>
         <div class="flex-grow"></div>
         <el-dropdown>
-            <span class="username">
-                {{ store.state.nowuser.username }}
-            <el-icon class="el-icon--right">
-                <arrow-down />
-            </el-icon>
-            </span>
+            <div class="name_photo">
+                <div class="photo">
+                </div>
+                <span class="username">
+                    username
+                    <!-- {{ store.state.nowuser.username }} -->
+                </span>
+                
+            </div>
+            
             <template #dropdown>
             <el-dropdown-menu class="dropdown_menu">
-                <el-dropdown-item>纸币：{{ store.state.nowuser.money }}</el-dropdown-item>
+                <el-dropdown-item @click="gotoPersonal">个人中心</el-dropdown-item>
                 <el-dropdown-item @click="gotoHome">退出登录</el-dropdown-item>
             </el-dropdown-menu>
             </template>
@@ -76,6 +84,7 @@
     .navigationBar {
         display: flex;
         align-items: center;
+        // justify-content: center;
         height: 90px;
         // position: fixed; /* 将导航栏固定在页面上 */
         top: 0; /* 从页面顶部开始定位 */
@@ -121,15 +130,31 @@
             margin: 5px 10px 0 0px;
         }
 
+        .name_photo {
+            display: flex;
+            outline: none;
+        }
+
         .username {
             color: white;
             cursor: pointer;
             display: flex;
             border: none;
-            font-size: 18px;
+            font-size: 24px;
             align-items: center;
-            margin: 5px 0 10px 0;
+            // margin: 5px 15px 10px 0;
             outline: none;
+        }
+
+        .photo {
+            width: 60px;
+            height: 60px;
+            border-radius: 1000px;
+            border: white solid 1px;
+            background: url("@/assets/photos/星空.jpg");
+            background-size: cover;
+            margin-top: 0px;
+            margin-right: 10px;
         }
 
         .dropdown_menu {

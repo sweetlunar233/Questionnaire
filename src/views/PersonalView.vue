@@ -5,6 +5,16 @@
 
     const navigation = ref(NavigationBar);
 
+    const router = useRouter();
+
+    const gotoPersonalMessage = () => {
+        router.push('/personal/message');
+    }
+
+    const gotoPersonalShop = () => {
+        router.push('/personal/shop');
+    }
+
 </script>
 
 <template>
@@ -12,11 +22,11 @@
         <el-header><navigation/></el-header>
         <el-container>
             <div class = "aside"> 
-                <button class = "option">
+                <button class = "option" @click="gotoPersonalMessage">
                     <img src="@/assets/personalMessageIcon.png" style="width: 50px; height: 50px;"/>
                     <span>个人信息</span>
                 </button>
-                <button class = "option">
+                <button class = "option" @click="gotoPersonalShop">
                     <img src="@/assets/shopIcon.png" style="width: 50px; height: 50px;"/>
                     <span>商城</span>
                 </button>
@@ -56,12 +66,12 @@
                 letter-spacing: 5px;
                 text-transform: uppercase;
                 cursor: pointer;
-                color: #2c9caf;
+                color: white;
                 transition: all 1000ms;
                 font-size: 25px;
                 position: relative;
                 overflow: hidden;
-                outline: 2px solid #2c9caf;
+                outline: 2px solid #f59cda;
                 margin: 20px 0 20px 0;
                 background-color: rgba(0, 0, 0, 0);
                 justify-content: center;
@@ -76,8 +86,8 @@
             .option:hover {
                 color: #ffffff;
                 transform: scale(1.1);
-                outline: 2px solid #70bdca;
-                box-shadow: 4px 5px 17px -4px #268391;
+                outline: 2px solid #f59cda;
+                box-shadow: 4px 5px 17px -4px #f59cda;
             }
 
             .option::before {
@@ -87,7 +97,7 @@
                 top: 0;
                 width: 0;
                 height: 100%;
-                background-color: #2c9caf;
+                background-color: #f59cda;
                 transform: skewX(45deg);
                 z-index: -1;
                 transition: width 1000ms;

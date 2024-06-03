@@ -50,7 +50,7 @@
            @drop: 放置元素时触发，处理元素放置后的逻辑。
            @dragenter.prevent: 进入另一个可放置元素时触发，这里用来调整元素位置。 -->
 
-      <div v-for="index in questionCnt" 
+      <div v-for="index in questionCnt"
       @mouseover="questionList[index-1].showToolbar = true" 
       @mouseleave="questionList[index-1].showToolbar = false"
       draggable=true
@@ -60,13 +60,107 @@
       @dragenter.prevent="dragEnter(index-1)"
       >
 
-        <!-- TieZhu:“是否必填”功能 -->
+        <!-- TieZhu:
+        对于单选和多选：
+          quetionList有如下属性。
+            showToolbar：是否显示题目工具栏，初值false
+            type：标识题目类型
+            qsIsEditing：题干是否正在修改，初值false
+            question：题干
+            isNecessary：布尔类型，是否必填，初值true
+            optionCnt：选项数量
+            text:正在修改的题干填写内容
+            isDisabled:是否可以删除选项，初值true
+            optionList：选项数组。包含以下内容：
+              showBar：是否展示工具栏，初值false
+              isEditing：是否正在被修改，初值false
+              content：选项内容
+              text：正在修改的填写内容
+        对于填空：
+          quetionList有如下属性:
+            showToolbar：是否显示题目工具栏，初值false
+            type：标识题目类型
+            qsIsEditing：题干是否正在修改，初值false
+            question：题干
+            isNecessary：布尔类型，是否必填，初值true
+            text:正在修改的题干填写内容
+        -->
+
         <el-icon color="#c45656" style="position: absolute; left: 1%;" v-if="questionList[index-1].isNecessary==true"><StarFilled/>&ensp;</el-icon>
 
-        <single-choice v-if="questionList[index-1].type==1" :message="index-1"></single-choice>
-        <multiple-choice v-if="questionList[index-1].type==2" :message="index-1"></multiple-choice>
-        <fill-blank v-if="questionList[index-1].type==3" :message="index-1"></fill-blank>
-        <score v-if="questionList[index-1].type==4" :message="index-1"></score>
+        <!-- TieZhu：单选题 -->
+        <div v-if="questionList[index-1].type==1">
+          <div>
+            <el-input v-if="questionList[index-1].qsIsEditing" v-model="questionList[index-1].question" @blur="finishEditing(0,index-1,0)" @keyup.enter="finishEditing(0,index-1,0)" clearable/>
+            <span v-else @click="startEditing(0,index-1,0)">{{ questionList[index-1].text }}</span>
+          </div>
+          
+          <van-radio-group v-model="radio" v-for="index2 in questionList[index-1].optionCnt" :disabled=true>
+              <div @mouseover="questionList[index-1].optionList[index2-1].showBar=true" @mouseleave="questionList[index-1].optionList[index2-1].showBar=false">
+                  <br/>
+                  <van-radio :name="index2" checked-color="#0283EF" :label-disabled=true>
+                    <div>
+                      <el-input v-if="questionList[index-1].optionList[index2-1].isEditing" v-model="questionList[index-1].optionList[index2-1].content" @blur="finishEditing(1,index-1,index2-1)" @keyup.enter="finishEditing(1,index-1,index2-1)" clearable/>
+                      <span v-else @click="startEditing(1,index-1,index2-1)">{{ questionList[index-1].optionList[index2-1].text }}</span>
+                    </div>
+                  </van-radio>
+                  <br/>
+                  <el-button-group v-if="questionList[index-1].optionList[index2-1].showBar">
+                      <el-button size="small" color="#fef0f0" @click="addOption(index-1,index2-1)"><el-icon><Plus/></el-icon></el-button>
+                      <el-button size="small" color="#ecf5ff" @click="deleteOption(index-1,index2-1)" :disabled="questionList[index-1].isDisabled"><el-icon><Minus/></el-icon></el-button>
+                  </el-button-group>
+              </div>
+          </van-radio-group>
+
+          <br/>
+        </div>
+
+        <!-- TieZhu：多选题 -->
+        <div v-if="questionList[index-1].type==2">
+          <div>
+            <el-input v-if="questionList[index-1].qsIsEditing" v-model="questionList[index-1].question" @blur="finishEditing(0,index-1,0)" @keyup.enter="finishEditing(0,index-1,0)" clearable/>
+            <span v-else @click="startEditing(0,index-1,0)">{{ questionList[index-1].text }}</span>
+          </div>
+          
+          <van-checkbox-group v-model="radio" v-for="index2 in questionList[index-1].optionCnt"  checked-color="#0283EF" :disabled=true>
+              <div @mouseover="questionList[index-1].optionList[index2-1].showBar=true" @mouseleave="questionList[index-1].optionList[index2-1].showBar=false">
+                  <br/>
+                  <van-checkbox :name="index2" shape="square" :label-disabled=true>
+                    <div>
+                      <el-input v-if="questionList[index-1].optionList[index2-1].isEditing" v-model="questionList[index-1].optionList[index2-1].content" @blur="finishEditing(1,index-1,index2-1)" @keyup.enter="finishEditing(1,index-1,index2-1)" clearable/>
+                      <span v-else @click="startEditing(1,index-1,index2-1)">{{ questionList[index-1].optionList[index2-1].text }}</span>
+                    </div>
+                  </van-checkbox>
+                  <br/>
+                  <el-button-group v-if="questionList[index-1].optionList[index2-1].showBar">
+                      <el-button size="small" color="#fef0f0" @click="addOption(index-1,index2-1)"><el-icon><Plus/></el-icon></el-button>
+                      <el-button size="small" color="#ecf5ff" @click="deleteOption(index-1,index2-1)" :disabled="questionList[index-1].isDisabled"><el-icon><Minus/></el-icon></el-button>
+                  </el-button-group>
+              </div>
+          </van-checkbox-group>
+
+          <br/>
+        </div>
+
+        <!-- TieZhu:填空题 -->
+        <div v-if="questionList[index-1].type==3">
+          <el-input v-if="questionList[index-1].qsIsEditing" v-model="questionList[index-1].question" @blur="finishEditing(0,index-1,0)" @keyup.enter="finishEditing(0,index-1,0)" clearable/>
+          <span v-else @click="startEditing(0,index-1,0)">{{ questionList[index-1].text }}</span>
+          <br/>
+          <br/>
+          <el-input v-model="fill" size="large" placeholder="" disabled/>
+          <br/>
+          <br/>
+        </div>
+
+        <div v-if="questionList[index-1].type==4">
+          <el-input v-if="questionList[index-1].qsIsEditing" v-model="questionList[index-1].question" @blur="finishEditing(0,index-1,0)" @keyup.enter="finishEditing(0,index-1,0)" clearable/>
+          <span v-else @click="startEditing(0,index-1,0)">{{ questionList[index-1].text }}</span>
+          <br/>
+          <el-rate v-model="score" allow-half></el-rate>
+          <br/>
+          <br/>
+        </div>
 
         <div v-if="questionList[index-1].showToolbar">
           <el-divider content-position="left" border-style="dashed">
@@ -105,13 +199,8 @@
 </template>
 
 <script>
-import EditableText from '../components/EditText.vue'
-import SingleChoice from '../components/Question/SingleChoice.vue'
-import MultipleChoice from '../components/Question/MultipleChoice.vue'
-import FillBlank from '../components/Question/FillBlank.vue'
-import Score from '../components/Question/Score.vue'
 import NavigationBar from "@/components/NavigationBar.vue"
-import store from '@/store'
+import { ElMessage } from 'element-plus'
  
  export default({
    data(){
@@ -125,73 +214,115 @@ import store from '@/store'
    methods: {
     //TieZhu:添加单选题
     addSingle(){
-      store.commit("addQsOn",{"index":this.questionCnt,"ele":{"type":1,"isNecessary":true,"question":"请选择一个选项","optionCnt":1,"optionList":["选项"]}});
-      console.log(store.state.qs);
       this.questionCnt++;
-      this.questionList.push({"type":1,"showToolbar":false,"isNecessary":true});
+      this.questionList.push({"type":1,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请选择一个选项","text":"请选择一个选项",
+      "optionCnt":1,"isDisabled":true,"optionList":[{"showBar":false,"isEditing":false,"content":"选项","text":"选项"}]});
     },
     //TieZhu:添加多选题
     addMultiple(){
-      store.commit("addQsOn",{"index":this.questionCnt,"ele":{"type":2,"isNecessary":true,"question":"请选择以下选项（多选）","optionCnt":1,"optionList":["选项"]}});
       this.questionCnt++;
-      this.questionList.push({"type":2,"showToolbar":false,"isNecessary":true});
+      this.questionList.push({"type":2,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请选择以下选项（多选）","text":"请选择以下选项（多选）",
+      "optionCnt":1,"isDisabled":true,"optionList":[{"showBar":false,"isEditing":false,"content":"选项","text":"选项"}]});
     },
     //TieZhu:添加填空题
     addFill(){
-      store.commit("addQsOn",{"index":this.questionCnt,"ele":{"type":3,"isNecessary":true,"question":"请填空"}});
       this.questionCnt++;
-      this.questionList.push({"type":3,"showToolbar":false,"isNecessary":true});
+      this.questionList.push({"type":3,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请填空","text":"请填空"});
     },
     //TieZhu:添加评分题
     addScore(){
-      store.commit("addQsOn",{"index":this.questionCnt-1,"ele":{"type":4,"isNecessary":true,"question":"请评分"}});
       this.questionCnt++;
-      this.questionList.push({"type":4,"showToolbar":false,"isNecessary":true});
+      this.questionList.push({"type":4,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请评分","text":"请评分"});
     },
+
     //TieZhu:工具栏功能
     necessary(index){
       this.questionList[index].isNecessary=true;
-      store.commit("updateIsNecessary",{"index":index,"isNecessary":true});
     },
     unnecessary(index){
       this.questionList[index].isNecessary=false;
-      store.commit("updateIsNecessary",{"index":index,"isNecessary":false});
     },
     deleteQs(index){
       this.questionList.splice(index,1);
-      store.commit("deleteQs",index);
       this.questionCnt--;
     },
     copy(index){
-      this.questionList.splice(index+1,0,this.questionList[index]);
-      store.commit("copyQs",index);
+      //使用parse进行深拷贝
+      const item = JSON.parse(JSON.stringify(this.questionList[index]));
+      this.questionList.splice(index+1,0,item);
       this.questionCnt++;
     },
+
+    //拖动改变顺序
     dragStart(index){
       this.draggedIndex = index;
     },
     dragEnter(index){
       if(index != this.draggedIndex){
-        const itemToMove = this.questionList[this.draggedIndex],stateToMove = store.state.qs[this.draggedIndex];
-        console.log(store.state.qs);
+        const itemToMove = this.questionList[this.draggedIndex];
         this.questionList.splice(this.draggedIndex,1)
-        this.questionList.splice(index-1,0,itemToMove);
-        store.commit("deleteQs",this.draggedIndex);
-        store.commit("addQsOn",{"index":index,"ele":stateToMove});
-        console.log(store.state.qs);
+        this.questionList.splice(index,0,itemToMove);
         this.draggedIndex = index;
       }
     },
     drop(index){
       this.draggedIndex = -1;
-    }
+    },
+
+    //选择题
+    addOption(index,index2){
+      this.questionList[index].optionCnt++;
+      this.questionList[index].optionList.splice(index2,0,{"showBar":false,"isEditing":false,"content":"选项","text":"选项"});
+      if(this.questionList[index].optionCnt==2){
+          this.questionList[index].isDisabled = false;
+      }
+    },
+    deleteOption(index,index2){
+      this.questionList[index].optionCnt--;
+      this.questionList[index].optionList.splice(index2,1);
+      if(this.questionList[index].optionCnt==1){
+        this.questionList[index].isDisabled = true;
+      }
+    },
+      //EditText
+    startEditing(type,index,index2) {
+      if(type == 0){
+        this.questionList[index].qsIsEditing = true;
+      }
+      else{
+        this.questionList[index].optionList[index2].isEditing = true;
+      }
+    },
+    finishEditing(type,index,index2) {
+      if(type == 0){
+        this.questionList[index].qsIsEditing = false;
+        if(this.questionList[index].question.length == 0){
+          this.questionList[index].question = this.questionList[index].text;
+          this.warning();
+        }
+        else{
+          this.questionList[index].text = this.questionList[index].question;
+        }
+      }
+      else{
+        this.questionList[index].optionList[index2].isEditing = false;
+        if(this.questionList[index].optionList[index2].content.length == 0){
+          this.questionList[index].optionList[index2].content = this.questionList[index].optionList[index2].text;
+          this.warning();
+        }
+        else{
+          this.questionList[index].optionList[index2].text = this.questionList[index].optionList[index2].content;
+        }
+      }
+    },
+    warning(){
+      ElMessage({
+        message:'长度不能为空',
+        type:'warning',
+      });
+    },
    },
    components:{
-    EditableText,
-    SingleChoice,
-    MultipleChoice,
-    FillBlank,
-    Score,
     NavigationBar,
    }
  })

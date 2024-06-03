@@ -24,23 +24,24 @@
     <div class="all-container">
       <el-container>
         <el-header><navigation2/></el-header>
-        <el-container class="aside">
+        <el-main class="aside">
     
             <div class="title">纸翼<span>传问</span></div>
             <div class="subtitle">欢迎来到纸翼传问欢迎来到纸翼传问欢迎来到纸翼传问欢迎来到纸翼传问欢迎来到纸翼传问</div>
             <el-button id="start_btn" @click = "gotoLogin" @mouseover="btnIn" @mouseout="btnOut" class="button" >开始</el-button>
 
-        </el-container>
+        </el-main>
       </el-container>
     </div>
 </template>
 
 <!-- dcx：scoped保证样式只会应用到当前 .vue 文件 -->
-<style lang="scss" scoped>
+<style lang="scss">
     .all-container {
         height: 100vh;
         background: url("../assets/bg6.png");
         background-size: cover;
+        // border: red solid 2px;
 
         .aside {
             display: flex;
