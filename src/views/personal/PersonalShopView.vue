@@ -1,5 +1,6 @@
 <template>
-    <div class="all-container">
+    <!-- <div class="title"></div> -->
+    <div class="item-container">
         <div class="item">
             <img src="../../assets/photos/星空.jpg" alt="" class="image">
             <div class="text">100纸币</div>
@@ -72,7 +73,14 @@
 </script>
 
 <style lang="scss">
-    .all-container {
+    .title {
+        font-size: 30px;
+        color: white;
+        padding-top: 3%;
+        margin-bottom: 4%;
+    }
+
+    .item-container {
         display: flex;
         flex-wrap: wrap;
         justify-content: flex-start; // 从左往右排列
@@ -98,18 +106,21 @@
                 width: 100%;
                 height: 100%;
                 object-fit: cover; // 图片等比例缩放填充
+                transition: opacity 0.3s ease-in-out;
             }
 
             .text {
+                height: auto;
+                width: 100%;
                 position: absolute; // 绝对定位
                 top: 50%; // 垂直居中
                 left: 50%; // 水平居中
                 transform: translate(-50%, -50%); // 通过偏移实现居中
                 opacity: 0; // 初始时隐藏
                 color: white;
-                font-size: 20px;
+                font-size: 30px;
                 text-align: center;
-                transition: opacity 0.3s ease; // 添加过渡效果
+                transition: opacity 0.3s ease-in-out; // 添加过渡效果
             }
 
             &:hover {

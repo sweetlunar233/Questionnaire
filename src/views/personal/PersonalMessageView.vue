@@ -15,7 +15,7 @@
     userPasswordText.value = "password";
 
     const changeNameText_in = () => {
-        userNameText.value = "好名字";
+        userNameText.value = "真是个好名字";
     }
     const changeNameText_out = () => {
         userNameText.value = "用户名";
@@ -32,42 +32,35 @@
 
     const changePasswordText_in = () => {
         userPasswordText.value = "修改密码";
+        // showpassword.value = false;
     }
     const changePasswordText_out = () => {
         userPasswordText.value = "password";
-        // userPasswordText.value = store.state.nowuser.password;
+        // showpassword.value = true;
     }
+
+
 </script>
 
 <template>
     <div class="all_container">
         <div class="photo">
         </div>
-        <a class="fancy"  @mouseover="changeNameText_in" @mouseout="changeNameText_out">
-            <!-- <span class="top-key"></span>  -->
+
+        <button class="box" @mouseover="changeNameText_in" @mouseout="changeNameText_out">
             <span class="text">{{userNameText}}</span>
-            <!-- <span class="bottom-key-1"></span> -->
-            <!-- <span class="bottom-key-2"></span> -->
-        </a>
+        </button>
 
-        <a class="fancy"  @mouseover="changePasswordText_in" @mouseout="changePasswordText_out">
-            <!-- <span class="top-key"></span>  -->
+        <button class="box" @mouseover="changePasswordText_in" @mouseout="changePasswordText_out">
             <span class="text">{{userPasswordText}}</span>
-            <!-- <span class="bottom-key-1"></span> -->
-            <!-- <span class="bottom-key-2"></span> -->
-        </a>
+            <!-- <span class="text_before">{{userPasswordText}}</span> -->
+            <!-- <span class="text_after">修改密码</span> -->
+        </button>
 
-        <a class="fancy"  @mouseover="changeEmailText_in" @mouseout="changeEmailText_out">
-            <!-- <span class="top-key"></span>  -->
+        <button class="box" @mouseover="changeEmailText_in" @mouseout="changeEmailText_out">
             <span class="text">{{userEmailText}}</span>
-            <!-- <span class="bottom-key-1"></span> -->
-            <!-- <span class="bottom-key-2"></span> -->
-        </a>
-        
+        </button>
 
-        <div class="money">
-
-        </div>
     </div>
 </template>
 
@@ -78,7 +71,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
 
         .photo {
             width: 200px;
@@ -130,110 +123,90 @@
         }
     }
 
-
-    .fancy {
-        background-color: transparent;
-        border: 2px solid white;
-        border-radius: 1em;
-        box-sizing: border-box;
-        color: #fff;
-        cursor: pointer;
-        display: inline-block;
-        /* float: right; */
-        font-weight: 700;
-        letter-spacing: 0.05em;
-        margin-bottom: 5%;
-        outline: none;
-        overflow: visible;
-        padding: 0.6em 1.1em;
+    .box {
+        width: 500px;
+        height: auto;
+        float: left;
+        transition: .5s linear;
         position: relative;
-        text-align: center;
-        text-decoration: none;
-        text-transform: none;
-        transition: all 0.3s ease-in-out;
-        user-select: none;
-        font-size: 30px;
-        
-    }
-
-    .fancy::before {
-        content: " ";
-        width: 1.5625rem;
-        height: 2px;
-        background: white;
-        top: 50%;
-        left: 1.5em;
-        position: absolute;
-        transform: translateY(-50%);
-        transform-origin: center;
-        transition: background 0.3s linear, width 0.3s linear;
-    }
-
-    .fancy .text {
-        font-size: 1.125em;
-        line-height: 1.33333em;
-        padding-left: 2em;
         display: block;
-        text-align: left;
-        transition: all 0.3s ease-in-out;
+        overflow: hidden;
+        padding: 15px;
+        text-align: center;
+        margin: 15px 5px;
+        background: transparent;
+        font-weight: 0;
+        font-size: 40px;
+        color: white;
+        // font-family: cursive, sans-serif;
+
+    }
+
+    // .text_before {
+    //     opacity: 1;
+    //     transition: ease-in 0.2s;
+    // }
+    // .text_after {
+    //     opacity: 0;
+    //     transition: ease-in 0.2s;
+    // }
+
+    .box:before {
+        position: absolute;
+        content: '';
+        left: 0;
+        bottom: 0;
+        height: 4px;
+        width: 100%;
+        border-bottom: 4px solid transparent;
+        border-left: 4px solid transparent;
+        box-sizing: border-box;
+        transform: translateX(100%);
+    }
+
+    .box:after {
+        position: absolute;
+        content: '';
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        border-top: 4px solid transparent;
+        border-right: 4px solid transparent;
+        box-sizing: border-box;
+        transform: translateX(-100%);
+    }
+
+    .box:hover {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        // .text_before{
+        //     opacity: 0;
+        // }
+        // .text_after {
+        //     opacity: 1;
+        // }
+    }
+
+    .box:hover:before {
+        border-color: white;
+        height: 100%;
+        transform: translateX(0);
+        transition: .3s transform linear, .3s height linear .3s;
+    }
+
+    .box:hover:after {
+        border-color: white;
+        height: 100%;
+        transform: translateX(0);
+        transition: .3s transform linear, .3s height linear .5s;
+    }
+
+    button {
+        color: black;
         text-decoration: none;
-        color: white;
-        
-    }
-
-    .fancy .top-key {
-        height: 2px;
-        width: 5rem;
-        top: -2px;
-        left: 2rem;
-        position: absolute;
-        background: black;
-        transition: width 0.5s ease-out, left 0.3s ease-out;
-    }
-
-    .fancy .bottom-key-1 {
-        height: 2px;
-        width: 1.5625rem;
-        right: 12rem;
-        bottom: -2px;
-        position: absolute;
-        background: black;
-        transition: width 0.5s ease-out, right 0.3s ease-out;
-    }
-
-    .fancy .bottom-key-2 {
-        height: 2px;
-        width: 5rem;
-        right: 2rem;
-        bottom: -2px;
-        position: absolute;
-        background: black;
-        transition: width 0.5s ease-out, right 0.3s ease-out;
-    }
-
-    .fancy:hover {
-        color: white;
-        /* background: #757274; */
-    }
-
-    .fancy:hover::before {
-        width: 0.9375rem;
-        background: white;
-    }
-
-    .fancy:hover .text {
-        color: white;
-        padding-left: 1.5em;
-    }
-
-    .fancy:hover .top-key {
-        left: -2px;
-        width: 0px;
-    }
-
-    .fancy:hover .bottom-key-1,
-    .fancy:hover .bottom-key-2 {
-        right: 0;
-        width: 0;
+        cursor: pointer;
+        outline: none;
+        border: none;
+        background: transparent;
     }
 </style>
