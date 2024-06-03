@@ -3,24 +3,23 @@ import { post,get } from "./api"
 export function GetUnreleasedQs(username){
     let data = {};
     data.username = username;
-    return get("/userManage/unreleased",data);
+    return get("/userManage/unreleased"+username);
 }
 
 export function GetReleasedQs(username){
     let data = {};
     data.username = username;
-    return get("/userManage/released",data);
+    return get("/userManage/released"+username);
 }
 
 export function GetFilledQs(username){
     let data = {};
     data.username = username;
-    return get("/userManage/filled",data);
+    return get("/userManage/filled"+username);
 }
 
 export function GetAllReleasedQs(){
-    let data = {};
-    return get("/userManage/square",data);
+    return get("/userManage/square");
 }
 
 export function DeleteUnreleasedQs(id){
