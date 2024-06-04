@@ -21,6 +21,10 @@
         router.push('/personal');
     }
 
+    const gotoUserManage = () => {
+        router.push('/userManage');
+    }
+
     const goBack = () => {
         router.go(-1); // 返回上一页
     };
@@ -52,7 +56,7 @@
 
 <template>
     <el-header class = "navigationBar">
-        <div @mouseover="logoIn('logo')" @mouseout="logoOut('logo')">
+        <div @click = "gotoUserManage" @mouseover="logoIn('logo')" @mouseout="logoOut('logo')">
             <img id="logo" src="../assets/logo.png" alt="Element logo"/>
         </div>
         <div class="title">
@@ -80,7 +84,7 @@
     </el-header>
 </template>
 
-<style lang = "scss">
+<style lang = "scss" scoped>
     .navigationBar {
         display: flex;
         align-items: center;

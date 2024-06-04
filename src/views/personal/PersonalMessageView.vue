@@ -3,42 +3,38 @@
     import {ref} from 'vue';
 
     const userNameText = ref("");
-    // userNameText.value = store.state.nowuser.username;
-    userNameText.value = "用户名";
+    userNameText.value = store.state.nowuser.username;
+    // userNameText.value = "用户名";
 
     const userEmailText = ref("");
-    // userEmailText.value = store.state.nowuser.email;
-    userEmailText.value = "1969024607@qq.com";
+    userEmailText.value = store.state.nowuser.email;
+    // userEmailText.value = "1969024607@qq.com";
 
     const userPasswordText = ref("");
-    // userPasswordText.value = store.state.nowuser.password;
     userPasswordText.value = "password";
 
     const changeNameText_in = () => {
         userNameText.value = "真是个好名字";
     }
     const changeNameText_out = () => {
-        userNameText.value = "用户名";
-        // userNameText.value = store.state.nowuser.username;
+        // userNameText.value = "用户名";
+        userNameText.value = store.state.nowuser.username;
     }
 
     const changeEmailText_in = () => {
         userEmailText.value = "修改邮箱";
     }
     const changeEmailText_out = () => {
-        userEmailText.value = "1969024607@qq.com";
-        // userEmailText.value = store.state.nowuser.email;
+        // userEmailText.value = "1969024607@qq.com";
+        userEmailText.value = store.state.nowuser.email;
     }
 
     const changePasswordText_in = () => {
         userPasswordText.value = "修改密码";
-        // showpassword.value = false;
     }
     const changePasswordText_out = () => {
         userPasswordText.value = "password";
-        // showpassword.value = true;
     }
-
 
 </script>
 
@@ -53,8 +49,6 @@
 
         <button class="box" @mouseover="changePasswordText_in" @mouseout="changePasswordText_out">
             <span class="text">{{userPasswordText}}</span>
-            <!-- <span class="text_before">{{userPasswordText}}</span> -->
-            <!-- <span class="text_after">修改密码</span> -->
         </button>
 
         <button class="box" @mouseover="changeEmailText_in" @mouseout="changeEmailText_out">
@@ -78,9 +72,10 @@
             height: 200px;
             border-radius: 1000px;
             border: white solid 3px;
-            background: url("@/assets/photos/星空.jpg");
+            background: url('@/assets/photos/photo1.jpg');
             background-size: cover;
             margin-bottom: 5%;
+            
         }
 
         /* .flex_start_card {

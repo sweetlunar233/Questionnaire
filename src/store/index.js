@@ -8,6 +8,7 @@ export default createStore({
       password: "",
       email: "",
       money: 0,
+      own_photos: new Array(20).fill(0),
     },
   },
   getters: {

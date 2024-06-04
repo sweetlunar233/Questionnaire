@@ -2,67 +2,7 @@
     <!-- <div class="title"></div> -->
     <div class="item-container">
         <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
+            <img src="../../assets/photos/photo1.jpg" alt="" class="image">
             <div class="text">100纸币</div>
         </div>
     </div>

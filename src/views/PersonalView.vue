@@ -1,9 +1,9 @@
 <script setup>
-    import NavigationBar from '@/components/NavigationBar.vue';
+    import NavigationBarWithLogoFunction from '@/components/NavigationBarWithLogoFunction.vue';
     import { ref } from "vue";
     import { useRouter } from 'vue-router';
 
-    const navigation = ref(NavigationBar);
+    const navigation3 = ref(NavigationBarWithLogoFunction);
 
     const router = useRouter();
 
@@ -19,7 +19,7 @@
 
 <template>
     <el-container class="container">
-        <el-header><navigation/></el-header>
+        <el-header><navigation3/></el-header>
         <el-container>
             <div class = "aside"> 
                 <button class = "option" @click="gotoPersonalMessage">
