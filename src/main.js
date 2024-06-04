@@ -17,10 +17,15 @@ import { RadioGroup, Radio } from 'vant';
 import { Checkbox, CheckboxGroup } from 'vant';
 import { Divider } from 'vant';
 
+//引入Echarts
+import * as echarts from 'echarts'
 
 const app = createApp(App)
+
+app.config.globalProperties.$echarts = echarts // 全局挂载echarts
+
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
 
-app.use(store).use(router).use(ElementPlus,{locale}).use(RadioGroup).use(Radio).use(Checkbox).use(CheckboxGroup).use(Divider).mount('#app')
+app.use(store).use(router).use(ElementPlus,{locale}).use(RadioGroup).use(Radio).use(Checkbox).use(CheckboxGroup).use(Divider).use(echarts).mount('#app')

@@ -40,9 +40,13 @@
           &ensp;填空题
         </el-button>
       </div>
-        </div>
-        <div class="right">
-      <editable-text initial-text="问卷标题" class="title"></editable-text>
+    </div>
+    
+    <div class="right">
+      <div class="title">
+        <el-input v-if="ttIsEditing" v-model="title" @blur="finishEditing(-1,0,0)" @keyup.enter="finishEditing(-1,0,0)" clearable/>
+        <span v-else @click="startEditing(-1,0,0)">{{ text }}</span>
+      </div>
       <van-divider  :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"></van-divider>
 
       <!-- @dragstart: 拖动开始时触发，记录被拖动的题目索引。
@@ -153,11 +157,12 @@
           <br/>
         </div>
 
+        <!-- TieZhu:评分题 -->
         <div v-if="questionList[index-1].type==4">
           <el-input v-if="questionList[index-1].qsIsEditing" v-model="questionList[index-1].question" @blur="finishEditing(0,index-1,0)" @keyup.enter="finishEditing(0,index-1,0)" clearable/>
           <span v-else @click="startEditing(0,index-1,0)">{{ questionList[index-1].text }}</span>
           <br/>
-          <el-rate v-model="score" allow-half></el-rate>
+          <el-rate v-model="score"></el-rate>
           <br/>
           <br/>
         </div>
@@ -209,6 +214,9 @@ import { ElMessage } from 'element-plus'
       questionCnt: 0,
       questionList: [],
       draggedIndex:-1,
+      title:'问题标题',
+      text:'问卷标题',
+      ttIsEditing:false,
     }
    },
    methods: {
@@ -289,8 +297,11 @@ import { ElMessage } from 'element-plus'
       if(type == 0){
         this.questionList[index].qsIsEditing = true;
       }
-      else{
+      else if(type == 1){
         this.questionList[index].optionList[index2].isEditing = true;
+      }
+      else{
+        this.ttIsEditing = true;
       }
     },
     finishEditing(type,index,index2) {
@@ -304,7 +315,7 @@ import { ElMessage } from 'element-plus'
           this.questionList[index].text = this.questionList[index].question;
         }
       }
-      else{
+      else if(type == 1){
         this.questionList[index].optionList[index2].isEditing = false;
         if(this.questionList[index].optionList[index2].content.length == 0){
           this.questionList[index].optionList[index2].content = this.questionList[index].optionList[index2].text;
@@ -312,6 +323,16 @@ import { ElMessage } from 'element-plus'
         }
         else{
           this.questionList[index].optionList[index2].text = this.questionList[index].optionList[index2].content;
+        }
+      }
+      else{
+        this.ttIsEditing = false;
+        if(this.title.length == 0){
+          this.title = this.text;
+          this.warning();
+        }
+        else{
+          this.text = this.title;
         }
       }
     },
