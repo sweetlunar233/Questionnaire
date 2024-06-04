@@ -20,16 +20,41 @@ export function getUserMessagePersonal(username){
     return get("/userManage/personal",data);
 }
 
-export function updateUserInfo(username, email){
+export function modifyUserInfo(username, email, password, zhibi){
     let data = {};
     data.username = username;
     data.email = email;
-    return post("/userManage/personal",data);
+    data.password = password;
+    data.zhibi = zhibi;
+    return post("/personal/message", data);
 }
 
-export function updateUserPassword(username, password){
+export function updataUserphotoInMassage(username, photonumber, status){
     let data = {};
     data.username = username;
-    data.password = password;
-    return post("/userManage/personal",data);
+    data.photonumber = photonumber;
+    data.status = status;
+    return post("/personal/message", data);
 }
+
+export function updataUserphotoInShop(username, photonumber, status){
+    let data = {};
+    data.username = username;
+    data.photonumber = photonumber;
+    data.status = status;
+    return post("/personal/shop", data);
+}
+
+// export function updateUserInfo(username, email){
+//     let data = {};
+//     data.username = username;
+//     data.email = email;
+//     return post("/userManage/personal",data);
+// }
+
+// export function updateUserPassword(username, password){
+//     let data = {};
+//     data.username = username;
+//     data.password = password;
+//     return post("/userManage/personal",data);
+// }

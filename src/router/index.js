@@ -71,6 +71,11 @@ const routes = [
         path: '/personal/message',
         name: 'personalMessage',
         component: () => import('../views/personal/PersonalMessageView.vue')
+      },
+      { 
+        path: '/personal/shop',
+        name: 'personalShop',
+        component: () => import('../views/personal/PersonalShopView.vue')
       }
     ]
   }

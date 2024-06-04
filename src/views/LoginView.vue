@@ -3,6 +3,7 @@
     import NavigationBarWithoutUser from "@/components/NavigationBarWithoutUser.vue";
     import { useRouter } from 'vue-router';
     import store from "@/store";
+
     const navigation2 = ref(NavigationBarWithoutUser);
     const isLogin = ref(1);
     const router = useRouter();
@@ -23,6 +24,7 @@
         store.state.nowuser.password = result.password;
         store.state.nowuser.email = result.email;
         store.state.nowuser.money = result.money;
+        store.state.nowuser.own_photos = result.own_photos;
     }
 
     import { getUserMessage, postUserMessage } from "@/api/user";
@@ -161,10 +163,10 @@
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .all_container {
         height: 100vh;
-        background: url("../assets/bg7.jpg");
+        background: url("../assets/photos/photo10.jpg");
         background-size: cover;
 
         .login-container{

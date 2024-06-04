@@ -26,6 +26,7 @@ const navigation = ref(NavigationBar);
 //     }
 // }
 // loginCheck();
+
 </script>
 
 <template>
@@ -36,7 +37,7 @@ const navigation = ref(NavigationBar);
             <!-- 左侧菜单 -->
             <el-aside width="250px" style="margin-top: 20px;">
                 <!-- element-plus的菜单标签 -->
-                <!-- <el-menu active-text-color="rgb(243,156,181)" background-color="rgba(255, 255, 255, 0)"  text-color="rgb(80, 134, 233)"  router>
+                <el-menu active-text-color="rgb(243,156,181)" background-color="rgba(255, 255, 255, 0)"  text-color="rgb(80, 134, 233)"  router>
                     <el-sub-menu style="margin-top: 20px">
                         <template #title>
                             <el-icon>
@@ -75,11 +76,7 @@ const navigation = ref(NavigationBar);
                         </el-icon>
                         <span>问卷广场</span>
                     </el-menu-item>
-                </el-menu> -->
-                <button class="option"><span>草稿箱</span></button>
-                <button class="option"><span>已发布问卷</span></button>
-                <button class="option"><span>已填写问卷</span></button>
-                <button class="option"><span>问卷广场</span></button>
+                </el-menu>
             </el-aside>
             <el-container>
                 <!-- 中间区域 -->
@@ -97,91 +94,31 @@ const navigation = ref(NavigationBar);
 </template>
 
 <style scoped lang="scss">
-.option {
-    width: 70%;
-    height: 10%;
-    // padding: 1em 2em;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-    cursor: pointer;
-    color: white;
-    transition: all 1000ms;
-    font-size: 25px;
-    position: relative;
-    overflow: hidden;
-    outline: 2px solid white;
-    margin: 20px 0 20px 0;
-    background-color: rgba(0, 0, 0, 0);
-    justify-content: center;
-    align-items: center;
-    display: flex;
-
-    span {
-        margin-left: 10px;
-    }
-}
-
-.option:hover {
-    color: #000;
-    transform: scale(1.1);
-    outline: 2px solid #fff;
-    box-shadow: 4px 5px 17px -4px #fff;
-}
-
-.option::before {
-    content: "";
-    position: absolute;
-    left: -50px;
-    top: 0;
-    width: 0;
-    height: 100%;
-    background-color: #fff;
-    transform: skewX(45deg);
-    z-index: -1;
-    transition: width 1000ms;
-}
-
-.option:hover::before {
-    width: 250%;
-}
-
-
-
-
-
-
-
-
 .layout-container {
     height: 100vh;
-    background: url("../assets/bg3.png");
+    background: url("../assets/bg6.png");
     background-size: cover;
-    
 }
 
 .layout-container .el-aside {
     height: 80%;
-    background-color: rgba(0, 0, 0, 0);
+    background-color: rgba(255, 255, 255, 0.5);
     border-radius: 7px;
     margin-bottom: 30px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0); /* 鼠标悬停时阴影加深 */
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    // justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* 鼠标悬停时阴影加深 */
 }
 
+.layout-container .el-aside .el-menu {
+    border-right: none;
+    background-color: rgba(255,255,255,0);
+}
 
 .with-background-color {
     background-color: rgba(255, 255, 255, 0); /* 设置背景颜色，可以根据需求自行调整 */
 }
 
 .with-background-color:hover {
-    background-color: rgba(0,0,0,0);
+    background-color: rgba(0,0,0,0.03);
 }
 
 .layout-container .el-footer {
