@@ -17,6 +17,8 @@
     "vant": "^3.4.3",
     "vant-green": "^1.0.44",
     "vue": "^3.2.13",
+    "vue-cookie": "^1.1.4",
+    "vue-cookies": "^1.8.4",
     "vue-router": "^4.3.2",
     "vuex": "^4.0.0"
   },

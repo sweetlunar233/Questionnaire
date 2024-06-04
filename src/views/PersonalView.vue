@@ -71,7 +71,7 @@
                 font-size: 25px;
                 position: relative;
                 overflow: hidden;
-                outline: 2px solid #f59cda;
+                outline: 2px solid white;
                 margin: 20px 0 20px 0;
                 background-color: rgba(0, 0, 0, 0);
                 justify-content: center;

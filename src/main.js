@@ -17,6 +17,7 @@ import { RadioGroup, Radio } from 'vant';
 import { Checkbox, CheckboxGroup } from 'vant';
 import { Divider } from 'vant';
 
+
 const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)

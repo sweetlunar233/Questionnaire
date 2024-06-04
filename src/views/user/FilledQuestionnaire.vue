@@ -182,14 +182,12 @@ const deleteQs = (id) =>{
 </script>
 <template>
     <el-card class="page-container">
-        <template #header>
             <div class="header">
                 <span>已填写问卷</span>
                 <!-- <div class="extra">
                     <el-button type="primary">添加文章</el-button>
                 </div> -->
             </div>
-        </template>
         <!-- 搜索表单 -->
         <el-form inline class="searchform">
             <div style="margin-right: auto"></div>
@@ -211,22 +209,26 @@ const deleteQs = (id) =>{
             </el-form-item>
         </el-form>
         <div class="card-container">
-            <el-card v-for="(questionnaire, index) in questionnaires" :key="index" class="article-card" style="margin-bottom: 20px;">
-                <div>
-                    <!-- 上部分 -->
-                    <div class="card-header">
-                        <span style="margin-left: 5px">{{ questionnaire.Title }}</span>
-                        <span style="float: right" class="right">填写日期: {{ questionnaire.PublishDate }}</span>
-                        <span style="float: right" class="right">ID: {{questionnaire.SurveyID}}</span>
-                    </div>
+            <div class="card" v-for="(questionnaire, index) in questionnaires" :key="index">
+                <div class="bg">
+                    <div>
+                        <!-- 上部分 -->
+                        <div class="card-header">
+                            <span style="margin-left: 5px">{{ questionnaire.Title }}</span>
+                            <span style="float: right" class="right">填写日期: {{ questionnaire.PublishDate }}</span>
+                            <span style="float: right" class="right">ID: {{questionnaire.SurveyID}}</span>
+                        </div>
 
-                    <!-- 下部分 -->
-                    <div class="card-footer">
-                        <el-button type="text" :icon="Edit" @click="goToQuestionnaireFill(questionnaire.SurveyID)">查看填写</el-button>
-                        <el-button type="danger" :icon="Delete" style="float: right" circle @click="deleteQs(questionnaire.SurveyID)"></el-button>
+                        <!-- 下部分 -->
+                        <div class="card-footer">
+                            <el-button type="text" :icon="Edit" @click="goToQuestionnaireFill(questionnaire.SurveyID)" class="textbutton">查看填写</el-button>
+                            <el-button type="danger" :icon="Delete" style="float: right" circle @click="deleteQs(questionnaire.SurveyID)" class="deletebutton"></el-button>
+                        </div>
                     </div>
                 </div>
-            </el-card>
+                <div class="blob"></div>
+            </div>
+
         </div>
         <!-- 分页条 -->
         <el-pagination :page-sizes="[3, 5, 10, 15]"
@@ -235,9 +237,96 @@ const deleteQs = (id) =>{
     </el-card>
 </template>
 <style scoped>
+.card {
+  position: relative;
+  width: 1200px;
+  height: 120px;
+  border-radius: 14px;
+  z-index: 1111;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 1px 1px 3px #bebebe, -1px -1px 3px #ffffff;
+
+  margin-left: 30px;
+  margin-bottom: 20px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: scale(1.01); /* 鼠标悬停时放大 */
+  box-shadow: 3px 3px 9px #bebebe, -3px -3px 9px #ffffff; /* 鼠标悬停时阴影加深 */
+}
+
+
+.bg {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 1190px;
+  height: 110px;
+  z-index: 2;
+  background: rgba(255, 244, 244, 0.95);
+  backdrop-filter: blur(24px);
+  border-radius: 10px;
+  overflow: hidden;
+  outline: 1px solid white;
+}
+
+.blob {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #ec4217;
+  opacity: 1;
+  filter: blur(12px);
+  animation: blob-bounce 5s infinite ease;
+}
+
+@keyframes blob-bounce {
+  0% {
+    transform: translate(-100%, -100%) translate3d(-595px, 0, 0);
+  }
+
+  40% {
+    transform: translate(-100%, -100%) translate3d(595px, 0, 0);
+  }
+
+  50% {
+    transform: translate(-100%, -100%) translate3d(595px, 110px, 0);
+  }
+
+  90% {
+    transform: translate(-100%, -100%) translate3d(-595px, 110px, 0);
+  }
+
+  100% {
+    transform: translate(-100%, -100%) translate3d(-595px, 0, 0);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 .page-container {
     min-height: 100%;
     box-sizing: border-box;
+    background-color: rgba(0, 0, 0, 0);
+    border: 0;
 }
 
 .page-container .header {
@@ -259,6 +348,7 @@ const deleteQs = (id) =>{
 
 .card-header {
   padding-bottom: 10px;
+  margin-top: 15px;
 }
 
 .card-footer {
@@ -269,7 +359,7 @@ const deleteQs = (id) =>{
 .right{
     font-size: 13px;
     padding-left: 7px;
-    padding-right: 7px;
+    padding-right: 20px;
     border-right: 1px solid #ebeef5;
 }
 
@@ -284,6 +374,14 @@ const deleteQs = (id) =>{
 
 .searchform .searchbutton{
     margin-right: 5px;
+}
+
+.textbutton{
+    margin-left: 20px;
+}
+
+.deletebutton{
+    margin-right: 20px;
 }
 
 </style>

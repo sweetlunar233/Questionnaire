@@ -17,6 +17,9 @@
     function btnOut() {
         document.getElementById("start_btn").classList.remove("zoom-btn");
     }
+
+
+
 </script>
 
 
@@ -25,7 +28,6 @@
       <el-container>
         <el-header><navigation2/></el-header>
         <el-main class="aside">
-    
             <div class="title">纸翼<span>传问</span></div>
             <div class="subtitle">欢迎来到纸翼传问欢迎来到纸翼传问欢迎来到纸翼传问欢迎来到纸翼传问欢迎来到纸翼传问</div>
             <el-button id="start_btn" @click = "gotoLogin" @mouseover="btnIn" @mouseout="btnOut" class="button" >开始</el-button>
