@@ -1,76 +1,30 @@
+<script setup>
+    import store from '@/store';
+    import {ref} from "vue";
+
+    const photos = ref([]);
+    photos.value = store.state.nowuser.own_photos;
+
+    const photoNotBuy = ref([]);
+
+    for (let i=1; i<photos.value.length; i++) {
+        if (photos.value[i] == 0) {
+            photoNotBuy.value.push(i);
+            console.log("not buy:", i);
+        }
+    }
+
+</script>
+
 <template>
     <!-- <div class="title"></div> -->
     <div class="item-container">
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
-            <div class="text">100纸币</div>
-        </div>
-        <div class="item">
-            <img src="../../assets/photos/星空.jpg" alt="" class="image">
+        <div class="item" v-for="(photonumber, index) in photoNotBuy" :key="index">
+            <img :src="require(`@/assets/photos/photo${photonumber}.jpg`)" alt="" class="image">
             <div class="text">100纸币</div>
         </div>
     </div>
 </template>
-
-<script setup>
-
-</script>
 
 <style lang="scss">
     .title {

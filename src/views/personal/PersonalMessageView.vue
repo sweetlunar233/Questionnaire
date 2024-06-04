@@ -3,62 +3,62 @@
     import {ref} from 'vue';
 
     const userNameText = ref("");
-    // userNameText.value = store.state.nowuser.username;
-    userNameText.value = "用户名";
+    userNameText.value = store.state.nowuser.username;
+    // userNameText.value = "用户名";
 
     const userEmailText = ref("");
-    // userEmailText.value = store.state.nowuser.email;
-    userEmailText.value = "1969024607@qq.com";
+    userEmailText.value = store.state.nowuser.email;
+    // userEmailText.value = "1969024607@qq.com";
 
     const userPasswordText = ref("");
-    // userPasswordText.value = store.state.nowuser.password;
     userPasswordText.value = "password";
 
     const changeNameText_in = () => {
         userNameText.value = "真是个好名字";
     }
     const changeNameText_out = () => {
-        userNameText.value = "用户名";
-        // userNameText.value = store.state.nowuser.username;
+        // userNameText.value = "用户名";
+        userNameText.value = store.state.nowuser.username;
     }
 
     const changeEmailText_in = () => {
         userEmailText.value = "修改邮箱";
     }
     const changeEmailText_out = () => {
-        userEmailText.value = "1969024607@qq.com";
-        // userEmailText.value = store.state.nowuser.email;
+        // userEmailText.value = "1969024607@qq.com";
+        userEmailText.value = store.state.nowuser.email;
     }
 
     const changePasswordText_in = () => {
         userPasswordText.value = "修改密码";
-        // showpassword.value = false;
     }
     const changePasswordText_out = () => {
         userPasswordText.value = "password";
-        // showpassword.value = true;
     }
 
+    const photoUrl = require(`@/assets/photos/photo${store.state.nowuser.own_photos[0]}.jpg`);
 
 </script>
 
 <template>
     <div class="all_container">
-        <div class="photo">
+        <div class = "photo_container">
+            <img class="photo" :src="photoUrl" alt="图片加载异常">
+            <div class="text">更换头像</div>
         </div>
+        <!-- <div class="photo"> -->
+        <!-- </div> -->
 
         <button class="box" @mouseover="changeNameText_in" @mouseout="changeNameText_out">
-            <span class="text">{{userNameText}}</span>
+            <span >{{userNameText}}</span>
         </button>
 
         <button class="box" @mouseover="changePasswordText_in" @mouseout="changePasswordText_out">
-            <span class="text">{{userPasswordText}}</span>
-            <!-- <span class="text_before">{{userPasswordText}}</span> -->
-            <!-- <span class="text_after">修改密码</span> -->
+            <span >{{userPasswordText}}</span>
         </button>
 
         <button class="box" @mouseover="changeEmailText_in" @mouseout="changeEmailText_out">
-            <span class="text">{{userEmailText}}</span>
+            <span >{{userEmailText}}</span>
         </button>
 
     </div>
@@ -73,15 +73,60 @@
         align-items: center;
         justify-content: flex-start;
 
-        .photo {
+        .photo_container {
             width: 200px;
             height: 200px;
             border-radius: 1000px;
-            border: white solid 3px;
-            background: url("@/assets/photos/星空.jpg");
-            background-size: cover;
+            border: white 2px solid;
+            position: relative; // 添加相对定位
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
             margin-bottom: 5%;
+
+            .photo {
+                width: 100%;
+                height: 100%;
+                object-fit: cover; // 图片等比例缩放填充
+                transition: opacity 0.3s ease-in-out;
+            }
+
+            .text {
+                height: auto;
+                width: 100%;
+                position: absolute; // 绝对定位
+                top: 50%; // 垂直居中
+                left: 50%; // 水平居中
+                transform: translate(-50%, -50%); // 通过偏移实现居中
+                opacity: 0; // 初始时隐藏
+                color: white;
+                font-size: 30px;
+                text-align: center;
+                transition: opacity 0.3s ease-in-out; // 添加过渡效果
+            }
+
+            &:hover {
+                transform: scale(1.1);
+                transition: all 0.2s ease;
+                cursor: pointer;
+
+                .text {
+                    opacity: 1; // 悬停时显示文本
+                }
+
+                .photo {
+                    opacity: 0.2; // 悬停时图片变暗
+                }
+            }
         }
+
+
+        
+
+        
+
 
         /* .flex_start_card {
             display: flex;

@@ -3,7 +3,6 @@
 <script setup>
     import { ref, watchEffect} from 'vue';
     import { useRouter } from 'vue-router';
-    import { ArrowDown } from '@element-plus/icons-vue'
     import store from '../store';
 
     const router = useRouter();
@@ -48,7 +47,7 @@
     </el-header>
 </template>
 
-<style lang = "scss">
+<style lang = "scss" scoped>
     .navigationBar {
         display: flex;
         align-items: center;
