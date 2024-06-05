@@ -38,6 +38,20 @@
 
     const photoUrl = require(`@/assets/photos/photo${store.state.nowuser.own_photos[0]}.jpg`);
 
+    const showPasswordCard = ref(true); // Set this variable based on your logic
+
+    const photos = ref([]);
+    photos.value = store.state.nowuser.own_photos;
+
+    const photoNotBuy = ref([]);
+
+    for (let i=1; i<photos.value.length; i++) {
+        if (photos.value[i] == 0) {
+            photoNotBuy.value.push(i);
+            console.log("not buy:", i);
+        }
+    }
+
 </script>
 
 <template>
@@ -60,6 +74,19 @@
         <button class="box" @mouseover="changeEmailText_in" @mouseout="changeEmailText_out">
             <span >{{userEmailText}}</span>
         </button>
+
+        <!-- 修改头像 -->
+        <div class="card_container">
+            <div class="card" style="">
+                <div class="item-container">
+                    <div class="item" v-for="(photonumber, index) in photoNotBuy" :key="index">
+                        <img :src="require(`@/assets/photos/photo${photonumber}.jpg`)" alt="" class="image">
+                        <div class="text">100纸币</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            
 
     </div>
 </template>
@@ -183,6 +210,7 @@
         font-weight: 0;
         font-size: 40px;
         color: white;
+        // z-index: -1;
         // font-family: cursive, sans-serif;
 
     }
@@ -254,4 +282,103 @@
         border: none;
         background: transparent;
     }
+
+    .card_container {
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        position: fixed; 
+
+        .card {
+            box-sizing: border-box;
+            width: 800px;
+            height: 600px;
+            background: rgba(217, 217, 217, 0.58);
+            border: 1px solid white;
+            box-shadow: 12px 17px 51px rgba(0, 0, 0, 0.22);
+            backdrop-filter: blur(6px);
+            border-radius: 17px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            font-weight: bolder;
+            color: black;
+            z-index: 10;
+        }
+
+        .card:hover {
+            border: 2px solid white;
+            box-shadow: 0px 0px 20px rgba(255,255,255,0.4);
+            // transform: scale(1.05);
+        }
+    }
+
+    .item-container {
+        width: 660px;
+        height: 521px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start; // 从左往右排列
+        align-items: flex-start; // 从上往下排列
+        gap: 35px;
+        // padding-top: 6%;
+        // max-width: 1200px;
+        // border: red solid 1px;
+
+        .item {
+            width: 100px;
+            height: 100px;
+            border-radius: 1000px;
+            border: white 2px solid;
+            position: relative; // 添加相对定位
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            // margin-bottom: 35px;
+
+            .image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover; // 图片等比例缩放填充
+                transition: opacity 0.3s ease-in-out;
+            }
+
+            .text {
+                height: auto;
+                width: 100%;
+                position: absolute; // 绝对定位
+                top: 50%; // 垂直居中
+                left: 50%; // 水平居中
+                transform: translate(-50%, -50%); // 通过偏移实现居中
+                opacity: 0; // 初始时隐藏
+                color: white;
+                font-size: 30px;
+                text-align: center;
+                transition: opacity 0.3s ease-in-out; // 添加过渡效果
+            }
+
+            &:hover {
+                transform: scale(1.1);
+                transition: all 0.2s ease;
+                cursor: pointer;
+
+                .text {
+                    opacity: 1; // 悬停时显示文本
+                }
+
+                .image {
+                    opacity: 0.2; // 悬停时图片变暗
+                }
+            }
+        }
+    }
+
+
+
 </style>
