@@ -3,19 +3,19 @@ import { post,get } from "./api"
 export function GetUnreleasedQs(username){
     let data = {};
     data.username = username;
-    return get("/userManage/unreleased"+username);
+    return get("/userManage/unreleased/"+username);
 }
 
 export function GetReleasedQs(username){
     let data = {};
     data.username = username;
-    return get("/userManage/released"+username);
+    return get("/userManage/released/"+username);
 }
 
 export function GetFilledQs(username){
     let data = {};
     data.username = username;
-    return get("/userManage/filled"+username);
+    return get("/userManage/filled/"+username);
 }
 
 export function GetAllReleasedQs(){
