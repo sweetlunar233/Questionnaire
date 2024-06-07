@@ -17,7 +17,7 @@ export function postUserMessage(username,password, email){
 export function getUserMessagePersonal(username){
     let data = {};
     data.username = username;
-    return get("/userManage/personal",data);
+    return get("/userManage/personal/"+username);
 }
 
 export function modifyUserInfo(username, email, password, zhibi){
