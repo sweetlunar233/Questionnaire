@@ -450,7 +450,7 @@ const handleCreate = () => {
 
 .card {
   position: relative;
-  width: 1200px;
+  width: 95%;
   height: 120px;
   border-radius: 14px;
   z-index: 1111;
@@ -544,7 +544,7 @@ const handleCreate = () => {
 .page-container {
     min-height: 100%;
     box-sizing: border-box;
-    background-color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.05);
     border: 0;
 }
 
