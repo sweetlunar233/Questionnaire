@@ -526,7 +526,7 @@ const handleCreate = () => {
 .page-container {
     min-height: 100%;
     box-sizing: border-box;
-    background-color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.05);
     border: 0;
 }
 

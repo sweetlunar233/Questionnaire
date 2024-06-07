@@ -352,7 +352,7 @@ button:hover::after {
 .page-container {
     min-height: 100%;
     box-sizing: border-box;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.05);
     border: 0;
 }
 

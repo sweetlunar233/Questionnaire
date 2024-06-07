@@ -363,7 +363,7 @@ const deleteQs = (id) =>{
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  background-color: #ec1717;
+  background-color: #e63a3a;
   opacity: 1;
   filter: blur(12px);
   animation: blob-bounce 5s infinite ease;
@@ -405,7 +405,7 @@ const deleteQs = (id) =>{
 .page-container {
     min-height: 100%;
     box-sizing: border-box;
-    background-color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.05);
     border: 0;
 }
 
