@@ -13,7 +13,7 @@
     };
 
     const gotoHome = () => {
-        store.state.nowuser.username = "";
+        // store.state.nowuser.username = "";
         router.push('/');
     }
 
@@ -50,6 +50,7 @@
 
 
     const nowuserPhotonumber = ref(store.state.nowuser.own_photos[0]);
+    console.log(nowuserPhotonumber.value);
     const photoUrl = computed(() => {
         return require(`@/assets/photos/photo${nowuserPhotonumber.value}.jpg`);
     })
@@ -158,7 +159,6 @@
             height: 55px;
             border-radius: 1000px;
             border: white solid 1.4px;
-            background: url("@/assets/photos/photo1.jpg");
             background-size: cover;
             margin-top: 0px;
             margin-right: 10px;

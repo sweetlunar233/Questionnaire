@@ -39,6 +39,7 @@
     }
 
     const nowuserPhotonumber = ref(store.state.nowuser.own_photos[0]);
+    console.log(nowuserPhotonumber.value);
     const photoUrl = computed(() => {
         return require(`@/assets/photos/photo${nowuserPhotonumber.value}.jpg`);
     })
@@ -127,7 +128,7 @@
             return;
         }
 
-        if(changePasswordData.value.repassword1 != changePasswordData.repassword2) {
+        if(changePasswordData.value.repassword1 != changePasswordData.value.repassword2) {
             ElMessage.error("两次密码输入不一致");
             return;
         }
