@@ -22,11 +22,11 @@ export function GetStoreFill(userName,surveyID){
     return get('',data)
 }
 //传回填写信息
-export function PostFill(surveyID,status,fill){
+export function PostFill(surveyID,status,question){
     let data = {};
     data.surveyID = surveyID;
     data.status = status;
-    data.fill = fill;
+    data.question = question;
     return post('',data);
 }
 //传回问卷信息

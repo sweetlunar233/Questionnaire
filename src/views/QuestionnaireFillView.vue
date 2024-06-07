@@ -100,7 +100,7 @@
   </template>
   
   <script>
-  import { GetStoreFill } from "@/api/question";
+  import { GetStoreFill, PostFill } from "@/api/question";
   import NavigationBar from "@/components/NavigationBar.vue"
   import { ref } from 'vue'
    
@@ -150,7 +150,19 @@
             this.questionCnt++;
             this.questionList.push({"type":4,"isNecessary":true,"question":"请评分","grade":ref('')});
         },
-        //
+        //暂存/提交,如果status是0，那么是暂存，如果status是1.那么根据问卷类型判断是已批改还是已提交
+        postFill(status){
+          var promise;
+          if(status == 0){
+            promise = PostFill(this.questionnaireId,'Unsubmitted',this.question);
+          }
+          else if(status == 1 && this.type == 3){
+            promise = PostFill(this.questionnaireId,'Graded',this.question);
+          }
+          else{
+            promise = PostFill(this.questionnaireId,'Submitted',this.question);
+          }
+        }
      },
      components:{
       NavigationBar,
