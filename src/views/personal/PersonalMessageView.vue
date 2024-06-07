@@ -1,5 +1,5 @@
 <script setup>
-    import { updateUserphotoInMassage } from '@/api/user';
+    import { modifyUserInfo, updateUserphotoInMassage } from '@/api/user';
     import store from '@/store';
     import { ElMessage } from 'element-plus';
     import { ref, computed } from 'vue';
@@ -69,23 +69,14 @@
 
     //更新已购买头像
     const photoBought = ref([]);
-    const updataPhotoBought = () => {
+    const updatePhotoBought = () => {
         for(let i=1; i<photos.value.length; i++) {
             if (photos.value[i] == 0) { //应该改成1
                 photoBought.value.push(i);
             }
         }
     }
-    updataPhotoBought();
-
-
-    //更换头像
-    const changePhoto = (photonumber) => {
-        store.state.nowuser.own_photos[0] = photonumber;
-        nowuserPhotonumber.value = photonumber;
-        updateUserphotoInMassage(store.state.nowuser.username, 0, index);
-        X_quit("ChangePhotoCard");
-    }
+    updatePhotoBought();
 
     //×按钮（quit）
     const X_quit = (cardname) => {
@@ -102,12 +93,76 @@
         })
     }
 
-    //修改密码和邮箱
+    //更换头像
+    const changePhoto = (photonumber) => {
+        store.state.nowuser.own_photos[0] = photonumber;
+        nowuserPhotonumber.value = photonumber;
+        // updateUserphotoInMassage(store.state.nowuser.username, 0, photonumber);
+        ElMessage.success("修改头像成功!");
+        X_quit("ChangePhotoCard");
+    }
+
+    //修改密码
     const changePasswordData = ref({
         password: "",
         repassword1: "",
         repassword2: ""
     })
+    const changePassword = () => {
+        if (!/^.{5,25}$/.test(changePasswordData.value.password)) {
+            ElMessage.error('原密码必须为5到25位非空字符');
+            return;
+        }
+        if (!/^.{5,25}$/.test(changePasswordData.value.repassword1)) {
+            ElMessage.error('修改密码必须为5到25位非空字符');
+            return;
+        }
+        if (!/^.{5,25}$/.test(changePasswordData.value.repassword2)) {
+            ElMessage.error('确认密码必须为5到25位非空字符');
+            return;
+        }
+
+        if(changePasswordData.value.password != store.state.nowuser.password) {
+            ElMessage.error("原密码错误");
+            return;
+        }
+
+        if(changePasswordData.value.repassword1 != changePasswordData.repassword2) {
+            ElMessage.error("两次密码输入不一致");
+            return;
+        }
+
+        store.state.nowuser.password = changePasswordData.value.repassword1;
+        modifyUserInfo(store.state.nowuser.username, false, changePasswordData.value.repassword1, false);
+        ElMessage.success("修改密码成功！");
+        X_quit("PasswordCard");
+    }
+
+    //修改邮箱
+    const changeEmailData = ref({
+        password: "",
+        email: ""
+    })
+    const changeEmail = () => {
+        if (!/^.{5,25}$/.test(changeEmailData.value.password)) {
+            ElMessage.error('原密码必须为5到25位非空字符');
+            return;
+        }
+        if (!/^.+@.+\..+$/.test(changeEmailData.value.email)) {
+            ElMessage.error('邮箱格式不正确');
+            return;
+        }
+
+        if(changeEmailData.value.password != store.state.nowuser.password) {
+            ElMessage.error("密码错误");
+            return;
+        }
+
+        store.state.nowuser.email = changeEmailData.value.email;
+        modifyUserInfo(store.state.nowuser.username, changeEmailData.value.email, false, false);
+        ElMessage.success("修改邮箱成功！");
+        X_quit("EmailCard");
+    }
 
 </script>
 
@@ -151,7 +206,7 @@
 
         <!-- 修改密码 -->
         <div class="card_container" v-if="showPasswordCard">
-            <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width:600px; height:450px;">
                 <button style="position:absolute; top:0; right:0;" @click="X_quit('PasswordCard')">
                     <img src="@/assets/X.png" class="X_button" >
                 </button>
@@ -167,16 +222,29 @@
                     <input type="password" placeholder="请确认修改后的密码" v-model="changePasswordData.repassword2"/>
                     <span class="label">确认密码</span>
                 </div>
+                <button class="commit_btn" @click="changePassword">
+                    <span>提交</span>
+                </button>
             </div>
         </div>
 
         <!-- 修改邮箱 -->
         <div class="card_container" v-if="showEmailCard">
-            <div class="card" style="">
+            <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width:600px; height:450px;">
                 <button style="position:absolute; top:0; right:0;" @click="X_quit('EmailCard')">
                     <img src="@/assets/X.png" class="X_button" >
                 </button>
-
+                <div class="inputf">
+                    <input type="password" placeholder="请验证密码" v-model="changePasswordData.password"/>
+                    <span class="label">密码</span>
+                </div>
+                <div class="inputf">
+                    <input type="password" placeholder="请输入新的邮箱" v-model="changePasswordData.password"/>
+                    <span class="label">邮箱</span>
+                </div>
+                <button class="commit_btn" @click="changeEmail">
+                    <span>提交</span>
+                </button>
             </div>
         </div>
 
@@ -486,16 +554,19 @@
     .inputf {
         width: 50%;
         position: relative;
-        margin-bottom: 50px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        
         input {
-            width: 100%;
-            height: 50px;
+            width: 110%;
+            height: 60px;
             border: none;
             outline: 1.5px solid rgb(222, 220, 221);;
             background: transparent;
             border-radius: 8px;
             font-size: 17px;
             padding: 0 15px;
+            margin-left: -8%;
             color: white;
             &::placeholder {
                 color: rgb(231, 230, 230);
@@ -529,4 +600,23 @@
         }
     }
 
+    .commit_btn {
+        border: white 1px solid;
+        border-radius: 10px;
+        width: 18%;
+        height: 12%;
+        // padding: 10px, 10px;
+        transition: all 0.2s ease-in;
+        margin-top: 20px;
+        span {
+            color: white;
+            font-size: 30px;
+        }
+
+        &:hover {
+            // border: 1px solid white;
+            // box-shadow: 0px 0px 20px rgba(255,255,255,0.4);
+            transform: scale(1.1);
+        }
+    }
 </style>

@@ -1,9 +1,9 @@
 <script setup>
-    import NavigationBarWithLogoFunction from '@/components/NavigationBarWithLogoFunction.vue';
+    import NavigationBarInPersonal from '@/components/NavigationBarInPersonal.vue';
     import { ref } from "vue";
     import { useRouter } from 'vue-router';
 
-    const navigation3 = ref(NavigationBarWithLogoFunction);
+    const navigation3 = ref(NavigationBarInPersonal);
 
     const router = useRouter();
 
