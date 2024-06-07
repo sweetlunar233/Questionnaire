@@ -449,7 +449,7 @@ const handleCreate = () => {
 
 .card {
   position: relative;
-  width: 1200px;
+  width: 95%;
   height: 120px;
   border-radius: 14px;
   z-index: 1111;
