@@ -129,6 +129,8 @@ username.value = internalData.$cookies.get('username') // 后面的为之前设�
 import {ElMessageBox, ElMessage} from 'element-plus'
 import {GetReleasedQs, DeleteReleasedQs, UpdateIsOpening} from '../../api/questionnaire.js'
 
+const flag = ref(true);
+
 const initCreated = (username) =>{
     var promise = GetReleasedQs(username);
     promise.then((result)=>{
@@ -146,7 +148,7 @@ const initCreated = (username) =>{
             if(i > pageSize.value * (pageNum.value - 1))
             {
                 if(i <= pageSize.value * pageNum.value){
-                    if(categoryName != "" && element.Category != categoryId.value){
+                    if(categoryId != "" && element.Category != categoryId.value){
                         console.log("oh no!")
                     }
                     else{
@@ -157,7 +159,11 @@ const initCreated = (username) =>{
             count++;
             i++;
         });
-        total.value = count;
+        if(flag.value)
+        {
+            total.value = count;
+            flag.value = false;
+        }
     })
 }
 initCreated(username.value);
@@ -260,7 +266,7 @@ const handleCreate = () => {
         <div class="header">
             <span style="font-size: 30px;">已发布问卷</span>
             <div class="extra">
-                <el-button type="primary" @click="showCreateDialog" style="background-color: #17ec81;border: 0;">创建问卷</el-button>
+                <button class="nbbutton" @click="showCreateDialog" style="margin-right: 30px;">创建问卷</button>
             </div>
         </div>
         <!-- 搜索表单 -->
@@ -276,8 +282,8 @@ const handleCreate = () => {
                 </el-select>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" class="searchbutton" @click="initCreated(username)" style="background-color: #17ec81;border: 0;">搜索</el-button>
-                <el-button @click="categoryId=''" style="color: grey;">重置</el-button>
+                <el-button class="bottone5" type="primary" @click="initCreated(username)" style="background-color: black;border: 0;color: white;">搜索</el-button>
+                <el-button class="bottone5" @click="categoryId=''" style="color: rgba(0, 0, 0, 0.753);">重置</el-button>
             </el-form-item>
         </el-form>
         <div class="card-container">
@@ -299,7 +305,7 @@ const handleCreate = () => {
                             <el-button type="text" :icon="View" @click="goToQuestionnaireFill(questionnaire.SurveyID)" class="otherbutton">预览</el-button>
                             <el-button type="text" :icon="Link" class="otherbutton">发送问卷</el-button>
                             <el-button type="text" :icon="Odometer" class="otherbutton">分析数据</el-button>
-                            <el-switch v-model="questionnaire.IsOpening" style="float: right; margin-left: 10px" @change="updateIsOpening(questionnaire.SurveyID)"  class="deletebutton"/>
+                            <el-switch v-model="questionnaire.IsOpening" style="float: right; margin-left: 10px;--el-switch-on-color: #13ceb5;" @change="updateIsOpening(questionnaire.SurveyID)"  class="deletebutton"/>
                             <el-button type="danger" :icon="Delete" style="float: right" circle @click="deleteQs(questionnaire.SurveyID)"></el-button>
                         </div>
                     </div>
@@ -325,8 +331,8 @@ const handleCreate = () => {
                 </el-form>
 
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="handleCloseDialog">取消</el-button>
-                    <el-button type="primary" @click="handleCreate">确定</el-button>
+                    <el-button @click="handleCloseDialog" class="bottone5">取消</el-button>
+                    <el-button type="primary" @click="handleCreate" class="bottone5" style="background-color: black;color: white;">确定</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -337,6 +343,109 @@ const handleCreate = () => {
     </el-card>
 </template>
 <style scoped>
+
+.bottone5 {
+ align-items: center;
+ background-color: #FFFFFF;
+ border: 2px solid rgba(0, 0, 0, 0.1);
+ border-radius: .25rem;
+ box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+ box-sizing: border-box;
+ color: rgba(0, 0, 0, 0.85);
+ cursor: pointer;
+ display: inline-flex;
+ font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+ font-size: 15px;
+ font-weight: 600;
+ justify-content: center;
+ line-height: 1.25;
+ min-height: 2.2rem;
+ padding: calc(.875rem - 1px) calc(1.5rem - 1px);
+ text-decoration: none;
+ transition: all 250ms;
+ user-select: none;
+ -webkit-user-select: none;
+ touch-action: manipulation;
+ vertical-align: baseline;
+ width: 4rem;
+}
+
+.bottone5:hover,
+.bottone5:focus {
+ border-color: rgba(0, 0, 0, 0.15);
+ box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+ color: rgba(0, 0, 0, 0.65);
+}
+
+.bottone5:hover {
+ transform: translateY(-1px);
+}
+
+.bottone5:active {
+ background-color: #F0F0F1;
+ border-color: rgba(0, 0, 0, 0.15);
+ box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+ color: rgba(0, 0, 0, 0.65);
+ transform: translateY(0);
+}
+
+
+
+
+
+
+
+
+
+
+.nbbutton {
+ padding: 8px 12px;
+ border: unset;
+ border-radius: 15px;
+ color: #212121;
+ z-index: 1;
+ background: #e8e8e8;
+ position: relative;
+ font-weight: 1000;
+ font-size: 17px;
+ -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+ box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+ transition: all 250ms;
+ overflow: hidden;
+
+ border: 5px solid black;
+}
+
+.nbbutton::before {
+ content: "";
+ position: absolute;
+ top: 0;
+ left: 0;
+ height: 100%;
+ width: 0;
+ border-radius: 15px;
+ background-color: #212121;
+ z-index: -1;
+ -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+ box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+ transition: all 250ms
+}
+
+.nbbutton:hover {
+ color: #e8e8e8;
+}
+
+.nbbutton:hover::before {
+ width: 100%;
+}
+
+
+
+
+
+
+
+
 
 .card {
   position: relative;
@@ -357,8 +466,8 @@ const handleCreate = () => {
 }
 
 .card:hover {
-  transform: scale(1.01); /* 鼠标悬停时放大 */
-  box-shadow: 3px 3px 9px #bebebe, -3px -3px 9px #ffffff; /* 鼠标悬停时阴影加深 */
+  transform: scale(1.001); /* 鼠标悬停时放大 */
+  box-shadow: 3px 3px 9px #bebebe, -1px -1px 3px #ffffff; /* 鼠标悬停时阴影加深 */
 }
 
 
@@ -434,7 +543,7 @@ const handleCreate = () => {
 .page-container {
     min-height: 100%;
     box-sizing: border-box;
-    background-color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.05);
     border: 0;
 }
 
@@ -483,10 +592,6 @@ const handleCreate = () => {
     justify-content: flex-end;
 }
 
-.searchform .searchbutton{
-    margin-right: 5px;
-}
-
 .textbutton{
     margin-left: 20px;
     font-size: 20px;
@@ -497,7 +602,9 @@ const handleCreate = () => {
 }
 
 .header{
-    margin-bottom: 20px;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    border-bottom: 1px white solid;
 }
 
 .thebutton{
