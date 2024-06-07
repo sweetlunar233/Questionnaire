@@ -1,7 +1,7 @@
 <!-- 导航栏 -->
 <!-- 请作为组件引入到首页，即 HomeView.vue -->
 <script setup>
-    import { ref, watchEffect} from 'vue';
+    import { ref, watchEffect, computed} from 'vue';
     import { useRouter } from 'vue-router';
     import { ArrowDown } from '@element-plus/icons-vue'
     import store from '../store';
@@ -48,6 +48,12 @@
         currentUrl.value = window.location.href;
     });
 
+
+    const nowuserPhotonumber = ref(store.state.nowuser.own_photos[0]);
+    const photoUrl = computed(() => {
+        return require(`@/assets/photos/photo${nowuserPhotonumber.value}.jpg`);
+    })
+
 </script>
 
 <template>
@@ -61,7 +67,8 @@
         <div class="flex-grow"></div>
         <el-dropdown>
             <div class="name_photo">
-                <div class="photo">
+                <div >
+                    <img :src="photoUrl" class="photo"/>
                 </div>
                 <span class="username">
                     <!-- username -->

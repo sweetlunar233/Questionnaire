@@ -28,7 +28,11 @@
                 </button>
                 <button class = "option" @click="gotoPersonalShop">
                     <img src="@/assets/shopIcon.png" style="width: 50px; height: 50px;"/>
-                    <span>商城</span>
+                    <span>头像商城</span>
+                </button>
+                <button class = "option" @click="gotoPersonalShop">
+                    <img src="@/assets/quit.png" style="width: 50px; height: 50px;"/>
+                    <span>退出登录</span>
                 </button>
             </div>
             <el-main>

@@ -1,6 +1,8 @@
 <script setup>
+    import { updateUserphotoInMassage } from '@/api/user';
     import store from '@/store';
-    import {ref} from 'vue';
+    import { ElMessage } from 'element-plus';
+    import { ref, computed } from 'vue';
 
     const userNameText = ref("");
     userNameText.value = store.state.nowuser.username;
@@ -36,27 +38,82 @@
         userPasswordText.value = "password";
     }
 
-    const photoUrl = require(`@/assets/photos/photo${store.state.nowuser.own_photos[0]}.jpg`);
+    const nowuserPhotonumber = ref(store.state.nowuser.own_photos[0]);
+    const photoUrl = computed(() => {
+        return require(`@/assets/photos/photo${nowuserPhotonumber.value}.jpg`);
+    })
+    
 
-    const showPasswordCard = ref(true); // Set this variable based on your logic
 
+    const showChangePhotoCard = ref(false);
+    const showPasswordCard = ref(false);
+    const showEmailCard = ref(false);
+    const openCard = (cardname) => {
+        if (cardname == "ChangePhotoCard")
+            showChangePhotoCard.value = true;
+        else if (cardname == "PasswordCard")
+            showPasswordCard.value = true;
+        else if (cardname == "EmailCard")
+            showEmailCard.value = true;
+
+        var elements = document.querySelectorAll('.box, .photo_container');
+        elements.forEach(function(element) {
+            element.style.zIndex = -1;
+        })
+
+    }
+
+    //username的头像全部状态
     const photos = ref([]);
     photos.value = store.state.nowuser.own_photos;
 
-    const photoNotBuy = ref([]);
-
-    for (let i=1; i<photos.value.length; i++) {
-        if (photos.value[i] == 0) {
-            photoNotBuy.value.push(i);
-            console.log("not buy:", i);
+    //更新已购买头像
+    const photoBought = ref([]);
+    const updataPhotoBought = () => {
+        for(let i=1; i<photos.value.length; i++) {
+            if (photos.value[i] == 0) { //应该改成1
+                photoBought.value.push(i);
+            }
         }
     }
+    updataPhotoBought();
+
+
+    //更换头像
+    const changePhoto = (photonumber) => {
+        store.state.nowuser.own_photos[0] = photonumber;
+        nowuserPhotonumber.value = photonumber;
+        updateUserphotoInMassage(store.state.nowuser.username, 0, index);
+        X_quit("ChangePhotoCard");
+    }
+
+    //×按钮（quit）
+    const X_quit = (cardname) => {
+        if (cardname == "ChangePhotoCard")
+            showChangePhotoCard.value = false;
+        else if (cardname == "PasswordCard")
+            showPasswordCard.value = false;
+        else if (cardname == "EmailCard")
+            showEmailCard.value = false;
+
+        var elements = document.querySelectorAll('.box, .photo_container');
+        elements.forEach(function(element) {
+            element.style.zIndex = 1;
+        })
+    }
+
+    //修改密码和邮箱
+    const changePasswordData = ref({
+        password: "",
+        repassword1: "",
+        repassword2: ""
+    })
 
 </script>
 
 <template>
     <div class="all_container">
-        <div class = "photo_container">
+        <div class = "photo_container" @click="openCard('ChangePhotoCard')">
             <img class="photo" :src="photoUrl" alt="图片加载异常">
             <div class="text">更换头像</div>
         </div>
@@ -67,26 +124,61 @@
             <span >{{userNameText}}</span>
         </button>
 
-        <button class="box" @mouseover="changePasswordText_in" @mouseout="changePasswordText_out">
+        <button class="box" @mouseover="changePasswordText_in" @mouseout="changePasswordText_out" @click="openCard('PasswordCard')">
             <span >{{userPasswordText}}</span>
         </button>
 
-        <button class="box" @mouseover="changeEmailText_in" @mouseout="changeEmailText_out">
+        <button class="box" @mouseover="changeEmailText_in" @mouseout="changeEmailText_out" @click="openCard('EmailCard')">
             <span >{{userEmailText}}</span>
         </button>
 
         <!-- 修改头像 -->
-        <div class="card_container">
+        <div class="card_container" v-if="showChangePhotoCard">
             <div class="card" style="">
+                <button style="position:absolute; top:0; right:0;" @click="X_quit('ChangePhotoCard')">
+                    <img src="@/assets/X.png" class="X_button" >
+                </button>
                 <div class="item-container">
-                    <div class="item" v-for="(photonumber, index) in photoNotBuy" :key="index">
-                        <img :src="require(`@/assets/photos/photo${photonumber}.jpg`)" alt="" class="image">
-                        <div class="text">100纸币</div>
+                    <div class="item" v-for="(photonumber, index) in photoBought" :key="index">
+                        <div @click="changePhoto(photonumber)">
+                            <img :src="require(`@/assets/photos/photo${photonumber}.jpg`)" alt="" class="image" >
+                            <div class="text">更换头像</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-            
+
+        <!-- 修改密码 -->
+        <div class="card_container" v-if="showPasswordCard">
+            <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <button style="position:absolute; top:0; right:0;" @click="X_quit('PasswordCard')">
+                    <img src="@/assets/X.png" class="X_button" >
+                </button>
+                <div class="inputf">
+                    <input type="password" placeholder="请输入原密码" v-model="changePasswordData.password"/>
+                    <span class="label">原密码</span>
+                </div>
+                <div class="inputf">
+                    <input type="password" placeholder="请输入修改后的密码" v-model="changePasswordData.repassword1"/>
+                    <span class="label">修改密码</span>
+                </div>
+                <div class="inputf">
+                    <input type="password" placeholder="请确认修改后的密码" v-model="changePasswordData.repassword2"/>
+                    <span class="label">确认密码</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 修改邮箱 -->
+        <div class="card_container" v-if="showEmailCard">
+            <div class="card" style="">
+                <button style="position:absolute; top:0; right:0;" @click="X_quit('EmailCard')">
+                    <img src="@/assets/X.png" class="X_button" >
+                </button>
+
+            </div>
+        </div>
 
     </div>
 </template>
@@ -299,7 +391,7 @@
             backdrop-filter: blur(6px);
             border-radius: 17px;
             text-align: center;
-            cursor: pointer;
+            
             transition: all 0.5s;
             display: flex;
             align-items: center;
@@ -325,6 +417,7 @@
         justify-content: flex-start; // 从左往右排列
         align-items: flex-start; // 从上往下排列
         gap: 35px;
+        cursor: pointer;
         // padding-top: 6%;
         // max-width: 1200px;
         // border: red solid 1px;
@@ -358,7 +451,7 @@
                 transform: translate(-50%, -50%); // 通过偏移实现居中
                 opacity: 0; // 初始时隐藏
                 color: white;
-                font-size: 30px;
+                font-size: 20px;
                 text-align: center;
                 transition: opacity 0.3s ease-in-out; // 添加过渡效果
             }
@@ -379,6 +472,61 @@
         }
     }
 
+    .X_button {
+        width: 40px; 
+        height: auto;
+        margin: 10px 10px 0 0;
+        cursor: pointer;
 
+        &:hover {
+            transform: scale(1.05);
+        }
+    }
+
+    .inputf {
+        width: 50%;
+        position: relative;
+        margin-bottom: 50px;
+        input {
+            width: 100%;
+            height: 50px;
+            border: none;
+            outline: 1.5px solid rgb(222, 220, 221);;
+            background: transparent;
+            border-radius: 8px;
+            font-size: 17px;
+            padding: 0 15px;
+            color: white;
+            &::placeholder {
+                color: rgb(231, 230, 230);
+            }
+            &:focus {
+                outline: 1.5px solid white;
+                &::placeholder {
+                    opacity: 0;
+                }
+                & + .label {
+                    opacity: 1;
+                    top: -26px;
+                }
+                
+            }
+            &:not(:placeholder-shown) + .label {
+                opacity: 1;
+                top: -26px;
+            }
+        }
+
+        .label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            font-size: 15px;
+            color: white;
+            font-weight: bold;
+            transition: 0.25s ease-out;
+            opacity: 0;
+        }
+    }
 
 </style>
