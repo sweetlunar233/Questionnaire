@@ -21,14 +21,14 @@
 
     function updateNowuser(result) {
         
-        $cookies.set("username", result.username);
-        $cookies.config("1m");
+        // $cookies.set("username", result.username);
+        // $cookies.config("1m");
 
         store.state.nowuser.username = result.username;
         store.state.nowuser.password = result.password;
         store.state.nowuser.email = result.email;
-        store.state.nowuser.money = result.money;
-        store.state.nowuser.own_photos = result.own_photos;
+        store.state.nowuser.money = result.zhibi;
+        store.state.nowuser.own_photos = result.ownphotos;
     }
 
     import { getUserMessage, postUserMessage } from "@/api/user";
@@ -93,7 +93,10 @@
             }
             else { //result.message == 0, 登录成功
                 //全局用户修改为当前注册用户
+                // console.log("start");
+                // console.log(result.ownphotos);
                 updateNowuser(result);
+                // console.log(result.ownphotos);
                 gotoUserManage();
             }
         })

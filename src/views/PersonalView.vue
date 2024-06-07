@@ -1,9 +1,9 @@
 <script setup>
-    import NavigationBarWithLogoFunction from '@/components/NavigationBarWithLogoFunction.vue';
+    import NavigationBarInPersonal from '@/components/NavigationBarInPersonal.vue';
     import { ref } from "vue";
     import { useRouter } from 'vue-router';
 
-    const navigation3 = ref(NavigationBarWithLogoFunction);
+    const navigation3 = ref(NavigationBarInPersonal);
 
     const router = useRouter();
 
@@ -13,6 +13,10 @@
 
     const gotoPersonalShop = () => {
         router.push('/personal/shop');
+    }
+
+    const gotoHome = () => {
+        router.push('/');
     }
 
 </script>
@@ -28,7 +32,11 @@
                 </button>
                 <button class = "option" @click="gotoPersonalShop">
                     <img src="@/assets/shopIcon.png" style="width: 50px; height: 50px;"/>
-                    <span>商城</span>
+                    <span>头像商城</span>
+                </button>
+                <button class = "option" @click="gotoHome">
+                    <img src="@/assets/quit.png" style="width: 50px; height: 50px;"/>
+                    <span>退出登录</span>
                 </button>
             </div>
             <el-main>

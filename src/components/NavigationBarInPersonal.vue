@@ -1,7 +1,7 @@
 <!-- 导航栏 -->
 <!-- 请作为组件引入到首页，即 HomeView.vue -->
 <script setup>
-    import { ref, watchEffect} from 'vue';
+    import { ref, watchEffect, computed } from 'vue';
     import { useRouter } from 'vue-router';
     import { ArrowDown } from '@element-plus/icons-vue'
     import store from '../store';
@@ -53,46 +53,22 @@
     });
 
 
-
-    import { getCurrentInstance } from 'vue'
-
-const temp = ref("");
- 
-// 创建可以访问内部组件实例的实例
-const internalInstance = getCurrentInstance()
-const internalData = internalInstance.appContext.config.globalProperties
-temp.value = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
+    const nowuserPhotonumber = ref(store.state.nowuser.own_photos[0]);
+    const photoUrl = computed(() => {
+        return require(`@/assets/photos/photo${nowuserPhotonumber.value}.jpg`);
+    })
 
 </script>
 
 <template>
     <el-header class = "navigationBar">
         <div @click = "gotoUserManage" @mouseover="logoIn('logo')" @mouseout="logoOut('logo')">
-            <img id="logo" src="../assets/logo.png" alt="Element logo"/>
+            <img id="logo" src="../assets/logo.png" alt="Element logo" class = "logo"/>
         </div>
         <div class="title">
             <span>纸翼</span>传问
         </div>
         <div class="flex-grow"></div>
-        <el-dropdown>
-            <div class="name_photo">
-                <div class="photo">
-                </div>
-                <span class="username">
-                    <!-- username -->
-                    <!-- {{ store.state.nowuser.username }} -->
-                    {{ temp }}
-                </span>
-                
-            </div>
-            
-            <template #dropdown>
-            <el-dropdown-menu class="dropdown_menu">
-                <el-dropdown-item @click="gotoPersonal">个人中心</el-dropdown-item>
-                <el-dropdown-item @click="gotoHome">退出登录</el-dropdown-item>
-            </el-dropdown-menu>
-            </template>
-        </el-dropdown>
     </el-header>
 </template>
 
@@ -110,7 +86,7 @@ temp.value = internalData.$cookies.get('username') // 后面的为之前设置�
         z-index: 1000; /* 设置层叠顺序，确保导航栏位于其他内容之上 */
         margin: 5px 0 0 7px;
 
-        img {
+        .logo {
             width: 60px;
             cursor: pointer;
             margin-top: 5px;
@@ -146,40 +122,7 @@ temp.value = internalData.$cookies.get('username') // 后面的为之前设置�
             margin: 5px 10px 0 0px;
         }
 
-        .name_photo {
-            display: flex;
-            outline: none;
-        }
 
-        .username {
-            color: white;
-            cursor: pointer;
-            display: flex;
-            border: none;
-            font-size: 24px;
-            align-items: center;
-            // margin: 5px 15px 10px 0;
-            outline: none;
-        }
-
-        .photo {
-            width: 55px;
-            height: 55px;
-            border-radius: 1000px;
-            border: white solid 1.4px;
-            background: url("@/assets/photos/photo1.jpg");
-            background-size: cover;
-            margin-top: 0px;
-            margin-right: 10px;
-        }
-
-        .dropdown_menu {
-            position: absolute; /* 设置子元素为绝对定位 */
-            top: 100%; /* 设置子元素距离父元素底部的距离 */
-            left: 0; /* 设置子元素左侧与父元素左侧对齐 */
-            z-index: 999; /* 设置子元素的层级 */
-            // justify-content: center;
-        }
     }
 
     .flex-grow {

@@ -1,6 +1,7 @@
 <script setup>
     import store from '@/store';
     import {ref} from "vue";
+    import { ElMessage } from 'element-plus';
 
     const photos = ref([]);
     photos.value = store.state.nowuser.own_photos;
@@ -11,6 +12,22 @@
         if (photos.value[i] == 0) {
             photoNotBuy.value.push(i);
             console.log("not buy:", i);
+        }
+    }
+
+    //购买头像
+    const buyPhoto = (index) => {
+        if (store.state.nowuser.money >= 100) {
+            store.state.nowuser.money -= 100;
+            store.state.nowuser.own_photos[index] = 1;
+            photos.value[index] = 1;
+            photoBought.value.push(index);
+            
+            updateUserphotoInMassage(store.state.nowuser.username, index, 1);
+            ElMessage.success("购买成功!");
+        }
+        else {
+            ElMessage.error("余额不足,快去填写问卷赚取纸币吧！");
         }
     }
 
