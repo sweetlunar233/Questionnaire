@@ -5,7 +5,7 @@
       
       <div class="right">
         <div class="title">{{ title }}</div>
-        <van-divider  :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"></van-divider>
+        <van-divider  :style="{ color: '#626aef', borderColor: '#626aef', padding: '0 16px' }"></van-divider>
   
         <div v-for="index in questionCnt">
   
@@ -89,12 +89,18 @@
         </div>
         
       </div>
+
+      <div class="bottom">
+        <el-button color="#626aef" size="large"><el-icon><Upload/></el-icon>&nbsp;提交</el-button>
+        <el-button color="#626aef" size="large"><el-icon><House/></el-icon>&nbsp;暂存</el-button>
+      </div>
   
     </div>
     
   </template>
   
   <script>
+  import { GetStoreFill } from "@/api/question";
   import NavigationBar from "@/components/NavigationBar.vue"
   import { ref } from 'vue'
    
@@ -102,9 +108,18 @@
      data(){
       return{
         input:'',
+        username:'',
+        questionnaireId:0,
+        type:0,
         questionCnt: 0,
         questionList: [],
         title:'问题标题',
+        isDisorder:false,
+        people:0, //剩余人数
+        timeLimit:0,
+        time:0, //存储在此页面停留的时间
+        intervalId:null, //存储定时器的ID
+        question:[],
       }
      },
      methods: {
@@ -135,6 +150,7 @@
             this.questionCnt++;
             this.questionList.push({"type":4,"isNecessary":true,"question":"请评分","grade":ref('')});
         },
+        //
      },
      components:{
       NavigationBar,
@@ -144,9 +160,58 @@
       this.addMultiple();
       this.addFill();
       this.addScore();
+      this.intervalId = setInterval(() => {
+        this.time++;
+      },1000);
+     },
+     beforeUnmount(){
+      if(this.intervalId){
+        clearInterval(this.intervalId);
+      }
      },
      components:{
       NavigationBar,
+     },
+     created(){
+      var promise;
+      this.questionnaireId = this.$route.query.questionnaireId;
+      const storedUsername = localStorage.getItem('username');
+      if(storedUsername){
+        this.username = storedUsername;
+        promise = GetStoreFill(this.username,this.questionnaireId);
+        // promise.then((result) => {
+        //   this.question = result.question;
+        // })
+      }
+      // else{
+      //   this.$router.push({path:'/login',query:{questionnaireId:this.questionnaireId}});
+      // }
+      // promise=GetQuestionnaire(this.questionnaireId,"/quetionnaireFill",false);
+      // promise.then((result) => {
+      //   this.title = result.Title;
+      //   this.type = result.category;
+      //   this.people = result.people;
+      //   this.timeLimit = result.TimeLimit;
+      //   this.questionList = result.questionList;
+      // })
+      // if(storedUsername){
+      //   let i = 0, j = 0;
+      //   for(i = 0;i < this.questionList.length;i++){
+      //     for(j = 0;j < this.question.length;j++){
+      //       if(this.questionList[i].questionID == this.question[j].questionID){
+      //         if(this.questionList[i].type <= 2){
+      //           this.questionList[i].radio = ref(this.question[j].value);
+      //         }
+      //         else if(this.questionList[i].type == 3){
+      //           this.questionList[i].radio = ref(this.question[j].fill);
+      //         }
+      //         else{
+      //           this.questionList[i].radio = ref(this.question[j].grade);
+      //         }
+      //       }
+      //     }
+      //   }
+      // }
      }
    })
   </script>
@@ -156,9 +221,8 @@
   
   .right{
     position: relative;
-    height: 700px;
+    height: 650px;
     width: 90%;
-    height: 700px;
     top: 8%;
     left: 4%;
     border-radius: 5px;
@@ -172,7 +236,7 @@
   .title{
     text-align: center;
     font-size: larger;
-    color: #409EFF;
+    color: #626aef;
     font-weight: bold;
   }
   
@@ -184,5 +248,19 @@
     background-position: center; 
     background-repeat: repeat-y; /* 背景图片不重复 */
     background-attachment: fixed; 
+  }
+
+  .bottom{
+    text-align: center;
+    position: relative;
+    width: 15%;
+    background-color: white;
+    left: 42%;
+    right: 50%;
+    border-radius: 5px;
+    border: 2px;
+    padding: 10px;
+    box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.1);
+    top: 10%;
   }
   </style>
