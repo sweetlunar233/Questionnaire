@@ -113,6 +113,7 @@ const goToQuestionnaireFill = (questionnaireId) => {
 import {GetAllReleasedQs} from '../../api/questionnaire.js'
 
 const initAllReleased = () =>{
+    questionnaires.value = [];  
     var promise = GetAllReleasedQs();
     promise.then((result)=>{
         var count = 0;

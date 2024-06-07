@@ -37,16 +37,6 @@ const categoryId = ref('')
 
 //文章列表数据模型
 const questionnaires = ref([
-    /*{
-        "SurveyID": 5,
-        "Title": "陕西旅游攻略",
-        "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
-        "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
-        "state": "草稿",
-        "categoryId": 2,
-        "PublishDate": "2023-09-03 11:55:30",
-        "IsOpening": true
-    },
     {
         "SurveyID": 5,
         "Title": "陕西旅游攻略",
@@ -66,7 +56,17 @@ const questionnaires = ref([
         "categoryId": 2,
         "PublishDate": "2023-09-03 11:55:30",
         "IsOpening": true
-    },*/
+    },
+    {
+        "SurveyID": 5,
+        "Title": "陕西旅游攻略",
+        "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
+        "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
+        "state": "草稿",
+        "categoryId": 2,
+        "PublishDate": "2023-09-03 11:55:30",
+        "IsOpening": true
+    },
     
 ])
 
@@ -108,6 +108,14 @@ const goToQuestionnaireFill = (questionnaireId) => {
     }
   });
 }
+const goToQuestionnaireData = (questionnaireId) => {
+  r.push({
+    path: '/dataPre',
+    query: {
+      questionnaireId: questionnaireId
+    }
+  });
+}
 
 
 
@@ -132,7 +140,7 @@ import {GetReleasedQs, UpdateOrDelete} from '../../api/questionnaire.js'
 const flag = ref(true);
 
 const initCreated = (username) =>{
-    questionnaires.value = [];  
+    questionnaires.value = [];
     var promise = GetReleasedQs(username);
     promise.then((result)=>{
         // var categoryName = "";
@@ -255,6 +263,30 @@ const handleCreate = () => {
 
 
 
+//编辑问卷提示新开一个问卷
+const reviseQuestionnaire = (id) => {
+    ElMessageBox.confirm(
+        '该问卷已发布，若要编辑，将新建此问卷的副本。您确定要这么做吗？',
+        '温馨提示',
+        {
+            confirmButtonText: '确认',
+            cancelButtonText: '取消',
+            type: 'warning',
+        }
+    )
+    .then(() => {
+        //用户点击了确认
+        goToQuestionnaireDesign(id, 5);
+    })
+    .catch(() => {
+        //用户点击了取消
+        ElMessage({
+            type: 'info',
+            message: '取消编辑',
+        })
+    })
+}
+
 
 
 
@@ -297,15 +329,16 @@ const handleCreate = () => {
                             <span style="float: right" class="right">发布日期: {{ questionnaire.PublishDate }}</span>
                             <span style="float: right" class="right" v-if="questionnaire.IsOpening">已发布</span>
                             <span style="float: right" class="right" v-else>已关闭</span>
+                            <span style="float: right" class="right">回收量 {{questionnaire.FilledPeople}}</span>
                             <span style="float: right" class="right">ID: {{questionnaire.SurveyID}}</span>
                         </div>
 
                         <!-- 下部分 -->
                         <div class="card-footer">
-                            <el-button type="text" :icon="Edit" @click="goToQuestionnaireDesign(questionnaire.SurveyID, -1)" :disabled="questionnaire.IsOpening" class="thebutton">编辑问卷</el-button>
+                            <el-button type="text" :icon="Edit" @click="reviseQuestionnaire(questionnaire.SurveyID)" :disabled="questionnaire.IsOpening" class="thebutton">编辑问卷</el-button>
                             <el-button type="text" :icon="View" @click="goToQuestionnaireFill(questionnaire.SurveyID)" class="otherbutton">预览</el-button>
                             <el-button type="text" :icon="Link" class="otherbutton">发送问卷</el-button>
-                            <el-button type="text" :icon="Odometer" class="otherbutton">分析数据</el-button>
+                            <el-button type="text" :icon="Odometer" class="otherbutton" @click="goToQuestionnaireData(questionnaire.SurveyID)">分析数据</el-button>
                             <el-switch v-model="questionnaire.IsOpening" style="float: right; margin-left: 10px;--el-switch-on-color: #13ceb5;" @change="updateIsOpening(questionnaire.SurveyID)"  class="deletebutton"/>
                             <el-button type="danger" :icon="Delete" style="float: right" circle @click="deleteQs(questionnaire.SurveyID)"></el-button>
                         </div>
