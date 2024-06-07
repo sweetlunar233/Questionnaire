@@ -258,7 +258,6 @@
 import { GetQuestionnaire, PostQuestion } from "@/api/question";
 import NavigationBar from "@/components/NavigationBar.vue"
 import { ElMessage } from 'element-plus'
-import { fa } from "element-plus/es/locale";
 import { NPopover } from "naive-ui"
 import { ref } from "vue" ;
  

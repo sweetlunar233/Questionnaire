@@ -37,7 +37,7 @@
             </div>
             <br/>
             <van-radio-group v-model=" questionList[index-1].radio" v-for="index2 in questionList[index-1].optionCnt" >
-                <van-radio :name="index2" checked-color="#0283EF" :label-disabled=true>
+                <van-radio :name="questionList[index-1].optionList[index2-1].optionId" checked-color="#0283EF" :label-disabled=true>
                     <div>
                     {{ questionList[index-1].optionList[index2-1].content }}
                     </div>
@@ -56,7 +56,7 @@
             
             <van-checkbox-group v-model=" questionList[index-1].radio" v-for="index2 in questionList[index-1].optionCnt"  checked-color="#0283EF">
                 <br/>
-                <van-checkbox :name="index2" shape="square" :label-disabled=true>
+                <van-checkbox :name="questionList[index-1].optionList[index2-1].optionId" shape="square" :label-disabled=true>
                     <div>
                     {{ questionList[index-1].optionList[index2-1].content }}
                     </div>
@@ -81,7 +81,7 @@
           <div v-if="questionList[index-1].type==4">
             {{ questionList[index-1].question }}
             <br/>
-            <el-rate v-model="questionList[index-1].grade" allow-half></el-rate>
+            <el-rate v-model="questionList[index-1].grade"></el-rate>
             <br/>
             <br/>
           </div>
@@ -91,8 +91,8 @@
       </div>
 
       <div class="bottom">
-        <el-button color="#626aef" size="large"><el-icon><Upload/></el-icon>&nbsp;提交</el-button>
-        <el-button color="#626aef" size="large"><el-icon><House/></el-icon>&nbsp;暂存</el-button>
+        <el-button color="#626aef" @click="postFill(1)" size="large"><el-icon><Upload/></el-icon>&nbsp;提交</el-button>
+        <el-button color="#626aef" @click="postFill(0)" size="large"><el-icon><House/></el-icon>&nbsp;暂存</el-button>
       </div>
   
     </div>
@@ -103,6 +103,7 @@
   import { GetStoreFill, PostFill } from "@/api/question";
   import NavigationBar from "@/components/NavigationBar.vue"
   import { ref } from 'vue'
+  import { ElMessage } from 'element-plus'
    
    export default({
      data(){
@@ -131,14 +132,14 @@
         //TieZhu:添加单选题
         addSingle(){
             this.questionCnt++;
-            this.questionList.push({"type":1,"isNecessary":true,"question":"请选择一个选项","radio":ref(),
-            "optionCnt":1,"optionList":[{"content":"选项"}]});
+            this.questionList.push({"type":1,"isNecessary":true,"question":"请选择一个选项","radio":ref(''),
+            "optionCnt":1,"optionList":[{"optionId":0,"content":"选项"}]});
         },
         //TieZhu:添加多选题
         addMultiple(){
             this.questionCnt++;
-            this.questionList.push({"type":2,"isNecessary":true,"question":"请选择以下选项（多选）","radio":ref(),
-            "optionCnt":1,"optionList":[{"content":"选项"}]});
+            this.questionList.push({"type":2,"isNecessary":true,"question":"请选择以下选项（多选）","max":1, "radio":ref(''),
+            "optionCnt":1,"optionList":[{"optionId":0,"content":"选项"}]});
         },
         //TieZhu:添加填空题
         addFill(){
@@ -152,16 +153,44 @@
         },
         //暂存/提交,如果status是0，那么是暂存，如果status是1.那么根据问卷类型判断是已批改还是已提交
         postFill(status){
-          var promise;
-          if(status == 0){
-            promise = PostFill(this.questionnaireId,'Unsubmitted',this.question);
+          if(!this.canSubmit()){
+            return;
           }
-          else if(status == 1 && this.type == 3){
-            promise = PostFill(this.questionnaireId,'Graded',this.question);
+          // var promise;
+          // if(status == 0){
+          //   promise = PostFill(this.questionnaireId,'Unsubmitted',this.question);
+          // }
+          // else if(status == 1 && this.type == 3){
+          //   promise = PostFill(this.questionnaireId,'Graded',this.question);
+          // }
+          // else{
+          //   promise = PostFill(this.questionnaireId,'Submitted',this.question);
+          // }
+        },
+        warning(content){
+          ElMessage({
+            message:content,
+            type:'warning',
+          });
+        },
+        //检测是否能够提交，如果没有把必填的填写完，则不能提交
+        canSubmit(){
+          let i = 0;
+          for(i = 0;i < this.questionList.length;i++){
+            if(this.questionList[i].type <= 2 && this.questionList[i].isNecessary && this.questionList[i].radio==''){
+              this.warning("有必填题目没有填写！")
+              return false;
+            }
+            else if(this.questionList[i].type == 3 && this.questionList[i].isNecessary && this.questionList[i].fill==''){
+              this.warning("有必填题目没有填写！")
+              return false;
+            }
+            else if(this.questionList[i].type == 4 && this.questionList[i].isNecessary && this.questionList[i].grade==''){
+              this.warning("有必填题目没有填写！")
+              return false;
+            }
           }
-          else{
-            promise = PostFill(this.questionnaireId,'Submitted',this.question);
-          }
+          return true;
         }
      },
      components:{
@@ -183,6 +212,7 @@
      },
      components:{
       NavigationBar,
+      ElMessage,
      },
      created(){
       var promise;
@@ -190,7 +220,7 @@
       const storedUsername = localStorage.getItem('username');
       if(storedUsername){
         this.username = storedUsername;
-        promise = GetStoreFill(this.username,this.questionnaireId);
+        // promise = GetStoreFill(this.username,this.questionnaireId);
         // promise.then((result) => {
         //   this.question = result.question;
         // })

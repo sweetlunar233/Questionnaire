@@ -14,6 +14,12 @@ export function GetCrossData(QuestionID1,QuestionID2){
     data.QuestionID2 = QuestionID2;
     return get('',data);
 }
+//拿到其他数据
+export function GetOtherData(surveyID){
+    let data = {};
+    data.surveyID = surveyID;
+    return get('',data);
+}
 //拿到暂存信息
 export function GetStoreFill(userName,surveyID){
     let data = {};
