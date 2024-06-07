@@ -8,7 +8,7 @@ import store from './store'
 // 引入 ElementPlus
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
-import locale from 'element-plus/dist/locale/zh-cn.js'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
 
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
@@ -32,7 +32,7 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
 
-app.use(store).use(router).use(ElementPlus,{locale}).use(RadioGroup).use(Radio).use(Checkbox).use(CheckboxGroup).use(Divider).use(echarts).use(Print).mount('#app')
+app.use(store).use(router).use(ElementPlus,{locale: zhCn}).use(RadioGroup).use(Radio).use(Checkbox).use(CheckboxGroup).use(Divider).use(echarts).use(Print).mount('#app')
 
 
 app.config.globalProperties.$cookies = VueCookies
