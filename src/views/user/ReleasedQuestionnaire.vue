@@ -108,6 +108,14 @@ const goToQuestionnaireFill = (questionnaireId) => {
     }
   });
 }
+const goToQuestionnaireData = (questionnaireId) => {
+  r.push({
+    path: '/dataPre',
+    query: {
+      questionnaireId: questionnaireId
+    }
+  });
+}
 
 
 
@@ -127,11 +135,12 @@ username.value = internalData.$cookies.get('username') // 后面的为之前设�
 
 
 import {ElMessageBox, ElMessage} from 'element-plus'
-import {GetReleasedQs, DeleteReleasedQs, UpdateIsOpening} from '../../api/questionnaire.js'
+import {GetReleasedQs, UpdateOrDelete} from '../../api/questionnaire.js'
 
 const flag = ref(true);
 
 const initCreated = (username) =>{
+    questionnaires.value = [];
     var promise = GetReleasedQs(username);
     promise.then((result)=>{
         // var categoryName = "";
@@ -181,7 +190,7 @@ const deleteQs = (id) =>{
     )
         .then(() => {
             //用户点击了确认
-            var promise = DeleteReleasedQs(id);
+            var promise = UpdateOrDelete(id, 1);
             promise.then((result)=>{
                 if(result.message === "True"){
                     ElMessage({
@@ -208,7 +217,7 @@ const deleteQs = (id) =>{
 }
 
 const updateIsOpening = (id) =>{
-    var promise = UpdateIsOpening(id);
+    var promise = UpdateOrDelete(id, 0);
     promise.then((result)=>{
         if(result.message === "True"){
             // ElMessage({
@@ -254,6 +263,30 @@ const handleCreate = () => {
 
 
 
+//编辑问卷提示新开一个问卷
+const reviseQuestionnaire = (id) => {
+    ElMessageBox.confirm(
+        '该问卷已发布，若要编辑，将新建此问卷的副本。您确定要这么做吗？',
+        '温馨提示',
+        {
+            confirmButtonText: '确认',
+            cancelButtonText: '取消',
+            type: 'warning',
+        }
+    )
+    .then(() => {
+        //用户点击了确认
+        goToQuestionnaireDesign(id, 5);
+    })
+    .catch(() => {
+        //用户点击了取消
+        ElMessage({
+            type: 'info',
+            message: '取消编辑',
+        })
+    })
+}
+
 
 
 
@@ -296,15 +329,16 @@ const handleCreate = () => {
                             <span style="float: right" class="right">发布日期: {{ questionnaire.PublishDate }}</span>
                             <span style="float: right" class="right" v-if="questionnaire.IsOpening">已发布</span>
                             <span style="float: right" class="right" v-else>已关闭</span>
+                            <span style="float: right" class="right">回收量 {{questionnaire.FilledPeople}}</span>
                             <span style="float: right" class="right">ID: {{questionnaire.SurveyID}}</span>
                         </div>
 
                         <!-- 下部分 -->
                         <div class="card-footer">
-                            <el-button type="text" :icon="Edit" @click="goToQuestionnaireDesign(questionnaire.SurveyID, -1)" :disabled="questionnaire.IsOpening" class="thebutton">编辑问卷</el-button>
+                            <el-button type="text" :icon="Edit" @click="reviseQuestionnaire(questionnaire.SurveyID)" :disabled="questionnaire.IsOpening" class="thebutton">编辑问卷</el-button>
                             <el-button type="text" :icon="View" @click="goToQuestionnaireFill(questionnaire.SurveyID)" class="otherbutton">预览</el-button>
                             <el-button type="text" :icon="Link" class="otherbutton">发送问卷</el-button>
-                            <el-button type="text" :icon="Odometer" class="otherbutton">分析数据</el-button>
+                            <el-button type="text" :icon="Odometer" class="otherbutton" @click="goToQuestionnaireData(questionnaire.SurveyID)">分析数据</el-button>
                             <el-switch v-model="questionnaire.IsOpening" style="float: right; margin-left: 10px;--el-switch-on-color: #13ceb5;" @change="updateIsOpening(questionnaire.SurveyID)"  class="deletebutton"/>
                             <el-button type="danger" :icon="Delete" style="float: right" circle @click="deleteQs(questionnaire.SurveyID)"></el-button>
                         </div>

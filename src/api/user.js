@@ -29,7 +29,7 @@ export function modifyUserInfo(username, email, password, zhibi){
     return post("/personal/message", data);
 }
 
-export function updataUserphotoInMassage(username, photonumber, status){
+export function updateUserphotoInMassage(username, photonumber, status){
     let data = {};
     data.username = username;
     data.photonumber = photonumber;
@@ -37,7 +37,7 @@ export function updataUserphotoInMassage(username, photonumber, status){
     return post("/personal/message", data);
 }
 
-export function updataUserphotoInShop(username, photonumber, status){
+export function updateUserphotoInShop(username, photonumber, status){
     let data = {};
     data.username = username;
     data.photonumber = photonumber;
