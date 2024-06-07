@@ -37,7 +37,7 @@ const categoryId = ref('')
 
 //文章列表数据模型
 const questionnaires = ref([
-    {
+    /*{
         "SurveyID": 5,
         "Title": "陕西旅游攻略",
         "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
@@ -66,7 +66,7 @@ const questionnaires = ref([
         "categoryId": 2,
         "PublishDate": "2023-09-03 11:55:30",
         "IsOpening": true
-    },
+    },*/
     
 ])
 
@@ -132,6 +132,7 @@ import {GetReleasedQs, DeleteReleasedQs, UpdateIsOpening} from '../../api/questi
 const flag = ref(true);
 
 const initCreated = (username) =>{
+    questionnaires.value = [];  
     var promise = GetReleasedQs(username);
     promise.then((result)=>{
         // var categoryName = "";

@@ -35,7 +35,7 @@ const categoryId = ref('')
 
 //文章列表数据模型
 const questionnaires = ref([
-    {
+    /*{
         "SurveyID": 5,
         "Title": "陕西旅游攻略",
         "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
@@ -61,7 +61,7 @@ const questionnaires = ref([
         "state": "草稿",
         "categoryId": 2,
         "PublishDate": "2023-09-03 11:55:30"
-    },
+    },*/
 ])
 
 //分页条数据模型
@@ -118,8 +118,10 @@ import {GetFilledQs, DeleteFilledQs} from '../../api/questionnaire.js'
 const flag = ref(true);
 
 const initFilled = (username) =>{
+    questionnaires.value = [];  
     var promise = GetFilledQs(username);
     promise.then((result)=>{
+        console.log(result.data[0]);
         // var categoryName = "";
         // if(categoryId.value != ""){
         //     categorys.value.forEach(category => {
