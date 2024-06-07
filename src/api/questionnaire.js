@@ -28,20 +28,17 @@ export function DeleteUnreleasedQs(id){
     return post("/userManage/unreleased", id);
 }
 
-export function DeleteReleasedQs(id){
-    let data = {};
-    data.id = id;
-    return post("/userManage/released", id);
-}
-
 export function DeleteFilledQs(id){
     let data = {};
     data.id = id;
     return post("/userManage/filled", id);
 }
 
-export function UpdateIsOpening(id){
+//update:0
+//delete:1
+export function UpdateOrDelete(id, flag){
     let data = {};
     data.id = id;
-    return post("/userManage/released",id);
+    data.flag = flag;
+    return post("/userManage/released",data);
 }

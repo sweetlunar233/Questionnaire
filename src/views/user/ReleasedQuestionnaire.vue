@@ -37,7 +37,7 @@ const categoryId = ref('')
 
 //文章列表数据模型
 const questionnaires = ref([
-    {
+    /*{
         "SurveyID": 5,
         "Title": "陕西旅游攻略",
         "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
@@ -66,7 +66,7 @@ const questionnaires = ref([
         "categoryId": 2,
         "PublishDate": "2023-09-03 11:55:30",
         "IsOpening": true
-    },
+    },*/
     
 ])
 
@@ -127,11 +127,12 @@ username.value = internalData.$cookies.get('username') // 后面的为之前设�
 
 
 import {ElMessageBox, ElMessage} from 'element-plus'
-import {GetReleasedQs, DeleteReleasedQs, UpdateIsOpening} from '../../api/questionnaire.js'
+import {GetReleasedQs, UpdateOrDelete} from '../../api/questionnaire.js'
 
 const flag = ref(true);
 
 const initCreated = (username) =>{
+    questionnaires.value = [];  
     var promise = GetReleasedQs(username);
     promise.then((result)=>{
         // var categoryName = "";
@@ -181,7 +182,7 @@ const deleteQs = (id) =>{
     )
         .then(() => {
             //用户点击了确认
-            var promise = DeleteReleasedQs(id);
+            var promise = UpdateOrDelete(id, 1);
             promise.then((result)=>{
                 if(result.message === "True"){
                     ElMessage({
@@ -208,7 +209,7 @@ const deleteQs = (id) =>{
 }
 
 const updateIsOpening = (id) =>{
-    var promise = UpdateIsOpening(id);
+    var promise = UpdateOrDelete(id, 0);
     promise.then((result)=>{
         if(result.message === "True"){
             // ElMessage({
@@ -449,7 +450,7 @@ const handleCreate = () => {
 
 .card {
   position: relative;
-  width: 95%;
+  width: 1200px;
   height: 120px;
   border-radius: 14px;
   z-index: 1111;
