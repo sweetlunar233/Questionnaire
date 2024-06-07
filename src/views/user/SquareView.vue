@@ -50,18 +50,6 @@ const questionnaires = ref([
         "published": true,
         "PostMan": "lorian"
     },
-    {
-        "id": 5,
-        "Title": "陕西旅游攻略",
-        "Reward": "100",
-        "Description": "陕西旅游攻略陕西旅游攻略陕西旅游攻略陕西旅游攻略陕西旅游攻略陕西旅游攻略陕西旅游攻略",
-        "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
-        "state": "草稿",
-        "categoryId": 2,
-        "createTime": "2023-09-03 11:55:30",
-        "published": true,
-        "PostMan": "lorian"
-    },
 ])
 
 //分页条数据模型
@@ -113,7 +101,7 @@ const goToQuestionnaireFill = (questionnaireId) => {
 import {GetAllReleasedQs} from '../../api/questionnaire.js'
 
 const initAllReleased = () =>{
-    questionnaires.value = [];  
+    questionnaires.value = [];
     var promise = GetAllReleasedQs();
     promise.then((result)=>{
         var count = 0;
@@ -144,8 +132,8 @@ initAllReleased();
 <template>
     <el-card class="page-container">
         <!-- 问卷列表 -->
-        <el-row class="questionnaire-list">
-            <el-col :span="8" v-for="(questionnaire, index) in questionnaires" :key="index">
+        <div class="questionnaire-list">
+            <div :span="8" v-for="(questionnaire, index) in questionnaires" :key="index">
                 <div class="card">
                     <div class="first-content">
                         <span class="firstfirst">{{ questionnaire.Title }}</span>
@@ -158,8 +146,8 @@ initAllReleased();
                         <button type="primary" style="float: right;font-size: 17px" size="large" @click="goToQuestionnaireFill(questionnaire.SurveyID)"><span>填写</span></button>
                     </div>
                 </div>
-            </el-col>
-        </el-row>
+            </div>
+        </div>
         <!-- 分页条 -->
         <el-pagination :page-sizes="[6, 8, 10, 12]"
         layout="sizes, prev, pager, next" background :total="total" @size-change="onSizeChange"
@@ -360,7 +348,6 @@ button:hover::after {
 .questionnaire-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
   margin-left: 40px;
 }
 
