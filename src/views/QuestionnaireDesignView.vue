@@ -5,8 +5,9 @@
 
     <div class="left">
       <div class="title">题型</div>
-      <van-divider  :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"></van-divider>
+      <van-divider  :style="{ color: '#626aef', borderColor: '#626aef', padding: '0 16px' }"></van-divider>
 
+      <!-- 单选题、多选题 -->
       <div>
         <el-button @click="addSingle()" plain>
           <el-icon style="vertical-align: middle">
@@ -25,6 +26,7 @@
 
       <br/>
 
+      <!-- 评分题、填空题 -->
       <div>
         <el-button @click="addScore()" plain>
           <el-icon style="vertical-align: middle">
@@ -40,6 +42,26 @@
           &ensp;填空题
         </el-button>
       </div>
+
+      <!-- 保存、发布、乱序展示、人数限制 -->
+      <div style="margin-top: 230%;">
+        <!-- 对于考试问卷/报名问卷，是否乱序展示/设置人数限制 -->
+        <div>
+          <div v-if="type==3">
+            <el-switch v-model="isDisorder" size="large" style="--el-switch-on-color: #626aef;"/>&nbsp;是否乱序展示
+          </div>
+          <div v-if="type==2">
+            <el-input-number v-model="people" size="small" :min="1"/>&nbsp;报名人数
+          </div>
+        </div>
+        <div class="row"></div>
+        <div>
+        <el-button plain color="#626aef" size="large" round><el-icon><Upload/></el-icon>&nbsp;保存</el-button>
+        <el-button plain color="#626aef" size="large" round><el-icon><Position/></el-icon>&nbsp;发布</el-button>
+        </div>
+      </div>
+
+
     </div>
     
     <div class="right">
@@ -47,7 +69,7 @@
         <el-input v-if="ttIsEditing" v-model="title" @blur="finishEditing(-1,0,0)" @keyup.enter="finishEditing(-1,0,0)" clearable/>
         <span v-else @click="startEditing(-1,0,0)">{{ text }}</span>
       </div>
-      <van-divider  :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"></van-divider>
+      <van-divider  :style="{ color: '#8a2be2', borderColor: '#8a2be2', padding: '0 16px' }"></van-divider>
 
       <!-- @dragstart: 拖动开始时触发，记录被拖动的题目索引。
            @dragover.prevent: 阻止默认行为，使得元素可以被放置。
@@ -55,8 +77,6 @@
            @dragenter.prevent: 进入另一个可放置元素时触发，这里用来调整元素位置。 -->
 
       <div v-for="index in questionCnt"
-      @mouseover="questionList[index-1].showToolbar = true" 
-      @mouseleave="questionList[index-1].showToolbar = false"
       draggable=true
       @dragstart="dragStart(index-1)"
       @dragover.prevent
@@ -64,9 +84,9 @@
       @dragenter.prevent="dragEnter(index-1)"
       >
 
-        <!-- TieZhu:
+        <!-- TieZhu:questionList说明
         对于单选和多选：
-          quetionList有如下属性。
+          quetionList有如下属性：
             showToolbar：是否显示题目工具栏，初值false
             type：标识题目类型
             qsIsEditing：题干是否正在修改，初值false
@@ -75,11 +95,13 @@
             optionCnt：选项数量
             text:正在修改的题干填写内容
             isDisabled:是否可以删除选项，初值true
+            max:仅针对多选，至多可以选几项
+            score:此题分数
             optionList：选项数组。包含以下内容：
-              showBar：是否展示工具栏，初值false
               isEditing：是否正在被修改，初值false
               content：选项内容
               text：正在修改的填写内容
+              isCorrect:是否为正确答案
         对于填空：
           quetionList有如下属性:
             showToolbar：是否显示题目工具栏，初值false
@@ -88,31 +110,41 @@
             question：题干
             isNecessary：布尔类型，是否必填，初值true
             text:正在修改的题干填写内容
+            score:此题分数
         -->
 
         <el-icon color="#c45656" style="position: absolute; left: 1%;" v-if="questionList[index-1].isNecessary==true"><StarFilled/>&ensp;</el-icon>
 
         <!-- TieZhu：单选题 -->
-        <div v-if="questionList[index-1].type==1">
+        <div v-if="questionList[index-1].type==1" @click="showTB(index-1)" >
           <div>
             <el-input v-if="questionList[index-1].qsIsEditing" v-model="questionList[index-1].question" @blur="finishEditing(0,index-1,0)" @keyup.enter="finishEditing(0,index-1,0)" clearable/>
-            <span v-else @click="startEditing(0,index-1,0)">{{ questionList[index-1].text }}</span>
+            <span v-else @click="startEditing(0,index-1,-1)">{{ questionList[index-1].text }}</span>
           </div>
           
           <van-radio-group v-model="radio" v-for="index2 in questionList[index-1].optionCnt" :disabled=true>
-              <div @mouseover="questionList[index-1].optionList[index2-1].showBar=true" @mouseleave="questionList[index-1].optionList[index2-1].showBar=false">
+              <div>
                   <br/>
                   <van-radio :name="index2" checked-color="#0283EF" :label-disabled=true>
-                    <div>
-                      <el-input v-if="questionList[index-1].optionList[index2-1].isEditing" v-model="questionList[index-1].optionList[index2-1].content" @blur="finishEditing(1,index-1,index2-1)" @keyup.enter="finishEditing(1,index-1,index2-1)" clearable/>
-                      <span v-else @click="startEditing(1,index-1,index2-1)">{{ questionList[index-1].optionList[index2-1].text }}</span>
-                    </div>
+                    <n-popover trigger="manual" :show="questionList[index-1].optionList[index2-1].isEditing" :show-arrow="false" placement="right">
+                      <template #trigger>
+                        <el-input 
+                        v-if="questionList[index-1].optionList[index2-1].isEditing"
+                        v-model="questionList[index-1].optionList[index2-1].content" 
+                        @blur="finishEditing(1,index-1,index2-1)" 
+                        @keyup.enter="finishEditing(1,index-1,index2-1)"
+                        />
+                        <span v-else @click="startEditing(1,index-1,index2-1)" >{{ questionList[index-1].optionList[index2-1].text }}</span>
+                      </template>
+                      <div>
+                        <el-button size="small" color="#fef0f0" @click="addOption(index-1,index2-1)" text><el-icon><Plus/></el-icon></el-button>
+                        <el-button size="small" color="#ecf5ff" @click="deleteOption(index-1,index2-1)" :disabled="questionList[index-1].isDisabled" text><el-icon><Minus/></el-icon></el-button>
+                        &nbsp;
+                        <el-switch v-model="questionList[index-1].optionList[index2-1].isCorrect" @change="checkAnswer(0,index-1,index2-1)"/>&nbsp;正确答案
+                      </div>
+                    </n-popover>
                   </van-radio>
                   <br/>
-                  <el-button-group v-if="questionList[index-1].optionList[index2-1].showBar">
-                      <el-button size="small" color="#fef0f0" @click="addOption(index-1,index2-1)"><el-icon><Plus/></el-icon></el-button>
-                      <el-button size="small" color="#ecf5ff" @click="deleteOption(index-1,index2-1)" :disabled="questionList[index-1].isDisabled"><el-icon><Minus/></el-icon></el-button>
-                  </el-button-group>
               </div>
           </van-radio-group>
 
@@ -120,30 +152,35 @@
         </div>
 
         <!-- TieZhu：多选题 -->
-        <div v-if="questionList[index-1].type==2">
+        <div v-if="questionList[index-1].type==2" @click="showTB(index-1)" >
           <div>
             <el-input v-if="questionList[index-1].qsIsEditing" v-model="questionList[index-1].question" @blur="finishEditing(0,index-1,0)" @keyup.enter="finishEditing(0,index-1,0)" clearable/>
-            <span v-else @click="startEditing(0,index-1,0)">{{ questionList[index-1].text }}</span>
+            <span v-else @click="startEditing(0,index-1,-1)">{{ questionList[index-1].text }}</span>
           </div>
           
-          <van-checkbox-group v-model="radio" v-for="index2 in questionList[index-1].optionCnt"  checked-color="#0283EF" :disabled=true>
-              <div @mouseover="questionList[index-1].optionList[index2-1].showBar=true" @mouseleave="questionList[index-1].optionList[index2-1].showBar=false">
-                  <br/>
-                  <van-checkbox :name="index2" shape="square" :label-disabled=true>
-                    <div>
-                      <el-input v-if="questionList[index-1].optionList[index2-1].isEditing" v-model="questionList[index-1].optionList[index2-1].content" @blur="finishEditing(1,index-1,index2-1)" @keyup.enter="finishEditing(1,index-1,index2-1)" clearable/>
-                      <span v-else @click="startEditing(1,index-1,index2-1)">{{ questionList[index-1].optionList[index2-1].text }}</span>
-                    </div>
-                  </van-checkbox>
-                  <br/>
-                  <el-button-group v-if="questionList[index-1].optionList[index2-1].showBar">
-                      <el-button size="small" color="#fef0f0" @click="addOption(index-1,index2-1)"><el-icon><Plus/></el-icon></el-button>
-                      <el-button size="small" color="#ecf5ff" @click="deleteOption(index-1,index2-1)" :disabled="questionList[index-1].isDisabled"><el-icon><Minus/></el-icon></el-button>
-                  </el-button-group>
-              </div>
+          <van-checkbox-group v-model="radio" v-for="index2 in questionList[index-1].optionCnt" checked-color="#0283EF" :disabled=true>
+            <div>
+                <br/>
+                <van-checkbox :name="index2" shape="square" :label-disabled=true>
+                  <n-popover trigger="manual" :show="questionList[index-1].optionList[index2-1].isEditing" :show-arrow="false" placement="right">
+                    <template #trigger>
+                      <el-input 
+                      v-if="questionList[index-1].optionList[index2-1].isEditing"
+                      v-model="questionList[index-1].optionList[index2-1].content" 
+                      @blur="finishEditing(1,index-1,index2-1)" 
+                      @keyup.enter="finishEditing(1,index-1,index2-1)"
+                      />
+                      <span v-else @click="startEditing(1,index-1,index2-1)" >{{ questionList[index-1].optionList[index2-1].text }}</span>
+                    </template>
+                    <el-button size="small" color="#fef0f0" @click="addOption(index-1,index2-1)" text><el-icon><Plus/></el-icon></el-button>
+                    <el-button size="small" color="#ecf5ff" @click="deleteOption(index-1,index2-1)" :disabled="questionList[index-1].isDisabled" text><el-icon><Minus/></el-icon></el-button>
+                    &nbsp;
+                    <el-switch v-model="questionList[index-1].optionList[index2-1].isCorrect" @change="checkAnswer(1,index-1,index2-1)"/>&nbsp;正确答案
+                  </n-popover>
+                </van-checkbox>
+                <br/>
+            </div>
           </van-checkbox-group>
-
-          <br/>
         </div>
 
         <!-- TieZhu:填空题 -->
@@ -166,7 +203,7 @@
           <br/>
           <br/>
         </div>
-
+        <!-- TieZhu:工具栏 -->
         <div v-if="questionList[index-1].showToolbar">
           <el-divider content-position="left" border-style="dashed">
               <el-icon><MagicStick /></el-icon>
@@ -192,11 +229,22 @@
             <el-icon><CloseBold/></el-icon>
             &ensp;设为非必填
           </el-button>
+          
+          &nbsp;
+
+          <el-select v-if="questionList[index-1].type==2" v-model="questionList[index-1].max" placeholder="至多选" style="width: 15%">
+            <el-option v-for="ind in questionList[index-1].optionList.length" :key="ind" :label="ind" :value="ind"/>
+          </el-select>
+          
+          &nbsp;
+
+          <el-input-number v-if="type==3" v-model="questionList[index-1].score" :min="0"/>
+
           <el-divider border-style="dashed"></el-divider>
         </div>
 
       </div>
-      
+
     </div>
 
   </div>
@@ -206,17 +254,25 @@
 <script>
 import NavigationBar from "@/components/NavigationBar.vue"
 import { ElMessage } from 'element-plus'
+import { NPopover } from "naive-ui"
+import { ref } from "vue" ;
  
  export default({
    data(){
     return{
       input:'',
+      username:'',
+      questionnaireId:0,
+      type:0,
       questionCnt: 0,
       questionList: [],
       draggedIndex:-1,
       title:'问题标题',
       text:'问卷标题',
       ttIsEditing:false,
+      lastEditObj:{"type":-2,"index1":-1,"index2":-1},//上一次修改的元素，如果不是选项，那么它的index2为-1.type:-1问卷标题;0问题;1选项
+      isDisorder:false,
+      people:0,
     }
    },
    methods: {
@@ -224,23 +280,25 @@ import { ElMessage } from 'element-plus'
     addSingle(){
       this.questionCnt++;
       this.questionList.push({"type":1,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请选择一个选项","text":"请选择一个选项",
-      "optionCnt":1,"isDisabled":true,"optionList":[{"showBar":false,"isEditing":false,"content":"选项","text":"选项"}]});
+      "optionCnt":1,"isDisabled":true,"socre":0,
+      "optionList":[{"showBar":false,"isEditing":false,"content":"选项","text":"选项","isCorrect":ref(false)}]});
     },
     //TieZhu:添加多选题
     addMultiple(){
       this.questionCnt++;
       this.questionList.push({"type":2,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请选择以下选项（多选）","text":"请选择以下选项（多选）",
-      "optionCnt":1,"isDisabled":true,"optionList":[{"showBar":false,"isEditing":false,"content":"选项","text":"选项"}]});
+      "optionCnt":1,"isDisabled":true,"max":1,"socre":0,
+      "optionList":[{"showBar":false,"isEditing":false,"content":"选项","text":"选项","isCorrect":false}]});
     },
     //TieZhu:添加填空题
     addFill(){
       this.questionCnt++;
-      this.questionList.push({"type":3,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请填空","text":"请填空"});
+      this.questionList.push({"type":3,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请填空","text":"请填空","socre":0});
     },
     //TieZhu:添加评分题
     addScore(){
       this.questionCnt++;
-      this.questionList.push({"type":4,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请评分","text":"请评分"});
+      this.questionList.push({"type":4,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请评分","text":"请评分","socre":0});
     },
 
     //TieZhu:工具栏功能
@@ -280,7 +338,7 @@ import { ElMessage } from 'element-plus'
     //选择题
     addOption(index,index2){
       this.questionList[index].optionCnt++;
-      this.questionList[index].optionList.splice(index2,0,{"showBar":false,"isEditing":false,"content":"选项","text":"选项"});
+      this.questionList[index].optionList.splice(index2,0,{"showBar":false,"isEditing":false,"content":"选项","text":"选项","isCorrect":false});
       if(this.questionList[index].optionCnt==2){
           this.questionList[index].isDisabled = false;
       }
@@ -294,22 +352,27 @@ import { ElMessage } from 'element-plus'
     },
       //EditText
     startEditing(type,index,index2) {
+      if(this.lastEditObj.type!=-2 && (index != this.lastEditObj.index1 || index2 != this.lastEditObj.index2)){
+        this.finishEditing(this.lastEditObj.type,this.lastEditObj.index1,this.lastEditObj.index2);
+      }
+      this.lastEditObj = {"type":type,"index1":index,"index2":index2};
       if(type == 0){
         this.questionList[index].qsIsEditing = true;
       }
       else if(type == 1){
         this.questionList[index].optionList[index2].isEditing = true;
       }
-      else{
+      else if(type == -1){
         this.ttIsEditing = true;
       }
     },
     finishEditing(type,index,index2) {
+      this.lastEditObj={"type":-2,"index1":-1,"index2":-1};
       if(type == 0){
         this.questionList[index].qsIsEditing = false;
         if(this.questionList[index].question.length == 0){
           this.questionList[index].question = this.questionList[index].text;
-          this.warning();
+          this.warning("长度不能为空");
         }
         else{
           this.questionList[index].text = this.questionList[index].question;
@@ -319,9 +382,9 @@ import { ElMessage } from 'element-plus'
         this.questionList[index].optionList[index2].isEditing = false;
         if(this.questionList[index].optionList[index2].content.length == 0){
           this.questionList[index].optionList[index2].content = this.questionList[index].optionList[index2].text;
-          this.warning();
+          this.warning("长度不能为空");
         }
-        else{
+        else if(type == -1){
           this.questionList[index].optionList[index2].text = this.questionList[index].optionList[index2].content;
         }
       }
@@ -329,22 +392,70 @@ import { ElMessage } from 'element-plus'
         this.ttIsEditing = false;
         if(this.title.length == 0){
           this.title = this.text;
-          this.warning();
+          this.warning("长度不能为空");
         }
         else{
           this.text = this.title;
         }
       }
     },
-    warning(){
+    warning(content){
       ElMessage({
-        message:'长度不能为空',
+        message:content,
         type:'warning',
       });
     },
+
+    //出现工具栏，注意，不仅要出现当前问题的工具栏，还要关闭其他问题的工具栏和退出其他问题的编辑状态
+    showTB(index){
+      this.questionList.forEach(ele => {
+        if(ele.showToolbar){
+          ele.showToolbar = false;
+        }
+      });
+      this.questionList[index].showToolbar = true;
+      if(this.lastEditObj.type!=-1 && index != this.lastEditObj.index1){
+        this.finishEditing(this.lastEditObj.type,this.lastEditObj.index1,this.lastEditObj.index2);
+      }
+    },
+
+    //检查单选题是否只有一个正确选项，多选题是否存在太多正确选项.第一个参数0：单选题；否则多选题
+    checkAnswer(type,index,index2){
+      let i = 0;
+      if(type == 0 && this.questionList[index].optionList[index2].isCorrect){
+        for(i=0;i<this.questionList[index].optionCnt;i++){
+          if(i != index2){
+            this.questionList[index].optionList[i].isCorrect = false;
+          }
+        }
+      }
+      else if(type == 1 && this.questionList[index].optionList[index2].isCorrect){
+        let cnt = 0;
+        for(i=0;i<this.questionList[index].optionCnt;i++){
+          if(this.questionList[index].optionList[i].isCorrect){
+            cnt++;
+          }
+        }
+        console.log(this.questionList[index].max);
+        console.log(cnt);
+        if(cnt > this.questionList[index].max){
+          this.questionList[index].optionList[index2].isCorrect = false;
+          this.warning("正确答案太多")
+        }
+      }
+    }
    },
    components:{
     NavigationBar,
+    NPopover,
+   },
+   created(){
+    this.questionnaireId = this.$route.query.questionnaireId;
+    this.type = this.$route.query.questionnaireType;
+    const storedUsername = localStorage.getItem('username');
+    if(storedUsername){
+      this.username = storedUsername;
+    }
    }
  })
 </script>
@@ -356,6 +467,7 @@ import { ElMessage } from 'element-plus'
   position: fixed;
   top: 5%;
   margin: 2%;
+  margin-left: 15%;
   border-radius: 5px;
   border: 2px;
   padding: 1%;
@@ -368,10 +480,10 @@ import { ElMessage } from 'element-plus'
 .right{
   position: relative;
   height: 700px;
-  width: 73%;
+  width: 50%;
   height: 700px;
   top: 8%;
-  left: 20%;
+  left: 30%;
   border-radius: 5px;
   border: 2px;
   padding: 20px;
@@ -383,7 +495,7 @@ import { ElMessage } from 'element-plus'
 .title{
   text-align: center;
   font-size: larger;
-  color: #409EFF;
+  color: #626aef;
   font-weight: bold;
 }
 
@@ -395,5 +507,10 @@ import { ElMessage } from 'element-plus'
   background-position: center; 
   background-repeat: repeat-y; /* 背景图片不重复 */
   background-attachment: fixed; 
+  
+}
+
+.row{
+  padding-bottom: 10px;
 }
 </style>
