@@ -115,6 +115,8 @@ username.value = internalData.$cookies.get('username') // 后面的为之前设�
 import {ElMessageBox, ElMessage} from 'element-plus'
 import {GetFilledQs, DeleteFilledQs} from '../../api/questionnaire.js'
 
+const flag = ref(true);
+
 const initFilled = (username) =>{
     var promise = GetFilledQs(username);
     promise.then((result)=>{
@@ -132,7 +134,7 @@ const initFilled = (username) =>{
             if(i > pageSize.value * (pageNum.value - 1))
             {
                 if(i <= pageSize.value * pageNum.value){
-                    if(categoryName != "" && element.Category != categoryId.value){
+                    if(categoryId != "" && element.Category != categoryId.value){
                         console.log("oh no!")
                     }
                     else{
@@ -143,7 +145,12 @@ const initFilled = (username) =>{
             count++;
             i++;
         });
-        total.value = count;
+        if(flag.value)
+        {
+            total.value = count;
+            flag.value = false;
+        }
+        
     })
 }
 initFilled(username.value);
@@ -220,8 +227,8 @@ const deleteQs = (id) =>{
                 </el-select>
             </el-form-item> -->
             <el-form-item>
-                <el-button type="primary" class="searchbutton" @click="initFilled(username)" style="background-color: #ec1717;border: 0;">搜索</el-button>
-                <el-button @click="categoryId=''" style="color: grey;">重置</el-button>
+                <el-button class="bottone5" type="primary" @click="initFilled(username)" style="background-color: black;border: 0;color: white;">搜索</el-button>
+                <el-button class="bottone5" @click="categoryId=''" style="color: rgba(0, 0, 0, 0.753);">重置</el-button>
             </el-form-item>
         </el-form>
         <div class="card-container">
@@ -253,6 +260,63 @@ const deleteQs = (id) =>{
     </el-card>
 </template>
 <style scoped>
+
+.bottone5 {
+ align-items: center;
+ background-color: #FFFFFF;
+ border: 2px solid rgba(0, 0, 0, 0.1);
+ border-radius: .25rem;
+ box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+ box-sizing: border-box;
+ color: rgba(0, 0, 0, 0.85);
+ cursor: pointer;
+ display: inline-flex;
+ font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+ font-size: 15px;
+ font-weight: 600;
+ justify-content: center;
+ line-height: 1.25;
+ min-height: 2.2rem;
+ padding: calc(.875rem - 1px) calc(1.5rem - 1px);
+ text-decoration: none;
+ transition: all 250ms;
+ user-select: none;
+ -webkit-user-select: none;
+ touch-action: manipulation;
+ vertical-align: baseline;
+ width: 4rem;
+}
+
+.bottone5:hover,
+.bottone5:focus {
+ border-color: rgba(0, 0, 0, 0.15);
+ box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+ color: rgba(0, 0, 0, 0.65);
+}
+
+.bottone5:hover {
+ transform: translateY(-1px);
+}
+
+.bottone5:active {
+ background-color: #F0F0F1;
+ border-color: rgba(0, 0, 0, 0.15);
+ box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+ color: rgba(0, 0, 0, 0.65);
+ transform: translateY(0);
+}
+
+
+
+
+
+
+
+
+
+
+
+
 .card {
   position: relative;
   width: 1200px;
@@ -272,8 +336,8 @@ const deleteQs = (id) =>{
 }
 
 .card:hover {
-  transform: scale(1.01); /* 鼠标悬停时放大 */
-  box-shadow: 3px 3px 9px #bebebe, -3px -3px 9px #ffffff; /* 鼠标悬停时阴影加深 */
+  transform: scale(1.001); /* 鼠标悬停时放大 */
+  box-shadow: 3px 3px 9px #bebebe, -1px -1px 3px #ffffff; /* 鼠标悬停时阴影加深 */
 }
 
 
@@ -390,10 +454,6 @@ const deleteQs = (id) =>{
     justify-content: flex-end;
 }
 
-.searchform .searchbutton{
-    margin-right: 5px;
-}
-
 .textbutton{
     margin-left: 20px;
     font-size: 20px;
@@ -404,7 +464,10 @@ const deleteQs = (id) =>{
 }
 
 .header{
-    margin-bottom: 20px;
+    margin-top: 5px;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    border-bottom: 1px white solid;
 }
 
 .thebutton{
