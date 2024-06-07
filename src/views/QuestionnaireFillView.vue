@@ -25,7 +25,7 @@
               question：题干
               isNecessary：布尔类型，是否必填，初值true
               fill:所填内容（仅对填空题有效）
-              score:所评分数（仅对评分题有效）
+              grade:所评分数（仅对评分题有效）
           -->
   
           <el-icon color="#c45656" style="position: absolute; left: 1%;" v-if="questionList[index-1].isNecessary==true"><StarFilled/>&ensp;</el-icon>
@@ -81,7 +81,7 @@
           <div v-if="questionList[index-1].type==4">
             {{ questionList[index-1].question }}
             <br/>
-            <el-rate v-model="questionList[index-1].score" allow-half></el-rate>
+            <el-rate v-model="questionList[index-1].grade" allow-half></el-rate>
             <br/>
             <br/>
           </div>
@@ -133,7 +133,7 @@
         //TieZhu:添加评分题
         addScore(){
             this.questionCnt++;
-            this.questionList.push({"type":4,"isNecessary":true,"question":"请评分","score":ref('')});
+            this.questionList.push({"type":4,"isNecessary":true,"question":"请评分","grade":ref('')});
         },
      },
      components:{

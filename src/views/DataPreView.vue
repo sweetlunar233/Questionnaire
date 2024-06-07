@@ -4,7 +4,6 @@
   <!-- <div class="chartBox">
     <div id="pillarsChart" :style="{ width: '100%', height: '100%' }"></div>
   </div> -->
-
   <navigation-bar style="position: fixed;"/>
 
     <div class="back">
@@ -12,8 +11,9 @@
       <div class="right">
 
         <n-card :title="title">
-          <n-tabs type="line" size="medium" @on-update:value="changeBar(value)" animated>
+          <n-tabs type="line" size="medium" @update:value="changeBar(value)" animated>
             <n-tab-pane name="dataAnalysis" tab="数据分析">
+              <div  id="dataAnalysis">
               <div v-for="index in questionCnt"  style="margin-left: 2%;">
   
                 <!-- TieZhu:
@@ -105,35 +105,38 @@
                   <br/>
                 </div>
               </div>
+              </div>
             </n-tab-pane>
             <n-tab-pane name="crossData" tab="交叉分析">
-              <div style=" margin-left: 2%; margin-right: 2%;">自变量X</div>
-              <div class="row"></div>
-              <div>
-                <el-select v-model="cross1" placeholder="添加自变量" size="large" style="width: 240px; margin-left: 2%; margin-right: 2%;">
-                  <el-option v-for="item in cross" :key="item.value" :label="item.label" :value="item.value"/>
-                </el-select>
-              </div>
-              <br/>
-              <div style=" margin-left: 2%; margin-right: 2%;">因变量Y</div>
-              <!-- TieZhu:空一半行 -->
-              <div class="row"></div>
-              <div>
-                <el-select v-model="cross2" placeholder="添加因变量" size="large" style="width: 240px; margin-left: 2%; margin-right: 2%;">
-                  <el-option v-for="item in cross" :key="item.value" :label="item.label" :value="item.value"/>
-                </el-select>
-              </div>
-
-              <n-collapse-transition :show="(cross1!=undefined)&&(cross2!=undefined)">
-                <br/>
-                <div style="margin-left: 2%; margin-right: 2%;">
-                  <el-button @click="toggleChart(-1,'bar')" style="color: #409EFF;" plain>柱状图</el-button>
-                  <el-button @click="toggleChart(-1,'line')" style="color: #409EFF;" plain>折线图</el-button>
+              <div id="crossData">
+                <div style=" margin-left: 2%; margin-right: 2%;">自变量X</div>
+                <div class="row"></div>
+                <div>
+                  <el-select v-model="cross1" placeholder="添加自变量" size="large" style="width: 240px; margin-left: 2%; margin-right: 2%;">
+                    <el-option v-for="item in cross" :key="item.value" :label="item.label" :value="item.value"/>
+                  </el-select>
                 </div>
-              </n-collapse-transition>
-              <div v-if="crossHasChart">
-                <div class="chartBox">
-                  <div :id="index-1" :style="{ width: '100%', height: '100%' }"></div>
+                <br/>
+                <div style=" margin-left: 2%; margin-right: 2%;">因变量Y</div>
+                <!-- TieZhu:空一半行 -->
+                <div class="row"></div>
+                <div>
+                  <el-select v-model="cross2" placeholder="添加因变量" size="large" style="width: 240px; margin-left: 2%; margin-right: 2%;">
+                    <el-option v-for="item in cross" :key="item.value" :label="item.label" :value="item.value"/>
+                  </el-select>
+                </div>
+
+                <n-collapse-transition :show="(cross1!=undefined)&&(cross2!=undefined)">
+                  <br/>
+                  <div style="margin-left: 2%; margin-right: 2%;">
+                    <el-button @click="toggleChart(-1,'bar')" style="color: #409EFF;" plain>柱状图</el-button>
+                    <el-button @click="toggleChart(-1,'line')" style="color: #409EFF;" plain>折线图</el-button>
+                  </div>
+                </n-collapse-transition>
+                <div v-if="crossHasChart">
+                  <div class="chartBox">
+                    <div :id="index-1" :style="{ width: '100%', height: '100%' }"></div>
+                  </div>
                 </div>
               </div>
             </n-tab-pane>
@@ -142,18 +145,23 @@
       </div>
       <div class="bar">
         <el-tooltip content="下载数据" placement="right">
-          <el-button size="large" text circle><el-icon color="#337ecc" :size="30" @click="download()"><Download /></el-icon></el-button>
+          <el-button size="large"  v-print="printObj" text circle><el-icon color="#337ecc" :size="30"><Download /></el-icon></el-button>
         </el-tooltip>
         <div class="row"></div>
         <div class="row"></div>
         <el-tooltip content="分享" placement="right">
-          <el-button size="large" text circle><el-icon color="#337ecc" :size="30" @click="share()"><Share /></el-icon></el-button>
+          <n-popover trigger="click" placement="bottom">
+            <template #trigger>
+              <el-button size="large" text circle><el-icon color="#337ecc" :size="30" ><Share /></el-icon></el-button>
+            </template>
+            <!-- TieZhu：分享链接弹出框 -->
+            <span><n-qr-code :value="url" error-correction-level="H"/></span>
+          </n-popover>
         </el-tooltip>
       </div>
+      
+
     </div>
-
-
-
 </template>
 
 <script>
@@ -165,7 +173,9 @@ import { NTabPane } from 'naive-ui';
 import { ref } from 'vue';
 import { NCollapseTransition } from 'naive-ui';
 import { NSpace } from 'naive-ui';
-import { download } from 'naive-ui/es/_utils';
+import { NPopover } from 'naive-ui';
+import { NQrCode } from 'naive-ui';
+import Print from 'vue3-print-nb';
 
 export default {
   data() {
@@ -176,11 +186,19 @@ export default {
       title:'问题标题',
       //用于交叉分析
       cross:[],
-      cross1:0,
-      cross2:0,
+      cross1:undefined,
+      cross2:undefined,
       crossHasChart:false,
-      //是否切换到了交叉分析标签
-      isCross:false,
+      //print
+      printObj: {
+        id: 'dataAnalysis', // 这里是要打印元素的ID
+        popTitle:"纸翼传问",
+		    preview:false,  // 是否开启预览
+        beforeOpenCallback:()=>{
+		      console.log('开始打印之前的callback')
+		    }
+      },
+      url:'',
     };
   },
   mounted() {
@@ -197,6 +215,7 @@ export default {
     }
     this.corss1=ref();
     this.cross2=ref();
+    this.url = window.location.href;
   },
   
   methods: {
@@ -320,15 +339,13 @@ export default {
     //当页面切换时，更换下载和分享的内容
     changeBar(value){
       this.isCross = !this.isCross;
+      if(this.isCross){
+        this.printObj.id = 'crossData'; //TieZhu：为什么要加#？不知道，反正打印组件要加
+      }
+      else{
+        this.printObj.id = 'dataAnalysis';
+      }
     },
-    //下载数据
-    download(){
-
-    },
-    //分享
-    share(){
-
-    }
   },
   components:{
     NavigationBar,
@@ -336,7 +353,10 @@ export default {
     NTabs,
     NTabPane,
     NCollapseTransition,
-    NSpace
+    NSpace,
+    Print,
+    NPopover,
+    NQrCode,
   }
 };
 </script>
