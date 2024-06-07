@@ -13,16 +13,20 @@ import store from '../../store';
 //文章分类数据模型
 const categorys = ref([
     {
+        "id": 0,
+        "categoryName": "普通问卷"
+    },
+    {
         "id": 1,
-        "categoryName": "生活"
+        "categoryName": "投票问卷"
     },
     {
         "id": 2,
-        "categoryName": "娱乐"
+        "categoryName": "报名问卷"
     },
     {
         "id": 3,
-        "categoryName": "学习"
+        "categoryName": "考试问卷"
     }
 ])
 
@@ -32,34 +36,31 @@ const categoryId = ref('')
 //文章列表数据模型
 const questionnaires = ref([
     {
-        "id": 5,
-        "title": "陕西旅游攻略",
+        "SurveyID": 5,
+        "Title": "陕西旅游攻略",
         "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
         "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
         "state": "草稿",
         "categoryId": 2,
-        "createTime": "2023-09-03 11:55:30",
-        "updateTime": "2023-09-03 11:55:30"
+        "PublishDate": "2023-09-03 11:55:30"
     },
     {
-        "id": 5,
-        "title": "陕西旅游攻略",
+        "SurveyID": 5,
+        "Title": "陕西旅游攻略",
         "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
         "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
         "state": "草稿",
         "categoryId": 2,
-        "createTime": "2023-09-03 11:55:30",
-        "updateTime": "2023-09-03 11:55:30"
+        "PublishDate": "2023-09-03 11:55:30"
     },
     {
-        "id": 5,
-        "title": "陕西旅游攻略",
+        "SurveyID": 5,
+        "Title": "陕西旅游攻略",
         "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
         "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
         "state": "草稿",
         "categoryId": 2,
-        "createTime": "2023-09-03 11:55:30",
-        "updateTime": "2023-09-03 11:55:30"
+        "PublishDate": "2023-09-03 11:55:30"
     },
 ])
 
@@ -73,12 +74,12 @@ total.value = questionnaires.value.length
 //当每页条数发生了变化，调用此函数
 const onSizeChange = (size) => {
     pageSize.value = size;
-    initCreated(store.state.nowuser.username);
+    initFilled(username.value);
 }
 //当前页码发生变化，调用此函数
 const onCurrentChange = (num) => {
     pageNum.value = num;
-    initCreated(store.state.nowuser.username);
+    initFilled(username.value);
 }
 
 
@@ -97,6 +98,14 @@ const goToQuestionnaireFill = (questionnaireId) => {
 
 
 
+import { getCurrentInstance } from 'vue'
+
+const username = ref("")
+ 
+// 创建可以访问内部组件实例的实例
+const internalInstance = getCurrentInstance()
+const internalData = internalInstance.appContext.config.globalProperties
+username.value = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
 
 
 
@@ -109,22 +118,26 @@ import {GetFilledQs, DeleteFilledQs} from '../../api/questionnaire.js'
 const initFilled = (username) =>{
     var promise = GetFilledQs(username);
     promise.then((result)=>{
-        var categoryName = "";
-        if(categoryId.value != ""){
-            categorys.value.forEach(category => {
-                if (category.id === categoryId) {
-                    categoryName = category.categoryName;
-                }
-            });
-        }
+        // var categoryName = "";
+        // if(categoryId.value != ""){
+        //     categorys.value.forEach(category => {
+        //         if (category.id === categoryId) {
+        //             categoryName = category.categoryName;
+        //         }
+        //     });
+        // }
         var count = 0;
         var i = 1;
         result.data.forEach(element => {
             if(i > pageSize.value * (pageNum.value - 1))
             {
                 if(i <= pageSize.value * pageNum.value){
-                    if(categoryName != "" && element.Category != categoryName) return;
-                    questionnaires.value.push(element);
+                    if(categoryName != "" && element.Category != categoryId.value){
+                        console.log("oh no!")
+                    }
+                    else{
+                        questionnaires.value.push(element);
+                    }
                 }
             }
             count++;
@@ -133,7 +146,7 @@ const initFilled = (username) =>{
         total.value = count;
     })
 }
-initFilled(store.state.nowuser.username);
+initFilled(username.value);
 
 
 const deleteQs = (id) =>{
@@ -162,7 +175,7 @@ const deleteQs = (id) =>{
                         message: result.content,
                     })
                 }
-                initFilled(store.state.nowuser.username);
+                initFilled(username.value);
             })
         })
         .catch(() => {
@@ -183,7 +196,7 @@ const deleteQs = (id) =>{
 <template>
     <el-card class="page-container">
             <div class="header">
-                <span>已填写问卷</span>
+                <span style="font-size: 30px;">已填写问卷</span>
                 <!-- <div class="extra">
                     <el-button type="primary">添加文章</el-button>
                 </div> -->
@@ -191,7 +204,10 @@ const deleteQs = (id) =>{
         <!-- 搜索表单 -->
         <el-form inline class="searchform">
             <div style="margin-right: auto"></div>
-            <el-form-item label="问卷分类：">
+            <el-form-item>
+                <template #label>
+                    <span style="color: white;font-size: 15px;">问卷分类：</span>
+                </template>
                 <el-select placeholder="请选择" style="width: 150px" v-model="categoryId">
                     <el-option v-for="c in categorys" :key="c.id" :label="c.categoryName" :value="c.id">
                     </el-option>
@@ -204,8 +220,8 @@ const deleteQs = (id) =>{
                 </el-select>
             </el-form-item> -->
             <el-form-item>
-                <el-button type="primary" class="searchbutton" @click="initCreated(store.state.nowuser.username)" style="background-color: rgb(80, 134, 233);border: 0;">搜索</el-button>
-                <el-button >重置</el-button>
+                <el-button type="primary" class="searchbutton" @click="initFilled(username)" style="background-color: #ec1717;border: 0;">搜索</el-button>
+                <el-button @click="categoryId=''" style="color: grey;">重置</el-button>
             </el-form-item>
         </el-form>
         <div class="card-container">
@@ -214,14 +230,14 @@ const deleteQs = (id) =>{
                     <div>
                         <!-- 上部分 -->
                         <div class="card-header">
-                            <span style="margin-left: 5px">{{ questionnaire.Title }}</span>
+                            <span class="textbutton">{{ questionnaire.Title }}</span>
                             <span style="float: right" class="right">填写日期: {{ questionnaire.PublishDate }}</span>
                             <span style="float: right" class="right">ID: {{questionnaire.SurveyID}}</span>
                         </div>
 
                         <!-- 下部分 -->
                         <div class="card-footer">
-                            <el-button type="text" :icon="Edit" @click="goToQuestionnaireFill(questionnaire.SurveyID)" class="textbutton">查看填写</el-button>
+                            <el-button type="text" :icon="Edit" @click="goToQuestionnaireFill(questionnaire.SurveyID)" class="thebutton">查看填写</el-button>
                             <el-button type="danger" :icon="Delete" style="float: right" circle @click="deleteQs(questionnaire.SurveyID)" class="deletebutton"></el-button>
                         </div>
                     </div>
@@ -231,8 +247,8 @@ const deleteQs = (id) =>{
 
         </div>
         <!-- 分页条 -->
-        <el-pagination :page-sizes="[3, 5, 10, 15]"
-        layout="jumper, total, sizes, prev, pager, next" background :total="total" @size-change="onSizeChange"
+        <el-pagination :page-sizes="[3, 5, 10]"
+        layout="sizes, prev, pager, next" background :total="total" @size-change="onSizeChange"
         @current-change="onCurrentChange" style="margin-top: 20px; justify-content: flex-end" />
     </el-card>
 </template>
@@ -283,7 +299,7 @@ const deleteQs = (id) =>{
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  background-color: #ec4217;
+  background-color: #ec1717;
   opacity: 1;
   filter: blur(12px);
   animation: blob-bounce 5s infinite ease;
@@ -334,6 +350,8 @@ const deleteQs = (id) =>{
     align-items: center;
     justify-content: space-between;
     font-size: 20px;
+    color: white;
+    font-weight: bold;
 }
 
 .article-card {
@@ -378,10 +396,19 @@ const deleteQs = (id) =>{
 
 .textbutton{
     margin-left: 20px;
+    font-size: 20px;
 }
 
 .deletebutton{
     margin-right: 20px;
 }
 
+.header{
+    margin-bottom: 20px;
+}
+
+.thebutton{
+    margin-left: 20px;
+    font-size: 15px;
+}
 </style>

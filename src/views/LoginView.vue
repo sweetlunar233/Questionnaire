@@ -20,6 +20,10 @@
     }
 
     function updateNowuser(result) {
+        
+        $cookies.set("username", result.username);
+        $cookies.config("1m");
+
         store.state.nowuser.username = result.username;
         store.state.nowuser.password = result.password;
         store.state.nowuser.email = result.email;
