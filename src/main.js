@@ -17,6 +17,8 @@ import { RadioGroup, Radio } from 'vant';
 import { Checkbox, CheckboxGroup } from 'vant';
 import { Divider } from 'vant';
 
+import VueCookies from 'vue-cookies'
+
 
 const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
@@ -24,3 +26,7 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 }
 
 app.use(store).use(router).use(ElementPlus,{locale}).use(RadioGroup).use(Radio).use(Checkbox).use(CheckboxGroup).use(Divider).mount('#app')
+
+
+app.config.globalProperties.$cookies = VueCookies
+VueCookies.config("1d");
