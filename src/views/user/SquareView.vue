@@ -152,7 +152,7 @@ initAllReleased();
                         <span class="first">post by： {{ questionnaire.PostMan }}</span>
                     </div>
                     <div class="second-content">
-                        <span class="second">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ truncateDescription(questionnaire.Description) }}</span> 
+                        <span class="second">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{truncateDescription(questionnaire.Description)}}</span> 
                         <span class="second">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;悬赏奖励： {{ questionnaire.Reward }}纸币</span>
                         
                         <button type="primary" style="float: right;font-size: 17px" size="large" @click="goToQuestionnaireFill(questionnaire.SurveyID)"><span>填写</span></button>
