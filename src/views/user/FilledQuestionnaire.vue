@@ -319,7 +319,7 @@ const deleteQs = (id) =>{
 
 .card {
   position: relative;
-  width: 95%;
+  width: 1200px;
   height: 120px;
   border-radius: 14px;
   z-index: 1111;
