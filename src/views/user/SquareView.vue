@@ -74,10 +74,12 @@ total.value = questionnaires.value.length
 //当每页条数发生了变化，调用此函数
 const onSizeChange = (size) => {
     pageSize.value = size
+    initAllReleased();
 }
 //当前页码发生变化，调用此函数
 const onCurrentChange = (num) => {
     pageNum.value = num
+    initAllReleased();
 }
 
 
@@ -143,16 +145,6 @@ initAllReleased();
         <!-- 问卷列表 -->
         <el-row class="questionnaire-list">
             <el-col :span="8" v-for="(questionnaire, index) in questionnaires" :key="index">
-                <!-- <el-card class="questionnaire-card">
-                    <div class="questionnaire-info">
-                        <h2 class="info">{{ questionnaire.Title }}</h2>
-                        <p class="info">{{ truncateDescription(questionnaire.Description) }}</p>
-                        <h3 class="info">悬赏奖励： {{ questionnaire.Reward }}纸币</h3>
-                        <div class="questionnaire-actions">
-                            <el-button type="primary" style="float: right;font-size: 17px" size="large" @click="goToQuestionnaireFill(questionnaire.SurveyID)">填写</el-button>
-                        </div>
-                    </div>
-                </el-card> -->
                 <div class="card">
                     <div class="first-content">
                         <span class="firstfirst">{{ questionnaire.Title }}</span>
@@ -168,12 +160,13 @@ initAllReleased();
             </el-col>
         </el-row>
         <!-- 分页条 -->
-        <el-pagination :page-sizes="[3, 5, 10, 15]"
-        layout="jumper, total, sizes, prev, pager, next" background :total="total" @size-change="onSizeChange"
+        <el-pagination :page-sizes="[6, 8, 10, 12]"
+        layout="sizes, prev, pager, next" background :total="total" @size-change="onSizeChange"
         @current-change="onCurrentChange" style="margin-top: 20px; justify-content: flex-end" />
     </el-card>
 </template>
 <style scoped>
+
 button {
   position: relative;
   margin: 0;
@@ -274,7 +267,7 @@ button:hover::after {
 .card {
   width: 300px;
   height: 220px;
-  background: rgb(103, 225, 255);
+  background: rgb(253, 243, 243);
   transition: all 0.4s;
   border-radius: 10px;
   box-shadow: 0px 0px 10px 5px  rgba(0, 0, 0, 0.705);
@@ -290,7 +283,7 @@ button:hover::after {
   cursor: pointer;
   transform: scale(1.2);
   box-shadow: 0px 0px 10px 5px  rgba(0, 0, 0, 0.705);
-  background: rgb(103, 151, 255);
+  background: rgb(248, 233, 233);
 }
 
 .first-content {

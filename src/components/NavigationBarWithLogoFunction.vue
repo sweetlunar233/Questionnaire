@@ -52,6 +52,17 @@
         currentUrl.value = window.location.href;
     });
 
+
+
+    import { getCurrentInstance } from 'vue'
+
+const temp = ref("");
+ 
+// 创建可以访问内部组件实例的实例
+const internalInstance = getCurrentInstance()
+const internalData = internalInstance.appContext.config.globalProperties
+temp.value = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
+
 </script>
 
 <template>
@@ -69,7 +80,8 @@
                 </div>
                 <span class="username">
                     <!-- username -->
-                    {{ store.state.nowuser.username }}
+                    <!-- {{ store.state.nowuser.username }} -->
+                    {{ temp }}
                 </span>
                 
             </div>
