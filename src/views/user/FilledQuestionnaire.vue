@@ -10,6 +10,16 @@ import {
 import { ref } from 'vue'
 import store from '../../store';
 
+//引入cookie
+import { getCurrentInstance } from 'vue'
+
+const username = ref("")
+ 
+// 创建可以访问内部组件实例的实例
+const internalInstance = getCurrentInstance()
+const internalData = internalInstance.appContext.config.globalProperties
+username.value = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
+
 //文章分类数据模型
 const categorys = ref([
     {
@@ -35,33 +45,7 @@ const categoryId = ref('')
 
 //文章列表数据模型
 const questionnaires = ref([
-    /*{
-        "SurveyID": 5,
-        "Title": "陕西旅游攻略",
-        "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
-        "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
-        "state": "草稿",
-        "categoryId": 2,
-        "PublishDate": "2023-09-03 11:55:30"
-    },
-    {
-        "SurveyID": 5,
-        "Title": "陕西旅游攻略",
-        "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
-        "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
-        "state": "草稿",
-        "categoryId": 2,
-        "PublishDate": "2023-09-03 11:55:30"
-    },
-    {
-        "SurveyID": 5,
-        "Title": "陕西旅游攻略",
-        "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
-        "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
-        "state": "草稿",
-        "categoryId": 2,
-        "PublishDate": "2023-09-03 11:55:30"
-    },*/
+    
 ])
 
 //分页条数据模型
@@ -97,15 +81,7 @@ const goToQuestionnaireFill = (questionnaireId) => {
 
 
 
-//引入cookie
-import { getCurrentInstance } from 'vue'
 
-const username = ref("")
- 
-// 创建可以访问内部组件实例的实例
-const internalInstance = getCurrentInstance()
-const internalData = internalInstance.appContext.config.globalProperties
-username.value = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
 
 
 
