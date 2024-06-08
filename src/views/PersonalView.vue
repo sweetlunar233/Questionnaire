@@ -16,6 +16,12 @@
     }
 
     const gotoHome = () => {
+        const cookieNames = $cookies.keys();
+        // 遍历删除所有的 cookie
+        cookieNames.forEach(cookieName => {
+            $cookies.remove(cookieName);
+        });
+
         router.push('/');
     }
 

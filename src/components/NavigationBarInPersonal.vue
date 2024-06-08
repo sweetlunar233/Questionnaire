@@ -13,7 +13,12 @@
     };
 
     const gotoHome = () => {
-        store.state.nowuser.username = "";
+        // store.state.nowuser.username = "";
+        const cookieNames = $cookies.keys();
+        // 遍历删除所有的 cookie
+        cookieNames.forEach(cookieName => {
+            $cookies.remove(cookieName);
+        });
         router.push('/');
     }
 
@@ -51,12 +56,6 @@
     window.addEventListener('popstate', () => {
         currentUrl.value = window.location.href;
     });
-
-
-    const nowuserPhotonumber = ref(store.state.nowuser.own_photos[0]);
-    const photoUrl = computed(() => {
-        return require(`@/assets/photos/photo${nowuserPhotonumber.value}.jpg`);
-    })
 
 </script>
 
