@@ -1,6 +1,7 @@
 import { post,get } from "./api"
 
 export function ConserveOrReleaseQuestionnaire(
+    username,
     questionnaireId, // 问卷id
     type, //问卷类型（普通、投票、报名、考试）
     questionList, //所有问题
@@ -17,5 +18,12 @@ export function ConserveOrReleaseQuestionnaire(
     data.isDisorder = isDisorder;
     data.title = title;
     data.flag = flag;
-    return post("/questionnaireDesign", data);
+    return post("/questionnaireDesign"+username, data);
+}
+
+export function GetQuestionnaireDesign(username, questionnaireId, type){ //获取问卷设计
+    let data = {};
+    data.questionnaireId = questionnaireId;
+    data.type = type;
+    return get("/questionnaireDesign"+username, data);
 }

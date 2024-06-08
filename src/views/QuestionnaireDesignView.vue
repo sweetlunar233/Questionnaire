@@ -258,7 +258,7 @@ import { NPopover } from "naive-ui"
 import { ref } from "vue" ;
 
 import { getCurrentInstance } from 'vue'
-import { ConserveOrReleaseQuestionnaire } from '../api/design.js'
+import { ConserveOrReleaseQuestionnaire, GetQuestionnaireDesign } from '../api/design.js'
 //编辑问卷传输问卷id的函数
 import { useRouter } from 'vue-router';
 const router = useRouter();
@@ -284,6 +284,7 @@ const router = useRouter();
    methods: {
     conserve(){
       var promise = ConserveOrReleaseQuestionnaire(
+        this.username,
         this.questionnaireId,
         this.type,
         this.questionList,
@@ -309,6 +310,7 @@ const router = useRouter();
     },
     release(){
       var promise = ConserveOrReleaseQuestionnaire(
+        this.username,
         this.questionnaireId,
         this.type,
         this.questionList,
@@ -332,7 +334,19 @@ const router = useRouter();
         }
       })
     },
-
+    showQuestionnaireDesign(){
+      var promise = GetQuestionnaireDesign(this.username, this.questionnaireId, this.type);
+      promise.then((result)=>{
+        this.questionnaireId = result.questionnaireId;
+        this.type = result.type;
+        this.questionList = result.questionList;
+        this.people = result.people;
+        this.isDisorder = result.isDisorder;
+        this.title = result.title;
+        this.text = this.title;
+        this.questionCnt = questionList.length;
+      })
+    },
 
 
     //TieZhu:添加单选题
