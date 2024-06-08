@@ -2,6 +2,7 @@
     import store from '@/store';
     import {ref} from "vue";
     import { ElMessage } from 'element-plus';
+import { updateUserphotoInShop } from '@/api/user';
 
     const photos = ref([]);
     photos.value = store.state.nowuser.own_photos;
@@ -15,15 +16,21 @@
         }
     }
 
+    const confirmBuy = ref(false);
+
+    const clickPhoto = () => {
+        confirmBuy.value = true;
+    }
+    
     //购买头像
-    const buyPhoto = (index) => {
+    const buyPhoto = (photonumber) => {
         if (store.state.nowuser.money >= 100) {
             store.state.nowuser.money -= 100;
-            store.state.nowuser.own_photos[index] = 1;
-            photos.value[index] = 1;
-            photoBought.value.push(index);
+            store.state.nowuser.own_photos[photonumber] = 1;
+            photos.value[photonumber] = 1;
+            photoNotBuy.value.splice(photoNotBuy.value.indexOf(photonumber), 1);
             
-            updateUserphotoInMassage(store.state.nowuser.username, index, 1);
+            updateUserphotoInShop(store.state.nowuser.username, photonumber, 1);
             ElMessage.success("购买成功!");
         }
         else {
@@ -31,19 +38,26 @@
         }
     }
 
+
+
 </script>
 
 <template>
     <!-- <div class="title"></div> -->
     <div class="item-container">
-        <div class="item" v-for="(photonumber, index) in photoNotBuy" :key="index">
+        <div class="item" v-for="(photonumber, index) in photoNotBuy" :key="index" @click="clickPhoto" @mouseout="confirmBuy=false">
             <img :src="require(`@/assets/photos/photo${photonumber}.jpg`)" alt="" class="image">
-            <div class="text">100纸币</div>
+            <div class="text" v-if="!confirmBuy">100纸币</div>
+            <div class="text" v-if="confirmBuy" @click="buyPhoto(photonumber)">确认购买</div>
         </div>
     </div>
+    
+    
+
+
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .title {
         font-size: 30px;
         color: white;
