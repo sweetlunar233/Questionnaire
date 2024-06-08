@@ -2,7 +2,7 @@
     import store from '@/store';
     import {ref} from "vue";
     import { ElMessage } from 'element-plus';
-    import { updateUserphotoInShop } from '@/api/user';
+    import { modifyUserMoney, updateUserphotoInShop } from '@/api/user';
 
     //导入cookies
     import { getCurrentInstance } from 'vue';
@@ -45,6 +45,7 @@
 
             photoNotBuy.value.splice(photoNotBuy.value.indexOf(photonumber), 1);
             
+            modifyUserMoney(nowuser_username.value, false, false, nowuser_money.value);
             updateUserphotoInShop(nowuser_username.value, photonumber, 1);
             ElMessage.success("购买成功!");
         }
