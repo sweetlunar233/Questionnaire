@@ -265,11 +265,11 @@
                     <img src="@/assets/X.png" class="X_button" >
                 </button>
                 <div class="inputf">
-                    <input type="password" placeholder="请验证密码" v-model="changePasswordData.password"/>
+                    <input type="password" placeholder="请验证密码" v-model="changeEmailData.password"/>
                     <span class="label">密码</span>
                 </div>
                 <div class="inputf">
-                    <input type="password" placeholder="请输入新的邮箱" v-model="changePasswordData.password"/>
+                    <input type="password" placeholder="请输入新的邮箱" v-model="changeEmailData.email"/>
                     <span class="label">邮箱</span>
                 </div>
                 <button class="commit_btn" @click="changeEmail">
