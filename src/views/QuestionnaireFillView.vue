@@ -32,12 +32,12 @@
   
           <!-- TieZhu：单选题 -->
           <div v-if="questionList[index-1].type==1">
-            <div>
+            <div style="margin-left: 0.5%">
               {{ questionList[index-1].question }}
             </div>
             <br/>
             <van-radio-group v-model=" questionList[index-1].radio" v-for="index2 in questionList[index-1].optionCnt" >
-                <van-radio :name="index2" checked-color="#0283EF" :label-disabled=true>
+                <van-radio :name="index2" checked-color="#0283EF" :label-disabled=true >
                     <div>
                     {{ questionList[index-1].optionList[index2-1].content }}
                     </div>
@@ -50,7 +50,7 @@
   
           <!-- TieZhu：多选题 -->
           <div v-if="questionList[index-1].type==2">
-            <div>
+            <div style="margin-left: 0.5%">
                 {{ questionList[index-1].question }}
             </div>
             
@@ -58,7 +58,7 @@
                 <br/>
                 <van-checkbox :name="index2" shape="square" :label-disabled=true>
                     <div>
-                    {{ questionList[index-1].optionList[index2-1].content }}
+                      {{ questionList[index-1].optionList[index2-1].content }}
                     </div>
                 </van-checkbox>
                 <br/>
@@ -69,7 +69,9 @@
   
           <!-- TieZhu:填空题 -->
           <div v-if="questionList[index-1].type==3">
-            {{ questionList[index-1].question }}
+            <div style="margin-left: 0.5%">
+              {{ questionList[index-1].question }}
+            </div>
             <br/>
             <br/>
             <el-input v-model="questionList[index-1].fill" size="large" placeholder="请填空"/>
@@ -79,7 +81,9 @@
           
           <!-- TieZhu:评分题 -->
           <div v-if="questionList[index-1].type==4">
-            {{ questionList[index-1].question }}
+            <div style="margin-left: 0.5%">
+              {{ questionList[index-1].question }}
+            </div>
             <br/>
             <el-rate v-model="questionList[index-1].grade" allow-half></el-rate>
             <br/>
@@ -102,12 +106,17 @@
      data(){
       return{
         input:'',
+        questionnaireId: 0,
         questionCnt: 0,
         questionList: [],
         title:'问题标题',
       }
      },
      methods: {
+        print(x){
+          console.log(x);
+        },
+
         //增加选项
         addOption(index,ele){
             this.questionList[index].optionCnt++;
@@ -117,13 +126,13 @@
         addSingle(){
             this.questionCnt++;
             this.questionList.push({"type":1,"isNecessary":true,"question":"请选择一个选项","radio":ref(),
-            "optionCnt":1,"optionList":[{"content":"选项"}]});
+            "optionCnt":4,"optionList":[{"content":"选项"},{"content":"选项"},{"content":"选项"},{"content":"选项"}]});
         },
         //TieZhu:添加多选题
         addMultiple(){
             this.questionCnt++;
             this.questionList.push({"type":2,"isNecessary":true,"question":"请选择以下选项（多选）","radio":ref(),
-            "optionCnt":1,"optionList":[{"content":"选项"}]});
+            "optionCnt":4,"optionList":[{"content":"选项"},{"content":"选项"},{"content":"选项"},{"content":"选项"}]});
         },
         //TieZhu:添加填空题
         addFill(){
@@ -147,6 +156,13 @@
      },
      components:{
       NavigationBar,
+     },
+     created(){
+      this.questionnaireId = this.$route.query.questionnaireId;
+      // 创建可以访问内部组件实例的实例
+      const internalInstance = getCurrentInstance()
+      const internalData = internalInstance.appContext.config.globalProperties
+      this.username = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
      }
    })
   </script>

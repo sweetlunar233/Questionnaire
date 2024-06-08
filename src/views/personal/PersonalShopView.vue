@@ -2,7 +2,7 @@
     import store from '@/store';
     import {ref} from "vue";
     import { ElMessage } from 'element-plus';
-    import { modifyUserMoney, updateUserphotoInShop } from '@/api/user';
+    import { updateUserphotoInShop } from '@/api/user';
 
     //导入cookies
     import { getCurrentInstance } from 'vue';
