@@ -1,5 +1,5 @@
 <script setup>
-    import { modifyUserInfo, updateUserphotoInMassage } from '@/api/user';
+    import { modifyUserInfo, modifyUserInfoInMessage, updateUserphotoInMassage } from '@/api/user';
     import store from '@/store';
     import { ElMessage } from 'element-plus';
     import { ref, computed } from 'vue';
@@ -118,7 +118,7 @@
 
         nowuserPhotonumber.value = photonumber;
         // updateUserphotoInMassage(store.state.nowuser.username, 0, photonumber);
-        updateUserphotoInMassage(nowuser_username.value, 0, photonumber);
+        modifyUserInfoInMessage(nowuser_username.value, false, false, false, 0, photonumber, 2);
         ElMessage.success("修改头像成功!");
         X_quit("ChangePhotoCard");
     }
@@ -158,7 +158,7 @@
         $cookies.set('password', changePasswordData.value.repassword1);
         nowuser_password.value = changePasswordData.value.repassword1;
 
-        modifyUserInfo(nowuser_username.value, false, changePasswordData.value.repassword1, false);
+        modifyUserInfoInMessage(nowuser_username.value, false, changePasswordData.value.repassword1, false, false, false, 1);
         ElMessage.success("修改密码成功！");
         X_quit("PasswordCard");
     }
@@ -187,7 +187,7 @@
         // store.state.nowuser.email = changeEmailData.value.email;
         // modifyUserInfo(store.state.nowuser.username, changeEmailData.value.email, false, false);
         $cookies.set('email', changeEmailData.value.email);
-        modifyUserInfo(nowuser_username.value, changeEmailData.value.email, false, false);
+        modifyUserInfoInMessage(nowuser_username.value, changeEmailData.value.email, false, false, false, false, 1);
         nowuser_email.value = changeEmailData.value.email;
 
         ElMessage.success("修改邮箱成功！");
