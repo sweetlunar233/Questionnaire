@@ -134,7 +134,7 @@
                         @blur="finishEditing(1,index-1,index2-1)" 
                         @keyup.enter="finishEditing(1,index-1,index2-1)"
                         />
-                        <span v-else @click="startEditing(1,index-1,index2-1)" >{{ questionList[index-1].optionList[index2-1].text }}</span>
+                        <span v-else @click="startEditing(1,index-1,index2-1)" :class="{ 'correct-answer': questionList[index-1].optionList[index2-1].isCorrect}">{{ questionList[index-1].optionList[index2-1].text }}</span>
                       </template>
                       <div>
                         <el-button size="small" color="#fef0f0" @click="addOption(index-1,index2-1)" text><el-icon><Plus/></el-icon></el-button>
@@ -166,11 +166,11 @@
                     <template #trigger>
                       <el-input 
                       v-if="questionList[index-1].optionList[index2-1].isEditing"
-                      v-model="questionList[index-1].optionList[index2-1].content" 
+                      v-model="questionList[index-1].optionList[index2-1].text" 
                       @blur="finishEditing(1,index-1,index2-1)" 
                       @keyup.enter="finishEditing(1,index-1,index2-1)"
                       />
-                      <span v-else @click="startEditing(1,index-1,index2-1)" >{{ questionList[index-1].optionList[index2-1].text }}</span>
+                      <span v-else @click="startEditing(1,index-1,index2-1)" :class="{ 'correct-answer': questionList[index-1].optionList[index2-1].isCorrect }">{{ questionList[index-1].optionList[index2-1].text }}</span>
                     </template>
                     <el-button size="small" color="#fef0f0" @click="addOption(index-1,index2-1)" text><el-icon><Plus/></el-icon></el-button>
                     <el-button size="small" color="#ecf5ff" @click="deleteOption(index-1,index2-1)" :disabled="questionList[index-1].isDisabled" text><el-icon><Minus/></el-icon></el-button>
@@ -384,7 +384,7 @@ import { ref } from "vue" ;
           this.questionList[index].optionList[index2].content = this.questionList[index].optionList[index2].text;
           this.warning("长度不能为空");
         }
-        else if(type == -1){
+        else {
           this.questionList[index].optionList[index2].text = this.questionList[index].optionList[index2].content;
         }
       }
@@ -512,5 +512,8 @@ import { ref } from "vue" ;
 
 .row{
   padding-bottom: 10px;
+}
+.correct-answer{
+  color:green
 }
 </style>
