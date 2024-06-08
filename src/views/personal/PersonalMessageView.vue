@@ -1,5 +1,5 @@
 <script setup>
-    import { modifyUserInfo, updateUserphotoInMassage } from '@/api/user';
+    import { modifyUserInfo, modifyUserInfoInMessage, updateUserphotoInMassage } from '@/api/user';
     import store from '@/store';
     import { ElMessage } from 'element-plus';
     import { ref, computed } from 'vue';
@@ -19,7 +19,6 @@
     const photos = ref([]);
     // photos.value = store.state.nowuser.own_photos;
     photos.value = internalData.$cookies.get('own_photos');
-
 
     const userNameText = ref("");
     // userNameText.value = store.state.nowuser.username;
@@ -59,7 +58,6 @@
 
     // const nowuserPhotonumber = ref(store.state.nowuser.own_photos[0]);
     const nowuserPhotonumber = ref(photos.value[0]);
-    console.log(nowuserPhotonumber.value);
     const photoUrl = computed(() => {
         return require(`@/assets/photos/photo${nowuserPhotonumber.value}.jpg`);
     })
@@ -116,11 +114,11 @@
     const changePhoto = (photonumber) => {
         // store.state.nowuser.own_photos[0] = photonumber;
         photos.value[0] = photonumber;
-        $cookies.set('own_photos', photos);
+        $cookies.set('own_photos', photos.value);
 
         nowuserPhotonumber.value = photonumber;
         // updateUserphotoInMassage(store.state.nowuser.username, 0, photonumber);
-        updateUserphotoInMassage(nowuser_username.value, 0, photonumber);
+        modifyUserInfoInMessage(nowuser_username.value, false, false, false, 0, photonumber, 2);
         ElMessage.success("修改头像成功!");
         X_quit("ChangePhotoCard");
     }
@@ -160,7 +158,7 @@
         $cookies.set('password', changePasswordData.value.repassword1);
         nowuser_password.value = changePasswordData.value.repassword1;
 
-        modifyUserInfo(nowuser_username.value, false, changePasswordData.value.repassword1, false);
+        modifyUserInfoInMessage(nowuser_username.value, false, changePasswordData.value.repassword1, false, false, false, 1);
         ElMessage.success("修改密码成功！");
         X_quit("PasswordCard");
     }
@@ -189,7 +187,7 @@
         // store.state.nowuser.email = changeEmailData.value.email;
         // modifyUserInfo(store.state.nowuser.username, changeEmailData.value.email, false, false);
         $cookies.set('email', changeEmailData.value.email);
-        modifyUserInfo(nowuser_username.value, changeEmailData.value.email, false, false);
+        modifyUserInfoInMessage(nowuser_username.value, changeEmailData.value.email, false, false, false, false, 1);
         nowuser_email.value = changeEmailData.value.email;
 
         ElMessage.success("修改邮箱成功！");
@@ -267,11 +265,11 @@
                     <img src="@/assets/X.png" class="X_button" >
                 </button>
                 <div class="inputf">
-                    <input type="password" placeholder="请验证密码" v-model="changePasswordData.password"/>
+                    <input type="password" placeholder="请验证密码" v-model="changeEmailData.password"/>
                     <span class="label">密码</span>
                 </div>
                 <div class="inputf">
-                    <input type="password" placeholder="请输入新的邮箱" v-model="changePasswordData.password"/>
+                    <input type="password" placeholder="请输入新的邮箱" v-model="changeEmailData.email"/>
                     <span class="label">邮箱</span>
                 </div>
                 <button class="commit_btn" @click="changeEmail">

@@ -123,29 +123,29 @@
           </div>
           
           <van-radio-group v-model="radio" v-for="index2 in questionList[index-1].optionCnt" :disabled=true>
-              <div>
-                  <br/>
-                  <van-radio :name="index2" checked-color="#0283EF" :label-disabled=true>
-                    <n-popover trigger="manual" :show="questionList[index-1].optionList[index2-1].isEditing" :show-arrow="false" placement="right">
-                      <template #trigger>
-                        <el-input 
-                        v-if="questionList[index-1].optionList[index2-1].isEditing"
-                        v-model="questionList[index-1].optionList[index2-1].content" 
-                        @blur="finishEditing(1,index-1,index2-1)" 
-                        @keyup.enter="finishEditing(1,index-1,index2-1)"
-                        />
-                        <span v-else @click="startEditing(1,index-1,index2-1)" :class="{ 'correct-answer': questionList[index-1].optionList[index2-1].isCorrect}">{{ questionList[index-1].optionList[index2-1].text }}</span>
-                      </template>
-                      <div>
-                        <el-button size="small" color="#fef0f0" @click="addOption(index-1,index2-1)" text><el-icon><Plus/></el-icon></el-button>
-                        <el-button size="small" color="#ecf5ff" @click="deleteOption(index-1,index2-1)" :disabled="questionList[index-1].isDisabled" text><el-icon><Minus/></el-icon></el-button>
-                        &nbsp;
-                        <el-switch v-model="questionList[index-1].optionList[index2-1].isCorrect" @change="checkAnswer(0,index-1,index2-1)"/>&nbsp;正确答案
-                      </div>
-                    </n-popover>
-                  </van-radio>
-                  <br/>
-              </div>
+            <div>
+              <br/>
+                <van-radio :name="index2" checked-color="#0283EF" :label-disabled=true>
+                  <n-popover trigger="manual" :show="questionList[index-1].optionList[index2-1].isEditing" :show-arrow="false" placement="right">
+                    <template #trigger>
+                      <el-input 
+                      v-if="questionList[index-1].optionList[index2-1].isEditing"
+                      v-model="questionList[index-1].optionList[index2-1].content" 
+                      @blur="finishEditing(1,index-1,index2-1)" 
+                      @keyup.enter="finishEditing(1,index-1,index2-1)"
+                      />
+                      <span v-else @click="startEditing(1,index-1,index2-1)" >{{ questionList[index-1].optionList[index2-1].text }}</span>
+                    </template>
+                    <div>
+                      <el-button size="small" color="#fef0f0" @click="addOption(index-1,index2-1)" text><el-icon><Plus/></el-icon></el-button>
+                      <el-button size="small" color="#ecf5ff" @click="deleteOption(index-1,index2-1)" :disabled="questionList[index-1].isDisabled" text><el-icon><Minus/></el-icon></el-button>
+                      &nbsp;
+                      <el-switch v-model="questionList[index-1].optionList[index2-1].isCorrect" @change="checkAnswer(0,index-1,index2-1)"/>&nbsp;正确答案
+                    </div>
+                  </n-popover>
+                </van-radio>
+              <br/>
+            </div>
           </van-radio-group>
 
           <br/>
@@ -415,13 +415,13 @@ const router = useRouter();
         this.finishEditing(this.lastEditObj.type,this.lastEditObj.index1,this.lastEditObj.index2);
       }
       this.lastEditObj = {"type":type,"index1":index,"index2":index2};
-      if(type == 0){
+      if(type == 0){ //题目标题
         this.questionList[index].qsIsEditing = true;
       }
-      else if(type == 1){
+      else if(type == 1){ //选项标题
         this.questionList[index].optionList[index2].isEditing = true;
       }
-      else if(type == -1){
+      else if(type == -1){ //问卷标题
         this.ttIsEditing = true;
       }
     },

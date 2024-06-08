@@ -14,34 +14,32 @@ export function postUserMessage(username,password, email){
     return post("/login",data);
 }
 
-export function getUserMessagePersonal(username){
-    let data = {};
-    data.username = username;
-    return get("/userManage/personal/"+username);
-}
-
-export function modifyUserInfo(username, email, password, zhibi){
+export function modifyUserInfoInMessage(username, email, password, zhibi, photonumber, status, flag){
     let data = {};
     data.username = username;
     data.email = email;
     data.password = password;
     data.zhibi = zhibi;
+    data.photonumber = photonumber;
+    data.status = status;
+    data.flag = flag;
     return post("/personal/message", data);
 }
 
-export function updateUserphotoInMassage(username, photonumber, status){
+// export function updateUserphotoInMassage(username, photonumber, status){
+//     let data = {};
+//     data.username = username;
+//     data.photonumber = photonumber;
+//     data.status = status;
+//     return post("/personal/message", data);
+// }
+
+export function updateUserphotoInShop(username, photonumber, status, money){
     let data = {};
     data.username = username;
     data.photonumber = photonumber;
     data.status = status;
-    return post("/personal/message", data);
-}
-
-export function updateUserphotoInShop(username, photonumber, status){
-    let data = {};
-    data.username = username;
-    data.photonumber = photonumber;
-    data.status = status;
+    data.money = money;
     return post("/personal/shop", data);
 }
 
