@@ -72,7 +72,7 @@
     const photoBought = ref([]);
     const updatePhotoBought = () => {
         for(let i=1; i<photos.value.length; i++) {
-            if (photos.value[i] == 0) { //应该改成1
+            if (photos.value[i] == 1) { //应该改成1
                 photoBought.value.push(i);
             }
         }

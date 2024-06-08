@@ -93,10 +93,10 @@
             }
             else { //result.message == 0, 登录成功
                 //全局用户修改为当前注册用户
-                // console.log("start");
-                // console.log(result.ownphotos);
+                console.log("start");
+                console.log(result.ownphotos);
                 updateNowuser(result);
-                // console.log(result.ownphotos);
+                console.log(result.ownphotos);
                 gotoUserManage();
             }
         })
