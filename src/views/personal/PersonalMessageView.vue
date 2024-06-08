@@ -20,23 +20,27 @@
     // photos.value = store.state.nowuser.own_photos;
     photos.value = internalData.$cookies.get('own_photos');
 
+    const usernameText = ref("");
+    usernameText.value = nowuser_username.value;
+    const userEmailText = ref("");
+    userEmailText.value = nowuser_email.value;
     const userPasswordText = ref("");
     userPasswordText.value = "password";
 
     const changeNameText_in = () => {
-        nowuser_username.value = "真是个好名字";
+        usernameText.value = "真是个好名字";
     }
     const changeNameText_out = () => {
         // userNameText.value = store.state.nowuser.username;
-        nowuser_username.value = nowuser_username.value;
+        usernameText.value = nowuser_username.value;
     }
 
     const changeEmailText_in = () => {
-        nowuser_email.value = "修改邮箱";
+        userEmailText.value = "修改邮箱";
     }
     const changeEmailText_out = () => {
         // userEmailText.value = store.state.nowuser.email;
-        nowuser_email.value = nowuser_email.value;
+        userEmailText.value = nowuser_email.value;
     }
 
     const changePasswordText_in = () => {
@@ -198,7 +202,7 @@
         <!-- </div> -->
 
         <button class="box" @mouseover="changeNameText_in" @mouseout="changeNameText_out">
-            <span >{{nowuser_username}}</span>
+            <span >{{usernameText}}</span>
         </button>
 
         <button class="box" @mouseover="changePasswordText_in" @mouseout="changePasswordText_out" @click="openCard('PasswordCard')">
@@ -206,7 +210,7 @@
         </button>
 
         <button class="box" @mouseover="changeEmailText_in" @mouseout="changeEmailText_out" @click="openCard('EmailCard')">
-            <span >{{nowuser_email}}</span>
+            <span >{{userEmailText}}</span>
         </button>
 
         <!-- 修改头像 -->
