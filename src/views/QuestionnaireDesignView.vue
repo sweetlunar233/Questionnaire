@@ -56,7 +56,7 @@
         </div>
         <div class="row"></div>
         <div>
-        <el-button plain color="#626aef" size="large" round><el-icon><Upload/></el-icon>&nbsp;保存</el-button>
+        <el-button plain color="#626aef" size="large" round @click="conserve"><el-icon><Upload/></el-icon>&nbsp;保存</el-button>
         <el-button plain color="#626aef" size="large" round><el-icon><Position/></el-icon>&nbsp;发布</el-button>
         </div>
       </div>
@@ -258,6 +258,10 @@ import { NPopover } from "naive-ui"
 import { ref } from "vue" ;
 
 import { getCurrentInstance } from 'vue'
+import { ConserveOrReleaseQuestionnaire } from '../api/design.js'
+//编辑问卷传输问卷id的函数
+import { useRouter } from 'vue-router';
+const router = useRouter();
  
  export default({
    data(){
@@ -278,8 +282,56 @@ import { getCurrentInstance } from 'vue'
     }
    },
    methods: {
-    
-
+    conserve(){
+      var promise = ConserveOrReleaseQuestionnaire(
+        this.questionnaireId,
+        this.type,
+        this.questionList,
+        this.people,
+        this.isDisorder,
+        this.title,
+        0
+      );
+      promise.then((result)=>{
+        if(result.message === "True"){
+          router.push("/userManage");
+          ElMessage({
+            message: '保存成功',
+            type: 'success',
+          });
+        }else{
+          ElMessage({
+            message: '保存失败',
+            type: 'error',
+          });
+        }
+      })
+    },
+    release(){
+      var promise = ConserveOrReleaseQuestionnaire(
+        this.questionnaireId,
+        this.type,
+        this.questionList,
+        this.people,
+        this.isDisorder,
+        this.title,
+        1
+      );
+      promise.then((result)=>{
+        if(result.message === "True"){
+          router.push("/userManage");
+          ElMessage({
+            message: '发布成功',
+            type: 'success',
+          });
+        }else{
+          ElMessage({
+            message: '发布失败',
+            type: 'error',
+          });
+        }
+      })
+    },
 
 
 
