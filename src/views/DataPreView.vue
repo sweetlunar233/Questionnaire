@@ -135,7 +135,7 @@
                 </n-collapse-transition>
                 <div v-if="crossHasChart">
                   <div class="chartBox">
-                    <div :id="index-1" :style="{ width: '100%', height: '100%' }"></div>
+                    <div :id="-1" :style="{ width: '100%', height: '100%' }"></div>
                   </div>
                 </div>
               </div>
@@ -176,19 +176,23 @@ import { NSpace } from 'naive-ui';
 import { NPopover } from 'naive-ui';
 import { NQrCode } from 'naive-ui';
 import Print from 'vue3-print-nb';
+import { GetCrossData, GetOtherData } from '@/api/question';
 
 export default {
   data() {
     return {
       input:'',
+      questionnaireId:0,
       questionCnt: 0,
       questionList: [],
       title:'问题标题',
       //用于交叉分析
-      cross:[],
-      cross1:undefined,
-      cross2:undefined,
+      cross:[], //可以用于交叉分析的题目
+      cross1:undefined, //自变量的问题ID
+      cross2:undefined, //因变量的问题ID
       crossHasChart:false,
+      crossContent:[],
+      crossCnt:[],
       //print
       printObj: {
         id: 'dataAnalysis', // 这里是要打印元素的ID
@@ -210,7 +214,7 @@ export default {
     let i = 0;
     for(i=0;i<this.questionCnt;i++){
       if(this.questionList[i].type != 3){
-        this.cross.push({"type":this.questionList[i].type,"value":i,"label":this.questionList[i].question});
+        this.cross.push({"type":this.questionList[i].type,"value":this.questionList[i].questionId,"label":this.questionList[i].question});
       }
     }
     this.corss1=ref();
@@ -220,10 +224,23 @@ export default {
   
   methods: {
     toggleChart(index,kind) {
-      this.questionList[index].hasChart = true;
-      this.$nextTick(() => {
-        this.createCharts(index, this.questionList[index].optionContent, this.questionList[index].optionCnt,kind);
-      });
+      if(index != -1){
+        this.questionList[index].hasChart = true;
+        this.$nextTick(() => {
+          this.createCharts(index, this.questionList[index].optionContent, this.questionList[index].optionCnt,kind);
+        });
+      }
+      else{
+        this.crossHasChart = true;
+        this.$nextTick(() => {
+          var promise = GetCrossData(this.cross1,this.cross2);
+          promise.then((result) => {
+            this.crossContent = result.crossContent;
+            this.crossCnt = result.crossCnt;
+          })
+          this.createCharts(index,this.crossContent,this.crossCnt,kind);
+        })
+      }
     },
     createCharts(id,xData,yData,chartType){
       //获取id并初始化图表
@@ -282,7 +299,6 @@ export default {
               width: "100%",
               height: "100%",
               textStyle: {
-              // normal: { 目前使用echarts版本是5 所以使用normal颜色未生效，把normal去掉就生效了 颜色不生效的话请注意使用echarts版本问题
                   color: function () {
                     return (
                       "rgb(" +
@@ -293,7 +309,6 @@ export default {
                       Math.round(Math.random() * 255) +
                       ")"
                     )
-                  //  }
                 },
                 emphasis: {
                   shadowBlur: 10,
@@ -311,11 +326,6 @@ export default {
       });
     },
 
-    //增加选项
-    addOption(index,ele){
-        this.questionList[index].optionCnt++;
-        this.questionList[index].optionList.push({"content":ele});
-    },
     //TieZhu:添加单选题
     addSingle(){
         this.questionCnt++;
@@ -357,6 +367,17 @@ export default {
     Print,
     NPopover,
     NQrCode,
+  },
+  created(){
+    this.questionnaireId = this.$route.query.questionnaireId;
+    var promise = GetOtherData(this.questionnaireId);
+    promise.then((result) => {
+      this.questionList = result.questionList;
+    })
+    let i = 0;
+    for(i = 0;i < this.questionList.length;i++){
+      this.questionList[i].hasChart = ref(false);
+    }
   }
 };
 </script>

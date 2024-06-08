@@ -43,21 +43,26 @@
         </el-button>
       </div>
 
-      <!-- 保存、发布、乱序展示、人数限制 -->
-      <div style="margin-top: 230%;">
+      <!-- 保存、发布、乱序展示、人数限制、时间限制 -->
+      <div style="margin-top: 220%;">
         <!-- 对于考试问卷/报名问卷，是否乱序展示/设置人数限制 -->
         <div>
           <div v-if="type==3">
             <el-switch v-model="isDisorder" size="large" style="--el-switch-on-color: #626aef;"/>&nbsp;是否乱序展示
           </div>
+          <div v-if="type==3">
+            限时&nbsp;<el-input-number v-model="timeLimit" size="small" :min="1" controls-position="right"/>&nbsp;min
+          </div>
           <div v-if="type==2">
-            <el-input-number v-model="people" size="small" :min="1"/>&nbsp;报名人数
+            <el-input-number v-model="people" size="small" :min="1" controls-position="right"/>&nbsp;报名人数
           </div>
         </div>
         <div class="row"></div>
         <div>
-        <el-button plain color="#626aef" size="large" round @click="conserve"><el-icon><Upload/></el-icon>&nbsp;保存</el-button>
-        <el-button plain color="#626aef" size="large" round><el-icon><Position/></el-icon>&nbsp;发布</el-button>
+          <el-button plain color="#626aef" size="large" @click="saveQuestionnaire()" round><el-icon><Upload/></el-icon>&nbsp;保存</el-button>
+          <el-button plain color="#626aef" size="large" round><el-icon><Position/></el-icon>&nbsp;发布</el-button>
+        <!-- <el-button plain color="#626aef" size="large" round @click="conserve"><el-icon><Upload/></el-icon>&nbsp;保存</el-button>
+        <el-button plain color="#626aef" size="large" round><el-icon><Position/></el-icon>&nbsp;发布</el-button> -->
         </div>
       </div>
 
@@ -237,8 +242,8 @@
           </el-select>
           
           &nbsp;
-
-          <el-input-number v-if="type==3" v-model="questionList[index-1].score" :min="0"/>
+          <!-- 设置本题分数 -->
+          <el-input-number v-if="type==3" v-model="questionList[index-1].score" :min="0" controls-position="right"/>
 
           <el-divider border-style="dashed"></el-divider>
         </div>
@@ -252,6 +257,7 @@
 </template>
 
 <script>
+import { GetQuestionnaire, PostQuestion } from "@/api/question";
 import NavigationBar from "@/components/NavigationBar.vue"
 import { ElMessage } from 'element-plus'
 import { NPopover } from "naive-ui"
@@ -269,7 +275,7 @@ const router = useRouter();
       input:'',
       username:'',
       questionnaireId:0,
-      type:0,
+      type:3,
       questionCnt: 0,
       questionList: [],
       draggedIndex:-1,
@@ -279,6 +285,7 @@ const router = useRouter();
       lastEditObj:{"type":-2,"index1":-1,"index2":-1},//上一次修改的元素，如果不是选项，那么它的index2为-1.type:-1问卷标题;0问题;1选项
       isDisorder:false,
       people:0,
+      timeLimit:0,
     }
    },
    methods: {
@@ -516,6 +523,11 @@ const router = useRouter();
           this.warning("正确答案太多")
         }
       }
+    },
+
+    //保存问卷
+    saveQuestionnaire(){
+      // var promise = PostQuestion(this.questionnaireId,this.title,this.type,!this.isDisorder,this.people,this.timeLimit,this.questionList);
     }
    },
    components:{
@@ -523,12 +535,34 @@ const router = useRouter();
     NPopover,
    },
    created(){
-    this.questionnaireId = this.$route.query.questionnaireId;
-    this.type = this.$route.query.questionnaireType;
-    // 创建可以访问内部组件实例的实例
     const internalInstance = getCurrentInstance()
     const internalData = internalInstance.appContext.config.globalProperties
     this.username = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
+    // if(this.questionnaireId != -1){
+    //   var promise=GetQuestionnaire(this.questionnaireId,"/quetionnaireDesign",true);
+    //   promise.then((result) => {
+    //     this.title = result.Title;
+    //     this.type = result.category;
+    //     this.people = result.people;
+    //     this.timeLimit = result.TimeLimit;
+    //     this.questionList = result.questionList;
+    //   })
+    //   let i = 0,j = 0;
+    //   for(i = 0;i < this.questionList.length;i++){
+    //     this.questionList[i].showToolbar = ref(false);
+    //     this.questionList[i].qsIsEditing = ref(false);
+    //     this.questionList[i].isDisabled = ref(true);
+    //     this.questionList[i].max = ref(1);
+    //     this.questionList[i].text = ref(this.questionList[i].question);
+    //     if(this.questionList[i].type <= 2){
+    //       for(j = 0;j < this.questionList[i].optionList.length;j++){
+    //       this.questionList[i].optionList[j].text = ref(this.questionList[i].optionList[j].content);
+    //       this.questionList[i].optionList[j].isEditing = ref(false);
+    //       }
+    //     }
+    //   }
+    // }
+    // 创建可以访问内部组件实例的实例
    }
  })
 </script>

@@ -5,7 +5,7 @@
       
       <div class="right">
         <div class="title">{{ title }}</div>
-        <van-divider  :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"></van-divider>
+        <van-divider  :style="{ color: '#626aef', borderColor: '#626aef', padding: '0 16px' }"></van-divider>
   
         <div v-for="index in questionCnt">
   
@@ -37,7 +37,7 @@
             </div>
             <br/>
             <van-radio-group v-model=" questionList[index-1].radio" v-for="index2 in questionList[index-1].optionCnt" >
-                <van-radio :name="index2" checked-color="#0283EF" :label-disabled=true >
+                <van-radio :name="questionList[index-1].optionList[index2-1].optionId" checked-color="#0283EF" :label-disabled=true>
                     <div>
                     {{ questionList[index-1].optionList[index2-1].content }}
                     </div>
@@ -56,7 +56,7 @@
             
             <van-checkbox-group v-model=" questionList[index-1].radio" v-for="index2 in questionList[index-1].optionCnt"  checked-color="#0283EF">
                 <br/>
-                <van-checkbox :name="index2" shape="square" :label-disabled=true>
+                <van-checkbox :name="questionList[index-1].optionList[index2-1].optionId" shape="square" :label-disabled=true>
                     <div>
                       {{ questionList[index-1].optionList[index2-1].content }}
                     </div>
@@ -85,7 +85,7 @@
               {{ questionList[index-1].question }}
             </div>
             <br/>
-            <el-rate v-model="questionList[index-1].grade" allow-half></el-rate>
+            <el-rate v-model="questionList[index-1].grade"></el-rate>
             <br/>
             <br/>
           </div>
@@ -93,23 +93,38 @@
         </div>
         
       </div>
+
+      <div class="bottom">
+        <el-button color="#626aef" @click="postFill(1)" size="large"><el-icon><Upload/></el-icon>&nbsp;提交</el-button>
+        <el-button color="#626aef" @click="postFill(0)" size="large"><el-icon><House/></el-icon>&nbsp;暂存</el-button>
+      </div>
   
     </div>
     
   </template>
   
   <script>
+  import { GetStoreFill, PostFill } from "@/api/question";
   import NavigationBar from "@/components/NavigationBar.vue"
   import { ref } from 'vue'
+  import { ElMessage } from 'element-plus'
    
    export default({
      data(){
       return{
         input:'',
-        questionnaireId: 0,
+        username:'',
+        questionnaireId:0,
+        type:0,
         questionCnt: 0,
         questionList: [],
         title:'问题标题',
+        isDisorder:false,
+        people:0, //剩余人数
+        timeLimit:0,
+        time:0, //存储在此页面停留的时间
+        intervalId:null, //存储定时器的ID
+        question:[],
       }
      },
      methods: {
@@ -125,14 +140,14 @@
         //TieZhu:添加单选题
         addSingle(){
             this.questionCnt++;
-            this.questionList.push({"type":1,"isNecessary":true,"question":"请选择一个选项","radio":ref(),
-            "optionCnt":4,"optionList":[{"content":"选项"},{"content":"选项"},{"content":"选项"},{"content":"选项"}]});
+            this.questionList.push({"type":1,"isNecessary":true,"question":"请选择一个选项","radio":ref(''),
+            "optionCnt":1,"optionList":[{"optionId":0,"content":"选项"}]});
         },
         //TieZhu:添加多选题
         addMultiple(){
             this.questionCnt++;
-            this.questionList.push({"type":2,"isNecessary":true,"question":"请选择以下选项（多选）","radio":ref(),
-            "optionCnt":4,"optionList":[{"content":"选项"},{"content":"选项"},{"content":"选项"},{"content":"选项"}]});
+            this.questionList.push({"type":2,"isNecessary":true,"question":"请选择以下选项（多选）","max":1, "radio":ref(''),
+            "optionCnt":1,"optionList":[{"optionId":0,"content":"选项"}]});
         },
         //TieZhu:添加填空题
         addFill(){
@@ -144,6 +159,47 @@
             this.questionCnt++;
             this.questionList.push({"type":4,"isNecessary":true,"question":"请评分","grade":ref('')});
         },
+        //暂存/提交,如果status是0，那么是暂存，如果status是1.那么根据问卷类型判断是已批改还是已提交
+        postFill(status){
+          if(!this.canSubmit()){
+            return;
+          }
+          // var promise;
+          // if(status == 0){
+          //   promise = PostFill(this.questionnaireId,'Unsubmitted',this.question);
+          // }
+          // else if(status == 1 && this.type == 3){
+          //   promise = PostFill(this.questionnaireId,'Graded',this.question);
+          // }
+          // else{
+          //   promise = PostFill(this.questionnaireId,'Submitted',this.question);
+          // }
+        },
+        warning(content){
+          ElMessage({
+            message:content,
+            type:'warning',
+          });
+        },
+        //检测是否能够提交，如果没有把必填的填写完，则不能提交
+        canSubmit(){
+          let i = 0;
+          for(i = 0;i < this.questionList.length;i++){
+            if(this.questionList[i].type <= 2 && this.questionList[i].isNecessary && this.questionList[i].radio==''){
+              this.warning("有必填题目没有填写！")
+              return false;
+            }
+            else if(this.questionList[i].type == 3 && this.questionList[i].isNecessary && this.questionList[i].fill==''){
+              this.warning("有必填题目没有填写！")
+              return false;
+            }
+            else if(this.questionList[i].type == 4 && this.questionList[i].isNecessary && this.questionList[i].grade==''){
+              this.warning("有必填题目没有填写！")
+              return false;
+            }
+          }
+          return true;
+        }
      },
      components:{
       NavigationBar,
@@ -153,16 +209,59 @@
       this.addMultiple();
       this.addFill();
       this.addScore();
+      this.intervalId = setInterval(() => {
+        this.time++;
+      },1000);
+     },
+     beforeUnmount(){
+      if(this.intervalId){
+        clearInterval(this.intervalId);
+      }
      },
      components:{
       NavigationBar,
+      ElMessage,
      },
      created(){
+      var promise;
       this.questionnaireId = this.$route.query.questionnaireId;
-      // 创建可以访问内部组件实例的实例
-      const internalInstance = getCurrentInstance()
-      const internalData = internalInstance.appContext.config.globalProperties
-      this.username = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
+      const storedUsername = localStorage.getItem('username');
+      if(storedUsername){
+        this.username = storedUsername;
+        // promise = GetStoreFill(this.username,this.questionnaireId);
+        // promise.then((result) => {
+        //   this.question = result.question;
+        // })
+      }
+      // else{
+      //   this.$router.push({path:'/login',query:{questionnaireId:this.questionnaireId}});
+      // }
+      // promise=GetQuestionnaire(this.questionnaireId,"/quetionnaireFill",false);
+      // promise.then((result) => {
+      //   this.title = result.Title;
+      //   this.type = result.category;
+      //   this.people = result.people;
+      //   this.timeLimit = result.TimeLimit;
+      //   this.questionList = result.questionList;
+      // })
+      // if(storedUsername){
+      //   let i = 0, j = 0;
+      //   for(i = 0;i < this.questionList.length;i++){
+      //     for(j = 0;j < this.question.length;j++){
+      //       if(this.questionList[i].questionID == this.question[j].questionID){
+      //         if(this.questionList[i].type <= 2){
+      //           this.questionList[i].radio = ref(this.question[j].value);
+      //         }
+      //         else if(this.questionList[i].type == 3){
+      //           this.questionList[i].radio = ref(this.question[j].fill);
+      //         }
+      //         else{
+      //           this.questionList[i].radio = ref(this.question[j].grade);
+      //         }
+      //       }
+      //     }
+      //   }
+      // }
      }
    })
   </script>
@@ -172,9 +271,8 @@
   
   .right{
     position: relative;
-    height: 700px;
+    height: 650px;
     width: 90%;
-    height: 700px;
     top: 8%;
     left: 4%;
     border-radius: 5px;
@@ -188,7 +286,7 @@
   .title{
     text-align: center;
     font-size: larger;
-    color: #409EFF;
+    color: #626aef;
     font-weight: bold;
   }
   
@@ -200,5 +298,19 @@
     background-position: center; 
     background-repeat: repeat-y; /* 背景图片不重复 */
     background-attachment: fixed; 
+  }
+
+  .bottom{
+    text-align: center;
+    position: relative;
+    width: 15%;
+    background-color: white;
+    left: 42%;
+    right: 50%;
+    border-radius: 5px;
+    border: 2px;
+    padding: 10px;
+    box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.1);
+    top: 10%;
   }
   </style>
