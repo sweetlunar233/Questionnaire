@@ -45,8 +45,7 @@
 
             photoNotBuy.value.splice(photoNotBuy.value.indexOf(photonumber), 1);
             
-            modifyUserMoney(nowuser_username.value, false, false, nowuser_money.value);
-            updateUserphotoInShop(nowuser_username.value, photonumber, 1);
+            updateUserphotoInShop(nowuser_username.value, photonumber, 1, nowuser_money.value);
             ElMessage.success("购买成功!");
         }
         else {

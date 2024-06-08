@@ -31,20 +31,12 @@ export function updateUserphotoInMassage(username, photonumber, status){
     return post("/personal/message", data);
 }
 
-export function updateUserphotoInShop(username, photonumber, status){
+export function updateUserphotoInShop(username, photonumber, status, money){
     let data = {};
     data.username = username;
     data.photonumber = photonumber;
     data.status = status;
-    return post("/personal/shop", data);
-}
-
-export function modifyUserMoney(username, email, password, zhibi){
-    let data = {};
-    data.username = username;
-    data.email = email;
-    data.password = password;
-    data.zhibi = zhibi;
+    data.money = money;
     return post("/personal/shop", data);
 }
 
