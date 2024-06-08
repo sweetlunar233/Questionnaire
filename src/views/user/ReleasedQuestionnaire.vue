@@ -157,7 +157,7 @@ const initCreated = (username) =>{
             if(i > pageSize.value * (pageNum.value - 1))
             {
                 if(i <= pageSize.value * pageNum.value){
-                    if(categoryId != "" && element.Category != categoryId.value){
+                    if(categoryId.value != "" && element.Category != categoryId.value){
                         console.log("oh no!")
                     }
                     else{
