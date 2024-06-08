@@ -4,13 +4,30 @@
     import { ElMessage } from 'element-plus';
     import { ref, computed } from 'vue';
 
+    //导入cookies
+    import { getCurrentInstance } from 'vue'
+    // 创建可以访问内部组件实例的实例
+    const internalInstance = getCurrentInstance()
+    const internalData = internalInstance.appContext.config.globalProperties
+
+
+    const nowuser_username = ref(internalData.$cookies.get('username'));
+    const nowuser_password = ref(internalData.$cookies.get('password'));
+    const nowuser_email = ref(internalData.$cookies.get('email'));
+    const nowuser_money = ref(internalData.$cookies.get('money'));
+    //username的头像全部状态
+    const photos = ref([]);
+    // photos.value = store.state.nowuser.own_photos;
+    photos.value = internalData.$cookies.get('own_photos');
+
+
     const userNameText = ref("");
-    userNameText.value = store.state.nowuser.username;
-    // userNameText.value = "用户名";
+    // userNameText.value = store.state.nowuser.username;
+    userNameText.value = nowuser_username.value;
 
     const userEmailText = ref("");
-    userEmailText.value = store.state.nowuser.email;
-    // userEmailText.value = "1969024607@qq.com";
+    // userEmailText.value = store.state.nowuser.email;
+    userEmailText.value = nowuser_email.value;
 
     const userPasswordText = ref("");
     userPasswordText.value = "password";
@@ -19,16 +36,16 @@
         userNameText.value = "真是个好名字";
     }
     const changeNameText_out = () => {
-        // userNameText.value = "用户名";
-        userNameText.value = store.state.nowuser.username;
+        // userNameText.value = store.state.nowuser.username;
+        userNameText.value = nowuser_username.value;
     }
 
     const changeEmailText_in = () => {
         userEmailText.value = "修改邮箱";
     }
     const changeEmailText_out = () => {
-        // userEmailText.value = "1969024607@qq.com";
-        userEmailText.value = store.state.nowuser.email;
+        // userEmailText.value = store.state.nowuser.email;
+        userEmailText.value = nowuser_email.value;
     }
 
     const changePasswordText_in = () => {
@@ -38,7 +55,10 @@
         userPasswordText.value = "password";
     }
 
-    const nowuserPhotonumber = ref(store.state.nowuser.own_photos[0]);
+    
+
+    // const nowuserPhotonumber = ref(store.state.nowuser.own_photos[0]);
+    const nowuserPhotonumber = ref(photos.value[0]);
     console.log(nowuserPhotonumber.value);
     const photoUrl = computed(() => {
         return require(`@/assets/photos/photo${nowuserPhotonumber.value}.jpg`);
@@ -64,9 +84,7 @@
 
     }
 
-    //username的头像全部状态
-    const photos = ref([]);
-    photos.value = store.state.nowuser.own_photos;
+    
 
     //更新已购买头像
     const photoBought = ref([]);
@@ -96,9 +114,13 @@
 
     //更换头像
     const changePhoto = (photonumber) => {
-        store.state.nowuser.own_photos[0] = photonumber;
+        // store.state.nowuser.own_photos[0] = photonumber;
+        photos.value[0] = photonumber;
+        $cookies.set('own_photos', photos);
+
         nowuserPhotonumber.value = photonumber;
         // updateUserphotoInMassage(store.state.nowuser.username, 0, photonumber);
+        updateUserphotoInMassage(nowuser_username.value, 0, photonumber);
         ElMessage.success("修改头像成功!");
         X_quit("ChangePhotoCard");
     }
@@ -123,7 +145,8 @@
             return;
         }
 
-        if(changePasswordData.value.password != store.state.nowuser.password) {
+        // if(changePasswordData.value.password != store.state.nowuser.password) {
+        if(changePasswordData.value.password != nowuser_password.value) {
             ElMessage.error("原密码错误");
             return;
         }
@@ -133,8 +156,11 @@
             return;
         }
 
-        store.state.nowuser.password = changePasswordData.value.repassword1;
-        modifyUserInfo(store.state.nowuser.username, false, changePasswordData.value.repassword1, false);
+        // store.state.nowuser.password = changePasswordData.value.repassword1;
+        $cookies.set('password', changePasswordData.value.repassword1);
+        nowuser_password.value = changePasswordData.value.repassword1;
+
+        modifyUserInfo(nowuser_username.value, false, changePasswordData.value.repassword1, false);
         ElMessage.success("修改密码成功！");
         X_quit("PasswordCard");
     }
@@ -154,13 +180,18 @@
             return;
         }
 
-        if(changeEmailData.value.password != store.state.nowuser.password) {
+        // if(changeEmailData.value.password != store.state.nowuser.password) {
+        if(changeEmailData.value.password != nowuser_password.value) {
             ElMessage.error("密码错误");
             return;
         }
 
-        store.state.nowuser.email = changeEmailData.value.email;
-        modifyUserInfo(store.state.nowuser.username, changeEmailData.value.email, false, false);
+        // store.state.nowuser.email = changeEmailData.value.email;
+        // modifyUserInfo(store.state.nowuser.username, changeEmailData.value.email, false, false);
+        $cookies.set('email', changeEmailData.value.email);
+        modifyUserInfo(nowuser_username.value, changeEmailData.value.email, false, false);
+        nowuser_email.value = changeEmailData.value.email;
+
         ElMessage.success("修改邮箱成功！");
         X_quit("EmailCard");
     }

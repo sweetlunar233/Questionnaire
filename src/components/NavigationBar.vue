@@ -6,6 +6,12 @@
     import { ArrowDown } from '@element-plus/icons-vue'
     import store from '../store';
 
+    //导入cookies
+    import { getCurrentInstance } from 'vue';
+    // 创建可以访问内部组件实例的实例
+    const internalInstance = getCurrentInstance();
+    const internalData = internalInstance.appContext.config.globalProperties;
+
     const router = useRouter();
 
     const gotoLogin = () => {
@@ -14,6 +20,13 @@
 
     const gotoHome = () => {
         // store.state.nowuser.username = "";
+
+        const cookieNames = $cookies.keys();
+        // 遍历删除所有的 cookie
+        cookieNames.forEach(cookieName => {
+            $cookies.remove(cookieName);
+        });
+
         router.push('/');
     }
 
@@ -48,8 +61,10 @@
         currentUrl.value = window.location.href;
     });
 
-
-    const nowuserPhotonumber = ref(store.state.nowuser.own_photos[0]);
+    const nowuser_username = ref(internalData.$cookies.get('username'));
+    const photos = ref(internalData.$cookies.get('own_photos'));
+    // const nowuserPhotonumber = ref(store.state.nowuser.own_photos[0]);
+    const nowuserPhotonumber = ref(photos.value[0]);
     console.log(nowuserPhotonumber.value);
     const photoUrl = computed(() => {
         return require(`@/assets/photos/photo${nowuserPhotonumber.value}.jpg`);
@@ -73,7 +88,7 @@
                 </div>
                 <span class="username">
                     <!-- username -->
-                    {{ store.state.nowuser.username }}
+                    {{ nowuser_username }}
                 </span>
                 
             </div>

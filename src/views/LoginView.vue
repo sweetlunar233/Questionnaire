@@ -1,6 +1,6 @@
 <script setup>
     import { ref } from "vue";
-    import NavigationBarWithoutUser from "@/components/NavigationBarWithoutUser.vue";
+    import NavigationBarWithoutUser from "@/components/NavigationBarInLogin.vue";
     import { useRouter } from 'vue-router';
     import store from "@/store";
 
@@ -24,11 +24,17 @@
         // $cookies.set("username", result.username);
         // $cookies.config("1m");
 
-        store.state.nowuser.username = result.username;
-        store.state.nowuser.password = result.password;
-        store.state.nowuser.email = result.email;
-        store.state.nowuser.money = result.zhibi;
-        store.state.nowuser.own_photos = result.ownphotos;
+        $cookies.set("username", result.username);
+        $cookies.set("password", result.password);
+        $cookies.set("email", result.email);
+        $cookies.set("money", result.zhibi);
+        $cookies.set("own_photos", result.ownphotos);
+
+        // store.state.nowuser.username = result.username;
+        // store.state.nowuser.password = result.password;
+        // store.state.nowuser.email = result.email;
+        // store.state.nowuser.money = result.zhibi;
+        // store.state.nowuser.own_photos = result.ownphotos;
     }
 
     import { getUserMessage, postUserMessage } from "@/api/user";
@@ -177,7 +183,7 @@
 <style lang="scss" scoped>
     .all_container {
         height: 100vh;
-        background: url("../assets/photos/photo10.jpg");
+        background: url("../assets/bg6.png");
         background-size: cover;
 
         .login-container{
