@@ -347,7 +347,7 @@ const deleteQs = (id) =>{
   position: absolute;
   top: 5px;
   left: 5px;
-  width: 1190px;
+  width: 300px;
   height: 110px;
   z-index: 2;
   background: rgba(255, 244, 244, 0.95);

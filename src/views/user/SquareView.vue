@@ -132,17 +132,18 @@ initAllReleased();
 <template>
     <el-card class="page-container">
         <!-- 问卷列表 -->
+        <!--考试问卷不显示；悬赏奖励只针对普通问卷和报名问卷；报名问卷显示剩余名额-->
         <div class="questionnaire-list">
             <div :span="8" v-for="(questionnaire, index) in questionnaires" :key="index">
-                <div class="card">
+                <div class="card" v-if="questionnaire.categoryId != 3">
                     <div class="first-content">
                         <span class="firstfirst">{{ questionnaire.Title }}</span>
                         <span class="first">post by： {{ questionnaire.PostMan }}</span>
                     </div>
                     <div class="second-content">
                         <span class="second">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{truncateDescription(questionnaire.Description)}}</span> 
-                        <span class="second">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;悬赏奖励： {{ questionnaire.Reward }}纸币</span>
-                        
+                        <span class="second" v-if="questionnaire.categoryId == 0 || questionnaire.categoryId == 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;悬赏奖励： {{ questionnaire.Reward }}纸币</span>
+                        <span class="second" v-if="questionnaire.categoryId == 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;剩余名额： {{ questionnaire.HeadCount }} </span>  
                         <button type="primary" style="float: right;font-size: 17px" size="large" @click="goToQuestionnaireFill(questionnaire.SurveyID)"><span>填写</span></button>
                     </div>
                 </div>
