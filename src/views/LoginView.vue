@@ -1,6 +1,6 @@
 <script setup>
     import { ref } from "vue";
-    import NavigationBarWithoutUser from "@/components/NavigationBarWithoutUser.vue";
+    import NavigationBarWithoutUser from "@/components/NavigationBarInLogin.vue";
     import { useRouter } from 'vue-router';
     import store from "@/store";
 
@@ -24,15 +24,22 @@
         // $cookies.set("username", result.username);
         // $cookies.config("1m");
 
-        store.state.nowuser.username = result.username;
-        store.state.nowuser.password = result.password;
-        store.state.nowuser.email = result.email;
-        store.state.nowuser.money = result.zhibi;
-        store.state.nowuser.own_photos = result.ownphotos;
+        $cookies.set("username", result.username);
+        $cookies.set("password", result.password);
+        $cookies.set("email", result.email);
+        $cookies.set("money", result.zhibi);
+        $cookies.set("own_photos", result.ownphotos);
+
+        // store.state.nowuser.username = result.username;
+        // store.state.nowuser.password = result.password;
+        // store.state.nowuser.email = result.email;
+        // store.state.nowuser.money = result.zhibi;
+        // store.state.nowuser.own_photos = result.ownphotos;
     }
 
     import { getUserMessage, postUserMessage } from "@/api/user";
     import { ElMessage } from "element-plus";
+
 
     const registerData = ref({
         username: "",
@@ -73,6 +80,8 @@
         password: ""
     })
 
+
+
     const login = () => {
         if (!/^\S{1,20}$/.test(loginData.value.username)) {
             ElMessage.error('用户名必须为1到20个非空字符');
@@ -93,6 +102,7 @@
             }
             else { //result.message == 0, 登录成功
                 //全局用户修改为当前注册用户
+                
                 // console.log("start");
                 // console.log(result.ownphotos);
                 updateNowuser(result);
@@ -173,7 +183,7 @@
 <style lang="scss" scoped>
     .all_container {
         height: 100vh;
-        background: url("../assets/photos/photo10.jpg");
+        background: url("../assets/bg6.png");
         background-size: cover;
 
         .login-container{

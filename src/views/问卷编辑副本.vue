@@ -43,26 +43,21 @@
         </el-button>
       </div>
 
-      <!-- 保存、发布、乱序展示、人数限制、时间限制 -->
-      <div style="margin-top: 220%;">
+      <!-- 保存、发布、乱序展示、人数限制 -->
+      <div style="margin-top: 230%;">
         <!-- 对于考试问卷/报名问卷，是否乱序展示/设置人数限制 -->
         <div>
           <div v-if="type==3">
             <el-switch v-model="isDisorder" size="large" style="--el-switch-on-color: #626aef;"/>&nbsp;是否乱序展示
           </div>
-          <div v-if="type==3">
-            限时&nbsp;<el-input-number v-model="timeLimit" size="small" :min="1" controls-position="right"/>&nbsp;min
-          </div>
           <div v-if="type==2">
-            <el-input-number v-model="people" size="small" :min="1" controls-position="right"/>&nbsp;报名人数
+            <el-input-number v-model="people" size="small" :min="1"/>&nbsp;报名人数
           </div>
         </div>
         <div class="row"></div>
         <div>
-          <el-button plain color="#626aef" size="large" @click="saveQuestionnaire()" round><el-icon><Upload/></el-icon>&nbsp;保存</el-button>
-          <el-button plain color="#626aef" size="large" round><el-icon><Position/></el-icon>&nbsp;发布</el-button>
-        <!-- <el-button plain color="#626aef" size="large" round @click="conserve"><el-icon><Upload/></el-icon>&nbsp;保存</el-button>
-        <el-button plain color="#626aef" size="large" round><el-icon><Position/></el-icon>&nbsp;发布</el-button> -->
+        <el-button plain color="#626aef" size="large" round><el-icon><Upload/></el-icon>&nbsp;保存</el-button>
+        <el-button plain color="#626aef" size="large" round><el-icon><Position/></el-icon>&nbsp;发布</el-button>
         </div>
       </div>
 
@@ -128,29 +123,29 @@
           </div>
           
           <van-radio-group v-model="radio" v-for="index2 in questionList[index-1].optionCnt" :disabled=true>
-            <div>
-              <br/>
-                <van-radio :name="index2" checked-color="#0283EF" :label-disabled=true>
-                  <n-popover trigger="manual" :show="questionList[index-1].optionList[index2-1].isEditing" :show-arrow="false" placement="right">
-                    <template #trigger>
-                      <el-input 
-                      v-if="questionList[index-1].optionList[index2-1].isEditing"
-                      v-model="questionList[index-1].optionList[index2-1].content" 
-                      @blur="finishEditing(1,index-1,index2-1)" 
-                      @keyup.enter="finishEditing(1,index-1,index2-1)"
-                      />
-                      <span v-else @click="startEditing(1,index-1,index2-1)" >{{ questionList[index-1].optionList[index2-1].text }}</span>
-                    </template>
-                    <div>
-                      <el-button size="small" color="#fef0f0" @click="addOption(index-1,index2-1)" text><el-icon><Plus/></el-icon></el-button>
-                      <el-button size="small" color="#ecf5ff" @click="deleteOption(index-1,index2-1)" :disabled="questionList[index-1].isDisabled" text><el-icon><Minus/></el-icon></el-button>
-                      &nbsp;
-                      <el-switch v-model="questionList[index-1].optionList[index2-1].isCorrect" @change="checkAnswer(0,index-1,index2-1)"/>&nbsp;正确答案
-                    </div>
-                  </n-popover>
-                </van-radio>
-              <br/>
-            </div>
+              <div>
+                  <br/>
+                  <van-radio :name="index2" checked-color="#0283EF" :label-disabled=true>
+                    <n-popover trigger="manual" :show="questionList[index-1].optionList[index2-1].isEditing" :show-arrow="false" placement="right">
+                      <template #trigger>
+                        <el-input 
+                        v-if="questionList[index-1].optionList[index2-1].isEditing"
+                        v-model="questionList[index-1].optionList[index2-1].content" 
+                        @blur="finishEditing(1,index-1,index2-1)" 
+                        @keyup.enter="finishEditing(1,index-1,index2-1)"
+                        />
+                        <span v-else @click="startEditing(1,index-1,index2-1)" >{{ questionList[index-1].optionList[index2-1].text }}</span>
+                      </template>
+                      <div>
+                        <el-button size="small" color="#fef0f0" @click="addOption(index-1,index2-1)" text><el-icon><Plus/></el-icon></el-button>
+                        <el-button size="small" color="#ecf5ff" @click="deleteOption(index-1,index2-1)" :disabled="questionList[index-1].isDisabled" text><el-icon><Minus/></el-icon></el-button>
+                        &nbsp;
+                        <el-switch v-model="questionList[index-1].optionList[index2-1].isCorrect" @change="checkAnswer(0,index-1,index2-1)"/>&nbsp;正确答案
+                      </div>
+                    </n-popover>
+                  </van-radio>
+                  <br/>
+              </div>
           </van-radio-group>
 
           <br/>
@@ -171,11 +166,11 @@
                     <template #trigger>
                       <el-input 
                       v-if="questionList[index-1].optionList[index2-1].isEditing"
-                      v-model="questionList[index-1].optionList[index2-1].text" 
+                      v-model="questionList[index-1].optionList[index2-1].content" 
                       @blur="finishEditing(1,index-1,index2-1)" 
                       @keyup.enter="finishEditing(1,index-1,index2-1)"
                       />
-                      <span v-else @click="startEditing(1,index-1,index2-1)" :class="{ 'correct-answer': questionList[index-1].optionList[index2-1].isCorrect }">{{ questionList[index-1].optionList[index2-1].text }}</span>
+                      <span v-else @click="startEditing(1,index-1,index2-1)" >{{ questionList[index-1].optionList[index2-1].text }}</span>
                     </template>
                     <el-button size="small" color="#fef0f0" @click="addOption(index-1,index2-1)" text><el-icon><Plus/></el-icon></el-button>
                     <el-button size="small" color="#ecf5ff" @click="deleteOption(index-1,index2-1)" :disabled="questionList[index-1].isDisabled" text><el-icon><Minus/></el-icon></el-button>
@@ -242,8 +237,8 @@
           </el-select>
           
           &nbsp;
-          <!-- 设置本题分数 -->
-          <el-input-number v-if="type==3" v-model="questionList[index-1].score" :min="0" controls-position="right"/>
+
+          <el-input-number v-if="type==3" v-model="questionList[index-1].score" :min="0"/>
 
           <el-divider border-style="dashed"></el-divider>
         </div>
@@ -257,17 +252,10 @@
 </template>
 
 <script>
-import { GetQuestionnaire, PostQuestion } from "@/api/question";
 import NavigationBar from "@/components/NavigationBar.vue"
 import { ElMessage } from 'element-plus'
 import { NPopover } from "naive-ui"
 import { ref } from "vue" ;
-
-import { getCurrentInstance } from 'vue'
-import { ConserveOrReleaseQuestionnaire, GetQuestionnaireDesign } from '../api/design.js'
-//编辑问卷传输问卷id的函数
-import { useRouter } from 'vue-router';
-const router = useRouter();
  
  export default({
    data(){
@@ -275,7 +263,7 @@ const router = useRouter();
       input:'',
       username:'',
       questionnaireId:0,
-      type:3,
+      type:0,
       questionCnt: 0,
       questionList: [],
       draggedIndex:-1,
@@ -285,77 +273,9 @@ const router = useRouter();
       lastEditObj:{"type":-2,"index1":-1,"index2":-1},//上一次修改的元素，如果不是选项，那么它的index2为-1.type:-1问卷标题;0问题;1选项
       isDisorder:false,
       people:0,
-      timeLimit:0,
     }
    },
    methods: {
-    conserve(){
-      var promise = ConserveOrReleaseQuestionnaire(
-        this.username,
-        this.questionnaireId,
-        this.type,
-        this.questionList,
-        this.people,
-        this.isDisorder,
-        this.title,
-        0
-      );
-      promise.then((result)=>{
-        if(result.message === "True"){
-          router.push("/userManage");
-          ElMessage({
-            message: '保存成功',
-            type: 'success',
-          });
-        }else{
-          ElMessage({
-            message: '保存失败',
-            type: 'error',
-          });
-        }
-      })
-    },
-    release(){
-      var promise = ConserveOrReleaseQuestionnaire(
-        this.username,
-        this.questionnaireId,
-        this.type,
-        this.questionList,
-        this.people,
-        this.isDisorder,
-        this.title,
-        1
-      );
-      promise.then((result)=>{
-        if(result.message === "True"){
-          router.push("/userManage");
-          ElMessage({
-            message: '发布成功',
-            type: 'success',
-          });
-        }else{
-          ElMessage({
-            message: '发布失败',
-            type: 'error',
-          });
-        }
-      })
-    },
-    showQuestionnaireDesign(){
-      var promise = GetQuestionnaireDesign(this.username, this.questionnaireId, this.type);
-      promise.then((result)=>{
-        this.questionnaireId = result.questionnaireId;
-        this.type = result.type;
-        this.questionList = result.questionList;
-        this.people = result.people;
-        this.isDisorder = result.isDisorder;
-        this.title = result.title;
-        this.text = this.title;
-        this.questionCnt = questionList.length;
-      })
-    },
-
-
     //TieZhu:添加单选题
     addSingle(){
       this.questionCnt++;
@@ -436,13 +356,13 @@ const router = useRouter();
         this.finishEditing(this.lastEditObj.type,this.lastEditObj.index1,this.lastEditObj.index2);
       }
       this.lastEditObj = {"type":type,"index1":index,"index2":index2};
-      if(type == 0){ //题目标题
+      if(type == 0){
         this.questionList[index].qsIsEditing = true;
       }
-      else if(type == 1){ //选项标题
+      else if(type == 1){
         this.questionList[index].optionList[index2].isEditing = true;
       }
-      else if(type == -1){ //问卷标题
+      else if(type == -1){
         this.ttIsEditing = true;
       }
     },
@@ -523,11 +443,6 @@ const router = useRouter();
           this.warning("正确答案太多")
         }
       }
-    },
-
-    //保存问卷
-    saveQuestionnaire(){
-      // var promise = PostQuestion(this.questionnaireId,this.title,this.type,!this.isDisorder,this.people,this.timeLimit,this.questionList);
     }
    },
    components:{
@@ -535,34 +450,12 @@ const router = useRouter();
     NPopover,
    },
    created(){
-    const internalInstance = getCurrentInstance()
-    const internalData = internalInstance.appContext.config.globalProperties
-    this.username = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
-    // if(this.questionnaireId != -1){
-    //   var promise=GetQuestionnaire(this.questionnaireId,"/quetionnaireDesign",true);
-    //   promise.then((result) => {
-    //     this.title = result.Title;
-    //     this.type = result.category;
-    //     this.people = result.people;
-    //     this.timeLimit = result.TimeLimit;
-    //     this.questionList = result.questionList;
-    //   })
-    //   let i = 0,j = 0;
-    //   for(i = 0;i < this.questionList.length;i++){
-    //     this.questionList[i].showToolbar = ref(false);
-    //     this.questionList[i].qsIsEditing = ref(false);
-    //     this.questionList[i].isDisabled = ref(true);
-    //     this.questionList[i].max = ref(1);
-    //     this.questionList[i].text = ref(this.questionList[i].question);
-    //     if(this.questionList[i].type <= 2){
-    //       for(j = 0;j < this.questionList[i].optionList.length;j++){
-    //       this.questionList[i].optionList[j].text = ref(this.questionList[i].optionList[j].content);
-    //       this.questionList[i].optionList[j].isEditing = ref(false);
-    //       }
-    //     }
-    //   }
-    // }
-    // 创建可以访问内部组件实例的实例
+    this.questionnaireId = this.$route.query.questionnaireId;
+    this.type = this.$route.query.questionnaireType;
+    const storedUsername = localStorage.getItem('username');
+    if(storedUsername){
+      this.username = storedUsername;
+    }
    }
  })
 </script>
@@ -619,8 +512,5 @@ const router = useRouter();
 
 .row{
   padding-bottom: 10px;
-}
-.correct-answer{
-  color:green
 }
 </style>

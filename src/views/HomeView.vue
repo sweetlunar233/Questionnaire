@@ -1,6 +1,6 @@
 <!-- 首页 -->
 <script setup>
-    import NavigationBarWithoutUser from '../components/NavigationBarWithoutUser.vue';
+    import NavigationBarWithoutUser from '../components/NavigationBarInLogin.vue';
     import { ref } from "vue";
     import { useRouter } from 'vue-router';
     
