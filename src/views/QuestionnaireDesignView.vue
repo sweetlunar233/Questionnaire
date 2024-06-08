@@ -279,6 +279,7 @@ const router = useRouter();
       lastEditObj:{"type":-2,"index1":-1,"index2":-1},//上一次修改的元素，如果不是选项，那么它的index2为-1.type:-1问卷标题;0问题;1选项
       isDisorder:false,
       people:0,
+      description:'',
     }
    },
    methods: {
@@ -517,6 +518,9 @@ const router = useRouter();
         }
       }
     }
+   },
+   mounted(){
+    GetQuestionnaireDesign();
    },
    components:{
     NavigationBar,

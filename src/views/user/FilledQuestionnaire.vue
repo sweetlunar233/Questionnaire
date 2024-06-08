@@ -217,6 +217,7 @@ const deleteQs = (id) =>{
                         <div class="card-header">
                             <span class="textbutton">{{ questionnaire.Title }}</span>
                             <span style="float: right" class="right">填写日期: {{ questionnaire.PublishDate }}</span>
+                            <span style="float: right" class="right">{{ questionnaire.Status }}</span>
                             <span style="float: right" class="right">ID: {{questionnaire.SurveyID}}</span>
                         </div>
 
