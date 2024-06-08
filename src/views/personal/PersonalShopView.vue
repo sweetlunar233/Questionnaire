@@ -27,7 +27,6 @@
     for (let i=1; i<photos.value.length; i++) {
         if (photos.value[i] == 0) {
             photoNotBuy.value.push(i);
-            console.log("not buy:", i);
         }
     }
 
@@ -37,22 +36,6 @@
         confirmBuy.value = true;
     }
     
-    //购买头像
-    // const buyPhoto = (photonumber) => {
-    //     if (store.state.nowuser.money >= 100) {
-    //         store.state.nowuser.money -= 100;
-    //         nowuser_money.value -= 100;
-    //         store.state.nowuser.own_photos[photonumber] = 1;
-    //         photos.value[photonumber] = 1;
-    //         photoNotBuy.value.splice(photoNotBuy.value.indexOf(photonumber), 1);
-            
-    //         updateUserphotoInShop(store.state.nowuser.username, photonumber, 1);
-    //         ElMessage.success("购买成功!");
-    //     }
-    //     else {
-    //         ElMessage.error("余额不足,快去填写问卷赚取纸币吧！");
-    //     }
-    // }
     const buyPhoto = (photonumber) => {
         if (nowuser_money.value >= 100) {
             nowuser_money.value -= 100;

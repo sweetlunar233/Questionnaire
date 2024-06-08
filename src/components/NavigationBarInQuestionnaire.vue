@@ -34,6 +34,10 @@
         router.push('/personal');
     }
 
+    const gotoUserManage = () => {
+        router.push('/userManage');
+    }
+
     const goBack = () => {
         router.go(-1); // 返回上一页
     };
@@ -63,10 +67,9 @@
 
     const nowuser_username = ref(internalData.$cookies.get('username'));
     const photos = ref(internalData.$cookies.get('own_photos'));
-    // console.log(photos.value);
     // const nowuserPhotonumber = ref(store.state.nowuser.own_photos[0]);
     const nowuserPhotonumber = ref(photos.value[0]);
-    // console.log(nowuserPhotonumber.value);
+    console.log(nowuserPhotonumber.value);
     const photoUrl = computed(() => {
         return require(`@/assets/photos/photo${nowuserPhotonumber.value}.jpg`);
     })
@@ -75,7 +78,7 @@
 
 <template>
     <el-header class = "navigationBar">
-        <div @mouseover="logoIn('logo')" @mouseout="logoOut('logo')">
+        <div @mouseover="logoIn('logo')" @mouseout="logoOut('logo')" @click="gotoUserManage">
             <img id="logo" src="../assets/logo.png" alt="Element logo"/>
         </div>
         <div class="title">

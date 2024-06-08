@@ -14,12 +14,6 @@ export function postUserMessage(username,password, email){
     return post("/login",data);
 }
 
-export function getUserMessagePersonal(username){
-    let data = {};
-    data.username = username;
-    return get("/userManage/personal/"+username);
-}
-
 export function modifyUserInfo(username, email, password, zhibi){
     let data = {};
     data.username = username;
@@ -42,6 +36,15 @@ export function updateUserphotoInShop(username, photonumber, status){
     data.username = username;
     data.photonumber = photonumber;
     data.status = status;
+    return post("/personal/shop", data);
+}
+
+export function modifyUserMoney(username, email, password, zhibi){
+    let data = {};
+    data.username = username;
+    data.email = email;
+    data.password = password;
+    data.zhibi = zhibi;
     return post("/personal/shop", data);
 }
 

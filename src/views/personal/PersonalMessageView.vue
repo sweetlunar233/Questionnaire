@@ -20,7 +20,6 @@
     // photos.value = store.state.nowuser.own_photos;
     photos.value = internalData.$cookies.get('own_photos');
 
-
     const userNameText = ref("");
     // userNameText.value = store.state.nowuser.username;
     userNameText.value = nowuser_username.value;
@@ -59,7 +58,6 @@
 
     // const nowuserPhotonumber = ref(store.state.nowuser.own_photos[0]);
     const nowuserPhotonumber = ref(photos.value[0]);
-    console.log(nowuserPhotonumber.value);
     const photoUrl = computed(() => {
         return require(`@/assets/photos/photo${nowuserPhotonumber.value}.jpg`);
     })
@@ -116,7 +114,7 @@
     const changePhoto = (photonumber) => {
         // store.state.nowuser.own_photos[0] = photonumber;
         photos.value[0] = photonumber;
-        $cookies.set('own_photos', photos);
+        $cookies.set('own_photos', photos.value);
 
         nowuserPhotonumber.value = photonumber;
         // updateUserphotoInMassage(store.state.nowuser.username, 0, photonumber);
