@@ -256,8 +256,6 @@ import NavigationBar from "@/components/NavigationBar.vue"
 import { ElMessage } from 'element-plus'
 import { NPopover } from "naive-ui"
 import { ref } from "vue" ;
-
-import { getCurrentInstance } from 'vue'
  
  export default({
    data(){
@@ -278,11 +276,6 @@ import { getCurrentInstance } from 'vue'
     }
    },
    methods: {
-    
-
-
-
-
     //TieZhu:添加单选题
     addSingle(){
       this.questionCnt++;
@@ -459,10 +452,10 @@ import { getCurrentInstance } from 'vue'
    created(){
     this.questionnaireId = this.$route.query.questionnaireId;
     this.type = this.$route.query.questionnaireType;
-    // 创建可以访问内部组件实例的实例
-    const internalInstance = getCurrentInstance()
-    const internalData = internalInstance.appContext.config.globalProperties
-    this.username = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
+    const storedUsername = localStorage.getItem('username');
+    if(storedUsername){
+      this.username = storedUsername;
+    }
    }
  })
 </script>
