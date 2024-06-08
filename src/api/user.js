@@ -14,12 +14,11 @@ export function postUserMessage(username,password, email){
     return post("/login",data);
 }
 
-export function modifyUserInfoInMessage(username, email, password, zhibi, photonumber, status, flag){
+export function modifyUserInfoInMessage(username, email, password, photonumber, status, flag){
     let data = {};
     data.username = username;
     data.email = email;
     data.password = password;
-    data.zhibi = zhibi;
     data.photonumber = photonumber;
     data.status = status;
     data.flag = flag;

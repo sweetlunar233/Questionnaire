@@ -20,31 +20,23 @@
     // photos.value = store.state.nowuser.own_photos;
     photos.value = internalData.$cookies.get('own_photos');
 
-    const userNameText = ref("");
-    // userNameText.value = store.state.nowuser.username;
-    userNameText.value = nowuser_username.value;
-
-    const userEmailText = ref("");
-    // userEmailText.value = store.state.nowuser.email;
-    userEmailText.value = nowuser_email.value;
-
     const userPasswordText = ref("");
     userPasswordText.value = "password";
 
     const changeNameText_in = () => {
-        userNameText.value = "真是个好名字";
+        nowuser_username.value = "真是个好名字";
     }
     const changeNameText_out = () => {
         // userNameText.value = store.state.nowuser.username;
-        userNameText.value = nowuser_username.value;
+        nowuser_username.value = nowuser_username.value;
     }
 
     const changeEmailText_in = () => {
-        userEmailText.value = "修改邮箱";
+        nowuser_email.value = "修改邮箱";
     }
     const changeEmailText_out = () => {
         // userEmailText.value = store.state.nowuser.email;
-        userEmailText.value = nowuser_email.value;
+        nowuser_email.value = nowuser_email.value;
     }
 
     const changePasswordText_in = () => {
@@ -158,7 +150,7 @@
         $cookies.set('password', changePasswordData.value.repassword1);
         nowuser_password.value = changePasswordData.value.repassword1;
 
-        modifyUserInfoInMessage(nowuser_username.value, false, changePasswordData.value.repassword1, false, false, false, 1);
+        modifyUserInfoInMessage(nowuser_username.value, nowuser_email.value, changePasswordData.value.repassword1, false, false, 1);
         ElMessage.success("修改密码成功！");
         X_quit("PasswordCard");
     }
@@ -187,7 +179,7 @@
         // store.state.nowuser.email = changeEmailData.value.email;
         // modifyUserInfo(store.state.nowuser.username, changeEmailData.value.email, false, false);
         $cookies.set('email', changeEmailData.value.email);
-        modifyUserInfoInMessage(nowuser_username.value, changeEmailData.value.email, false, false, false, false, 1);
+        modifyUserInfoInMessage(nowuser_username.value, changeEmailData.value.email, nowuser_password.value, false, false, 1);
         nowuser_email.value = changeEmailData.value.email;
 
         ElMessage.success("修改邮箱成功！");
@@ -206,7 +198,7 @@
         <!-- </div> -->
 
         <button class="box" @mouseover="changeNameText_in" @mouseout="changeNameText_out">
-            <span >{{userNameText}}</span>
+            <span >{{nowuser_username}}</span>
         </button>
 
         <button class="box" @mouseover="changePasswordText_in" @mouseout="changePasswordText_out" @click="openCard('PasswordCard')">
@@ -214,7 +206,7 @@
         </button>
 
         <button class="box" @mouseover="changeEmailText_in" @mouseout="changeEmailText_out" @click="openCard('EmailCard')">
-            <span >{{userEmailText}}</span>
+            <span >{{nowuser_email}}</span>
         </button>
 
         <!-- 修改头像 -->
