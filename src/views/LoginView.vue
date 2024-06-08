@@ -34,6 +34,7 @@
     import { getUserMessage, postUserMessage } from "@/api/user";
     import { ElMessage } from "element-plus";
 
+
     const registerData = ref({
         username: "",
         password: "",
@@ -73,6 +74,8 @@
         password: ""
     })
 
+
+
     const login = () => {
         if (!/^\S{1,20}$/.test(loginData.value.username)) {
             ElMessage.error('用户名必须为1到20个非空字符');
@@ -93,6 +96,7 @@
             }
             else { //result.message == 0, 登录成功
                 //全局用户修改为当前注册用户
+                
                 console.log("start");
                 console.log(result.ownphotos);
                 updateNowuser(result);

@@ -113,7 +113,7 @@
             score:此题分数
         -->
 
-        <el-icon color="#c45656" style="position: absolute; left: 1%;" v-if="questionList[index-1].isNecessary==true"><StarFilled/>&ensp;</el-icon>
+        <el-icon color="#c45656" style="position: absolute; left: 1%;font-size: 24px;" v-if="questionList[index-1].isNecessary==true"><StarFilled/>&ensp;</el-icon>
 
         <!-- TieZhu：单选题 -->
         <div v-if="questionList[index-1].type==1" @click="showTB(index-1)" >
