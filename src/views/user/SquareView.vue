@@ -10,7 +10,7 @@ import {
 
 import { ref } from 'vue'
 import store from '../../store';
-
+import {ElMessage} from 'element-plus'
 
 //文章列表数据模型
 const questionnaires = ref([
