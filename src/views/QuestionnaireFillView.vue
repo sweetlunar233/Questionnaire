@@ -37,7 +37,7 @@
             </div>
             <br/>
             <van-radio-group v-model=" questionList[index-1].radio" v-for="index2 in questionList[index-1].optionCnt" >
-                <van-radio :name="questionList[index-1].optionList[index2-1].optionId" checked-color="#0283EF" :label-disabled=true>
+                <van-radio :name="questionList[index-1].optionList[index2-1].optionId" checked-color="#0283EF" :label-disabled=true @click="print(questionList[index-1].radio)">
                     <div>
                     {{ questionList[index-1].optionList[index2-1].content }}
                     </div>
@@ -147,18 +147,18 @@
         addSingle(){
             this.questionCnt++;
             this.questionList.push({"type":1,"isNecessary":true,"question":"请选择一个选项","radio":ref(''),
-            "optionCnt":1,"optionList":[{"optionId":0,"content":"选项"}]});
+            "optionCnt":1,"optionList":[{"optionId":0,"content":"选项", "isCorrect":true}]});
         },
         //TieZhu:添加多选题
         addMultiple(){
             this.questionCnt++;
-            this.questionList.push({"type":2,"isNecessary":true,"question":"请选择以下选项（多选）","max":1, "radio":ref(''),
-            "optionCnt":1,"optionList":[{"optionId":0,"content":"选项"}]});
+            this.questionList.push({"type":2,"score":10,"isNecessary":true,"question":"请选择以下选项（多选）","max":1, "radio":ref(''),
+            "optionCnt":1,"optionList":[{"optionId":0,"content":"选项", "isCorrect":true}]});
         },
         //TieZhu:添加填空题
         addFill(){
             this.questionCnt++;
-            this.questionList.push({"type":3,"isNecessary":true,"question":"请填空","fill":ref('')});
+            this.questionList.push({"type":3,"isNecessary":true,"question":"请填空","fill":ref(''), "answer":""});
         },
         //TieZhu:添加评分题
         addScore(){
