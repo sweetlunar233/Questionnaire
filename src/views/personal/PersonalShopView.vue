@@ -80,10 +80,10 @@
 
 <style lang="scss" scoped>
     .all_container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        // display: flex;
+        // flex-direction: column;
+        // justify-content: center;
+        // align-items: center;
         // height: 100vh;
 
         .flex_flow {
