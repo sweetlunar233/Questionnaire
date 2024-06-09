@@ -65,14 +65,24 @@
         currentUrl.value = window.location.href;
     });
 
-    const nowuser_username = ref(internalData.$cookies.get('username'));
-    const photos = ref(internalData.$cookies.get('own_photos'));
-    // const nowuserPhotonumber = ref(store.state.nowuser.own_photos[0]);
-    const nowuserPhotonumber = ref(photos.value[0]);
-    console.log(nowuserPhotonumber.value);
-    const photoUrl = computed(() => {
+    const getPhoroUrl = () =>{
         return require(`@/assets/photos/photo${nowuserPhotonumber.value}.jpg`);
-    })
+    }
+    const nowuser_username = ref();
+    const photos = ref();
+    const nowuserPhotonumber = ref(0);
+    console.log(nowuserPhotonumber.value);
+    // const photoUrl = ref("@/assets/photos/photo0.jpg");
+    if($cookies.isKey('username')){
+        nowuser_username.value = internalData.$cookies.get('username');
+        photos.value = internalData.$cookies.get('own_photos');
+        nowuserPhotonumber.value = photos.value[0];
+        
+    
+    }
+    const photoUrl = computed(getPhoroUrl);
+
+    
 
 </script>
 
