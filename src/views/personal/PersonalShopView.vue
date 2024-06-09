@@ -2,7 +2,7 @@
     import store from '@/store';
     import {ref} from "vue";
     import { ElMessage } from 'element-plus';
-    import { modifyUserMoney, updateUserphotoInShop } from '@/api/user';
+    import { updateUserphotoInShop } from '@/api/user';
 
     //导入cookies
     import { getCurrentInstance } from 'vue';
@@ -80,10 +80,10 @@
 
 <style lang="scss" scoped>
     .all_container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        // display: flex;
+        // flex-direction: column;
+        // justify-content: center;
+        // align-items: center;
         // height: 100vh;
 
         .flex_flow {

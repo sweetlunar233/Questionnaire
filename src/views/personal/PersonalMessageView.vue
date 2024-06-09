@@ -1,5 +1,5 @@
 <script setup>
-    import { modifyUserInfo, modifyUserInfoInMessage, updateUserphotoInMassage } from '@/api/user';
+    import { modifyUserInfoInMessage } from '@/api/user';
     import store from '@/store';
     import { ElMessage } from 'element-plus';
     import { ref, computed } from 'vue';

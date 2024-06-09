@@ -1,10 +1,10 @@
 import { post,get } from "./api"
 
-export function getUserMessage(username){
-    let data = {};
-    data.username = username;
-    return get("/login",data);
-}
+// export function getUserMessage(username){
+//     let data = {};
+//     data.username = username;
+//     return get("/login",data);
+// }
 
 export function postUserMessage(username,password, email){
     let data = {};
