@@ -284,6 +284,7 @@
         const timeDisplay = document.getElementById('time');
         this.intervalId = setInterval(() => {
           totalSeconds--;
+          this.duration++;
           const minutes = Math.floor(totalSeconds / 60);
           const seconds = totalSeconds % 60;
           timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
