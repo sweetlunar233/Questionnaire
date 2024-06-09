@@ -52,6 +52,7 @@
   
         </div>
         
+        <div>最终得分：{{ this.score }}</div>
       </div>
 
       <div class="bottom">

@@ -85,7 +85,7 @@
               {{ questionList[index-1].question }}
             </div>
             <br/>
-            <el-rate v-model="questionList[index-1].grade"></el-rate>
+            <el-rate v-model="questionList[index-1].grade" allow-half></el-rate>
             <br/>
             <br/>
           </div>
@@ -107,8 +107,13 @@
   import { GetStoreFill, PostFill } from "@/api/question";
   import NavigationBar from "@/components/NavigationBarInQuestionnaire.vue"
   import { ref } from 'vue'
-  import { ElMessage } from 'element-plus'
+  import { ElMessage, descriptionItemProps } from 'element-plus'
    
+
+
+
+
+
    export default({
      data(){
       return{
@@ -125,6 +130,7 @@
         time:0, //存储在此页面停留的时间
         intervalId:null, //存储定时器的ID
         question:[],
+        description:'',
       }
      },
      methods: {
