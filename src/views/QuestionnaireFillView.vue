@@ -131,7 +131,7 @@
         intervalId:null, //存储定时器的ID
         description:'',
         submissionId:0,
-        duration:4,
+        duration:60,//以秒为单位
         description:'问卷描述',
         miao:0,
       }
@@ -149,13 +149,13 @@
         //TieZhu:添加单选题
         addSingle(){
             this.questionCnt++;
-            this.questionList.push({"type":1,"isNecessary":true,"question":"请选择一个选项","Answer":ref(''),
+            this.questionList.push({"type":1,"isNecessary":true,"question":"请选择一个选项","Answer":ref(-1),
             "optionCnt":1,"optionList":[{"optionId":0,"content":"选项"}]});
         },
         //TieZhu:添加多选题
         addMultiple(){
             this.questionCnt++;
-            this.questionList.push({"type":2,"isNecessary":true,"question":"请选择以下选项（多选）","max":1, "Answer":ref(''),
+            this.questionList.push({"type":2,"isNecessary":true,"question":"请选择以下选项（多选）","max":1, "Answer":ref(-1),
             "optionCnt":1,"optionList":[{"optionId":0,"content":"选项"}]});
         },
         //TieZhu:添加填空题
@@ -166,7 +166,7 @@
         //TieZhu:添加评分题
         addScore(){
             this.questionCnt++;
-            this.questionList.push({"type":4,"isNecessary":true,"question":"请评分","Answer":ref('')});
+            this.questionList.push({"type":4,"isNecessary":true,"question":"请评分","Answer":ref(-1)});
         },
         //暂存/提交,如果status是0，那么是暂存，如果status是1.那么根据问卷类型判断是已批改还是已提交
         postFill(status){
@@ -188,10 +188,22 @@
                 sum += this.questionList[i].score;
               }
               else if(this.questionList[i].type == 2){
-
+                let j = 0;
+                sum += this.questionList[i].score;
+                for(j=0;j<this.questionList[i].optionList.length;j++){
+                  if(this.questionList[i].correctAnwser[j] != this.questionList[i].fill[j]){
+                    sum -= this.questionList[i].score;
+                    break;
+                  }
+                }
               }
             }
             this.$router.push({path:'/testAnswer',query:{questionnaireID:this.questionnaireId,submissionID:this.submissionId,score:sum}}); 
+          }
+          else if(status == 1 && this.type == 1){
+            this.success("投票成功");
+            promise = PostFill(this.questionnaireId,'Submitted',this.question);
+            this.$router.push({path:'/dataPre',query:{questionnaireID:this.questionnaireId}});
           }
           else{
             promise = PostFill(this.questionnaireId,'Submitted',this.question);
@@ -201,6 +213,12 @@
           ElMessage({
             message:content,
             type:'warning',
+          });
+        },
+        success(content){
+          ElMessage({
+            message:content,
+            type:'succes',
           });
         },
         //检测是否能够提交，如果没有把必填的填写完，则不能提交
@@ -232,15 +250,7 @@
       this.addMultiple();
       this.addFill();
       this.addScore();
-      this.time = this.duration;
-      this.intervalId = setInterval(() => {
-        this.time++;
-        if(this.time > this.duration){
-          this.warning("考试时间到！试卷回收");
-          this.postFill(1);
-        }
-      },60000);
-      let totalSeconds = this.timeLimit * 60;
+      let totalSeconds = this.timeLimit * 60 - duration;
       const timeDisplay = document.getElementById('time');
       this.intervalId = setInterval(() => {
         totalSeconds--;
@@ -265,7 +275,7 @@
      },
      created(){
       var promise;
-      // this.questionnaireId = this.$route.query.questionnaireId;
+      this.questionnaireId = this.$route.query.questionnaireId;
       if(this.$cookies.isKey('username')){
         const internalInstance = getCurrentInstance()
         const internalData = internalInstance.appContext.config.globalProperties
@@ -283,9 +293,7 @@
       }
       else{
         this.warning("请先登录！");
-        console.log("1")
         this.$router.push({path:'/login',query:{questionnaireId:this.questionnaireId}});
-        console.log("2")
       }
      }
    })

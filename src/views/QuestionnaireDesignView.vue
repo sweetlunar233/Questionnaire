@@ -369,25 +369,25 @@ const router = useRouter();
     addSingle(){
       this.questionCnt++;
       this.questionList.push({"type":1,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请选择一个选项","text":"请选择一个选项",
-      "optionCnt":1,"isDisabled":true,"socre":0,
+      "optionCnt":1,"isDisabled":true,"score":0,
       "optionList":[{"showBar":false,"isEditing":false,"content":"选项","text":"选项","isCorrect":ref(false)}]});
     },
     //TieZhu:添加多选题
     addMultiple(){
       this.questionCnt++;
       this.questionList.push({"type":2,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请选择以下选项（多选）","text":"请选择以下选项（多选）",
-      "optionCnt":1,"isDisabled":true,"max":1,"socre":0,
+      "optionCnt":1,"isDisabled":true,"max":1,"score":0,
       "optionList":[{"showBar":false,"isEditing":false,"content":"选项","text":"选项","isCorrect":false}]});
     },
     //TieZhu:添加填空题
     addFill(){
       this.questionCnt++;
-      this.questionList.push({"type":3,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请填空","text":"请填空","socre":0});
+      this.questionList.push({"type":3,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请填空","text":"请填空","score":0});
     },
     //TieZhu:添加评分题
     addScore(){
       this.questionCnt++;
-      this.questionList.push({"type":4,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请评分","text":"请评分","socre":0});
+      this.questionList.push({"type":4,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请评分","text":"请评分","score":0});
     },
 
     //TieZhu:工具栏功能

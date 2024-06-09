@@ -182,7 +182,7 @@ export default {
   data() {
     return {
       input:'',
-      questionnaireId:0,
+      questionnaireId:2,
       questionCnt: 0,
       questionList: [],
       title:'问题标题',
@@ -207,11 +207,6 @@ export default {
     };
   },
   mounted() {
-    this.addSingle();
-    this.addMultiple();
-    this.addFill();
-    this.addScore();
-
     let i = 0;
     for(i=0;i<this.questionCnt;i++){
       if(this.questionList[i].type != 3){
@@ -340,7 +335,7 @@ export default {
     //TieZhu:添加填空题
     addFill(){
         this.questionCnt++;
-        this.questionList.push({"type":3,"question":"请填空","hasChart":false,"fill":["铁柱","翠花","大壮","二狗"],"cnt":[1,2,1,1]});
+        this.questionList.push({"type":3,"question":"请填空","hasChart":false,"content":["铁柱","翠花","大壮","二狗"],"count":[1,2,1,1]});
     },
     //TieZhu:添加评分题
     addScore(){
@@ -375,12 +370,12 @@ export default {
     promise.then((result) => {
       this.questionList = result.questions_stats;
       this.title = result.title;
-
     })
     let i = 0;
     for(i = 0;i < this.questionList.length;i++){
       this.questionList[i].hasChart = ref(false);
     }
+    console.log(this.questionList);
   }
 };
 </script>
