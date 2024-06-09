@@ -106,7 +106,7 @@
   import { ElMessage } from 'element-plus'
   import { GetFill } from "@/api/answer.js"
   import { getCurrentInstance } from "vue";
-
+  
   
   export default({
     data(){
@@ -281,9 +281,10 @@
     ElMessage,
     },
     created(){
-    // this.questionnaireId = this.$route.query.questionnaireID;
-    // this.submissionId = this.$route.query.submissionID;
-    // this.score = this.$route.query.score;
+    this.questionnaireId = this.$route.query.questionnaireID;
+    this.submissionId = this.$route.query.submissionID;
+    this.score = this.$route.query.score;
+    console.log(this.questionnaireId + "," + this.submissionId + "," +this.score);
     
     const internalInstance = getCurrentInstance();
     const internalData = internalInstance.appContext.config.globalProperties;

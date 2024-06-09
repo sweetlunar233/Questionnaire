@@ -12,6 +12,12 @@ import { ref } from 'vue'
 import store from '../../store';
 import {ElMessage} from 'element-plus'
 
+
+
+
+
+
+
 //文章列表数据模型
 const questionnaires = ref([
     {
@@ -101,7 +107,9 @@ const goToQuestionnaireFill = (questionnaireId, type) => {
     })
   
 }
-
+const questionnaireId = r.query.questionnaireId; // 获取问卷ID
+const submissionId = r.query.submissionId; // 获取提交ID
+console.log(questionnaireId,submissionId)
 
 
 //引入cookie
