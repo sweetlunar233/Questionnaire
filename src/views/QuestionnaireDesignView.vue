@@ -5,7 +5,7 @@
 
     <div class="left">
       <div class="title">题型</div>
-      <van-divider  :style="{ color: '#626aef', borderColor: '#626aef', padding: '0 16px' }"></van-divider>
+      <van-divider  :style="{ width: '80%', color: '#626aef', borderColor: '#626aef', padding: '0 16px' }"></van-divider>
 
       <!-- 单选题、多选题 -->
       <div>
@@ -46,7 +46,7 @@
       <!-- 保存、发布、乱序展示、人数限制、时间限制 -->
       <div style="margin-top: 220%;">
         <!-- 对于考试问卷/报名问卷，是否乱序展示/设置人数限制 -->
-        <div>
+        <div class = "blank_button_container">
           <div v-if="type==3">
             <el-switch v-model="isDisorder" size="large" style="--el-switch-on-color: #626aef;"/>&nbsp;是否乱序展示
           </div>
@@ -58,7 +58,7 @@
           </div>
         </div>
         <div class="row"></div>
-        <div>
+        <div class = "post_button_container">
           <el-button plain color="#626aef" size="large" @click="saveQuestionnaire()" round><el-icon><Upload/></el-icon>&nbsp;保存</el-button>
           <el-button plain color="#626aef" size="large" round><el-icon><Position/></el-icon>&nbsp;发布</el-button>
         <!-- <el-button plain color="#626aef" size="large" round @click="conserve"><el-icon><Upload/></el-icon>&nbsp;保存</el-button>
@@ -607,21 +607,27 @@ const router = useRouter();
   position: fixed;
   top: 5%;
   margin: 2%;
-  margin-left: 15%;
+  margin-left: 10%;
   border-radius: 5px;
   border: 2px;
   padding: 1%;
-  width: 12%;
-  height: 700px;
+  width: 15%;
+  height: 80%;
   box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.1);
   background-color: white;
+
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .right{
   position: relative;
   height: 700px;
-  width: 50%;
-  height: 700px;
+  width: 60%;
+  height: 80%;
   top: 8%;
   left: 30%;
   border-radius: 5px;
@@ -655,5 +661,14 @@ const router = useRouter();
 }
 .correct-answer{
   color:green
+}
+
+.blank_button_container {
+  position: relative;
+  /* margin-bottom: 5%; */
+}
+.post_button_container {
+  position: relative;
+  /* margin-bottom: 10%; */
 }
 </style>

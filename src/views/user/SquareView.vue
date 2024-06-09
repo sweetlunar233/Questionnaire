@@ -137,9 +137,10 @@ const initAllReleased = () =>{
                     questionnaires.value.push(element);
                 }
             }
+            count++;
             i++;
           } 
-          count++;
+          
           
         });
         console.log(questionnaires.value);
@@ -177,8 +178,8 @@ initAllReleased();
             </div>
         </div>
         <!-- 分页条 -->
-        <el-pagination :page-sizes="[6, 8, 10, 12]"
-        layout="total, sizes, prev, pager, next" background :total="total" @size-change="onSizeChange"
+        <el-pagination
+        layout="total, prev, pager, next" background :total="total" @size-change="onSizeChange"
         @current-change="onCurrentChange" style="margin-top: 20px; justify-content: flex-end" />
     </el-card>
 </template>

@@ -19,7 +19,7 @@
         document.getElementById("start_btn").classList.remove("zoom-btn");
     }
 
-
+import { NCarousel } from 'naive-ui'
 
 </script>
 
@@ -30,7 +30,7 @@
         <el-header><navigation2/></el-header>
         <el-main class="aside">
             <div class="title">纸翼<span>传问</span></div>
-            <div class="subtitle">欢迎来到纸翼传问欢迎来到纸翼传问欢迎来到纸翼传问欢迎来到纸翼传问欢迎来到纸翼传问</div>
+            <div class="subtitle">在简约的画布上，我们绘制着问卷的华丽图景，让您轻盈翱翔于数据的海洋，感受探索之美</div>
             <el-button id="start_btn" @click = "gotoLogin" @mouseover="btnIn" @mouseout="btnOut" class="button" >开始</el-button>
 
         </el-main>
@@ -44,22 +44,26 @@
         height: 100vh;
         background: url("../assets/bg6.png");
         background-size: cover;
+        
         // border: red solid 2px;
 
         .aside {
+            height: auto;
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            margin-top: 11%;
+
             // width: 600px;
             // height: 700px;
             // margin: 100px 20px 50px 200px;
             // border: red solid 1px;
-            min-height: 100vh;
+            // min-height: 80vh;
 
             .title {
-                font-size: 56px;
-                margin-bottom: 20px;
+                font-size: 80px;
+                margin-bottom: 4%;
                 color: white;
                 span {
                     color: rgb(243,156,181);
@@ -68,12 +72,12 @@
             }
 
             .subtitle {
-                font-size: 20px;
-                margin-bottom: 50px;
+                font-size: 25px;
+                margin-bottom: 8%;
                 padding: 40px;
                 text-align: justify;
                 color: white;
-                font-weight: bold;
+                // font-weight: bold;
             }
 
             
