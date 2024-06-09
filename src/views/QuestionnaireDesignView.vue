@@ -42,9 +42,10 @@
           &ensp;填空题
         </el-button>
       </div>
-
+      <br/>
+      <div style="flex-grow: 1;"></div>
       <!-- 保存、发布、乱序展示、人数限制、时间限制 -->
-      <div style="margin-top: 220%;">
+      <div >
         <!-- 对于考试问卷/报名问卷，是否乱序展示/设置人数限制 -->
         <div class = "blank_button_container">
           <div v-if="type==3">
