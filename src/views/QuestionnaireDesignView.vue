@@ -350,19 +350,6 @@ const router = useRouter();
         }
       })
     },
-    showQuestionnaireDesign(){
-      var promise = GetQuestionnaireDesign(this.username, this.questionnaireId, this.type);
-      promise.then((result)=>{
-        this.questionnaireId = result.questionnaireId;
-        this.type = result.type;
-        this.questionList = result.questionList;
-        this.people = result.people;
-        this.isDisorder = result.isDisorder;
-        this.title = result.title;
-        this.text = this.title;
-        this.questionCnt = questionList.length;
-      })
-    },
 
 
     //TieZhu:添加单选题
@@ -382,12 +369,12 @@ const router = useRouter();
     //TieZhu:添加填空题
     addFill(){
       this.questionCnt++;
-      this.questionList.push({"type":3,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请填空","text":"请填空","score":0});
+      this.questionList.push({"type":3,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请填空","text":"请填空","score":0,"correctAnwser":false});
     },
     //TieZhu:添加评分题
     addScore(){
       this.questionCnt++;
-      this.questionList.push({"type":4,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请评分","text":"请评分","score":0});
+      this.questionList.push({"type":4,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请评分","text":"请评分","score":0,"correctAnwser":false});
     },
 
     //TieZhu:工具栏功能
@@ -567,44 +554,47 @@ const router = useRouter();
       this.success("发布成功");
     }
    },
-   mounted(){
-    // GetQuestionnaireDesign();
-   },
    components:{
     NavigationBarInQuestionnaire,
     NPopover,
    },
-   created(){
+   mounted(){
     const internalInstance = getCurrentInstance()
     const internalData = internalInstance.appContext.config.globalProperties
     this.username = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
     
     this.questionnaireId = parseInt(this.$route.query.questionnaireId);
     this.type = this.$route.query.questionnaireType;
-    // if(this.questionnaireId != -1){
-    //   var promise=GetQuestionnaire(this.questionnaireId,"/quetionnaireDesign",true);
-    //   promise.then((result) => {
-    //     this.title = result.Title;
-    //     this.type = result.category;
-    //     this.people = result.people;
-    //     this.timeLimit = result.TimeLimit;
-    //     this.questionList = result.questionList;
-    //   })
-    //   let i = 0,j = 0;
-    //   for(i = 0;i < this.questionList.length;i++){
-    //     this.questionList[i].showToolbar = ref(false);
-    //     this.questionList[i].qsIsEditing = ref(false);
-    //     this.questionList[i].isDisabled = ref(true);
-    //     this.questionList[i].max = ref(1);
-    //     this.questionList[i].text = ref(this.questionList[i].question);
-    //     if(this.questionList[i].type <= 2){
-    //       for(j = 0;j < this.questionList[i].optionList.length;j++){
-    //       this.questionList[i].optionList[j].text = ref(this.questionList[i].optionList[j].content);
-    //       this.questionList[i].optionList[j].isEditing = ref(false);
-    //       }
-    //     }
-    //   }
-    // }
+    if(this.questionnaireId != -1){
+      var promise=GetQuestionnaire(this.questionnaireId,"/quetionnaireDesign",true);
+      
+      promise.then((result) => {
+        this.title = result.Title;
+        this.text = this.title;
+        this.type = result.category;
+        this.people = result.people;
+        this.timeLimit = result.TimeLimit;
+        this.questionList = result.questionList;
+        this.description = result.description;
+        this.destext = this.description;
+        
+        let i = 0,j = 0;
+        for(i = 0;i < this.questionList.length;i++){
+          this.questionList[i].showToolbar = ref(false);
+          this.questionList[i].qsIsEditing = ref(false);
+          this.questionList[i].isDisabled = ref(true);
+          this.questionList[i].max = ref(1);
+          this.questionList[i].text = ref(this.questionList[i].question);
+          if(this.questionList[i].type <= 2){
+            console.log(this.questionList[i]);
+            for(j = 0;j < this.questionList[i].optionCnt;j++){
+            this.questionList[i].optionList[j].text = ref(this.questionList[i].optionList[j].content);
+            this.questionList[i].optionList[j].isEditing = ref(false);
+            }
+          }
+        }
+      })
+    }
     // 创建可以访问内部组件实例的实例
    }
  })

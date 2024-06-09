@@ -111,7 +111,7 @@
   import { GetStoreFill, PostFill } from "@/api/question";
   import NavigationBar from "@/components/NavigationBarInQuestionnaire.vue"
   import { ref } from 'vue'
-  import { ElMessage, descriptionItemProps } from 'element-plus'
+  import { ElMessage } from 'element-plus'
   import {getCurrentInstance} from 'vue'
 
    export default({
@@ -133,7 +133,7 @@
         submissionId:0,
         duration:60,//以秒为单位
         description:'问卷描述',
-        miao:0,
+        submisstionId:0,
       }
      },
      methods: {
@@ -155,7 +155,7 @@
         //TieZhu:添加多选题
         addMultiple(){
             this.questionCnt++;
-            this.questionList.push({"type":2,"isNecessary":true,"question":"请选择以下选项（多选）","max":1, "Answer":ref(-1),
+            this.questionList.push({"type":2,"isNecessary":true,"question":"请选择以下选项（多选）","max":1, "Answer":ref([-1]),
             "optionCnt":1,"optionList":[{"optionId":0,"content":"选项"}]});
         },
         //TieZhu:添加填空题
@@ -175,10 +175,10 @@
           }
           var promise;
           if(status == 0){
-            promise = PostFill(this.questionnaireId,'Unsubmitted',this.question);
+            promise = PostFill(this.questionnaireId,'Unsubmitted',this.question,this.submissionId,this.username);
           }
           else if(status == 1 && this.type == 3){
-            promise = PostFill(this.questionnaireId,'Graded',this.question);
+            promise = PostFill(this.questionnaireId,'Graded',this.question,this.submissionId,this.username);
             let sum = 0,i = 0;
             for(i=0;i<this.questionList.length;i++){
               if(this.questionList[i].type == 3 && this.questionList[i].fill == this.questionList[i].correctAnwser){
@@ -202,11 +202,11 @@
           }
           else if(status == 1 && this.type == 1){
             this.success("投票成功");
-            promise = PostFill(this.questionnaireId,'Submitted',this.question);
+            promise = PostFill(this.questionnaireId,'Submitted',this.question,this.submissionId,this.username);
             this.$router.push({path:'/dataPre',query:{questionnaireID:this.questionnaireId}});
           }
           else{
-            promise = PostFill(this.questionnaireId,'Submitted',this.question);
+            promise = PostFill(this.questionnaireId,'Submitted',this.question,this.submissionId,this.username);
           }
         },
         warning(content){
@@ -250,7 +250,7 @@
       this.addMultiple();
       this.addFill();
       this.addScore();
-      let totalSeconds = this.timeLimit * 60 - duration;
+      let totalSeconds = this.timeLimit * 60 - this.duration;
       const timeDisplay = document.getElementById('time');
       this.intervalId = setInterval(() => {
         totalSeconds--;
@@ -260,6 +260,7 @@
 
         if (totalSeconds <= 0) {
           this.warning("考试时间到！试卷回收");
+          clearInterval(this.intervalId);
           this.postFill(1);
         }
       },1000);
