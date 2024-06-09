@@ -37,7 +37,7 @@
           </div>
           <br/>
           <van-radio-group v-model=" questionList[index-1].radio" v-for="index2 in questionList[index-1].optionCnt" >
-              <van-radio :name="questionList[index-1].optionList[index2-1].optionId" disabled="true"
+              <van-radio :name="questionList[index-1].optionList[index2-1].optionId" disabled=true
                     check="1" 
                     checked-color="#00FF00"> 
                   <div>
@@ -56,7 +56,7 @@
               {{ questionList[index-1].question }}
           </div>
           
-          <van-checkbox-group v-model=" questionList[index-1].radio" v-for="index2 in questionList[index-1].optionCnt"  checked-color="#0283EF">
+          <van-checkbox-group v-model="questionList[index-1].radio" v-for="index2 in questionList[index-1].optionCnt"  checked-color="#0283EF">
               <br/>
               <van-checkbox :name="questionList[index-1].optionList[index2-1].optionId" shape="square" :label-disabled=true>
                   <div>
@@ -106,19 +106,19 @@
 </template>
 
 <script>
-import { GetStoreFill, PostFill } from "@/api/question";
 import NavigationBar from "@/components/NavigationBarInQuestionnaire.vue"
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 
-import { GetFill, GetDesign } from '../api/answer.js'
+import { GetFill } from '../api/answer.js'
+import { getCurrentInstance } from 'vue'
  
  export default({
    data(){
     return{
       input:'',
       username:'',
-      questionnaireId:0,
+      questionnaireId:-1,
       type:0,
       questionCnt: 0,
       questionList: [],
@@ -130,26 +130,21 @@ import { GetFill, GetDesign } from '../api/answer.js'
       intervalId:null, //存储定时器的ID
       question:[],
       score:0,
+      submissionid:-1,
     }
    },
    methods: {
       getFill(){
-        var promise = GetFill(this.questionnaireId);
+        var promise = GetFill(this.username, this.questionnaireId, this.submissionId);
         promise.then((result)=>{
           this.questionListFill = result.questionList;
-          this.score = result.score;
-        })
-      },
-      getDesign(){
-        var promise = GetDesign(this.questionnaireId);
-        promise.then((result)=>{
-          this.questionListDesign = result.questionList;
-          this.type = result.type;
+          this.type = result.category;
           this.title = result.title;
-          this.questionCnt = this.questionnaireListDesign.length;
+          this.questionCnt = this.questionnaireListFill.length;
           this.people = result.people;
-          this.timeLimit = result.timeLimit;
+          this.timeLimit = result.TimeLimit;
         })
+        
       },
       print(x){
         console.log(x);
@@ -254,12 +249,15 @@ import { GetFill, GetDesign } from '../api/answer.js'
     ElMessage,
    },
    created(){
-    var promise;
-    this.questionnaireId = this.$route.query.questionnaireId;
-    const storedUsername = localStorage.getItem('username');
-    if(storedUsername){
-      this.username = storedUsername;
-    }
+    this.questionnaireId = this.$route.query.questionnaireID;
+    this.submissionId = this.$route.query.submissionID;
+    this.score = this.$route.query.score;
+    
+    const internalInstance = getCurrentInstance()
+    const internalData = internalInstance.appContext.config.globalProperties
+    this.username = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
+
+    this.getFill();   
    }
  })
 </script>
