@@ -282,7 +282,7 @@
             this.postFill(1);
           }
         },1000);
-        }
+      }
      },
      beforeUnmount(){
       if(this.intervalId){
@@ -320,6 +320,11 @@
           this.questionList = result.questionList;
           this.duration = result.duration;
           this.description = result.description;
+          if(this.type == 2 && this.people == 0){
+            this.warning("报名人数已满！")
+            this.$router.push({path:'/userManage/filled'});
+            return;
+          }
         })
       }
       else{
