@@ -223,6 +223,11 @@ export default {
     this.corss1=ref();
     this.cross2=ref();
     this.url = window.location.href;
+
+    // this.addSingle();
+    // this.addMultiple();
+    // this.addFill();
+    // this.addScore();
   },
   
   methods: {
