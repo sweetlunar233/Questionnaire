@@ -51,7 +51,7 @@ const questionnaires = ref([
 //分页条数据模型
 const pageNum = ref(1)//当前页
 const total = ref(20)//总条数
-const pageSize = ref(3)//每页条数
+const pageSize = ref(4)//每页条数
 
 total.value = questionnaires.value.length
 
@@ -121,25 +121,21 @@ const initFilled = (username) =>{
         var count = 0;
         var i = 1;
         result.data.forEach(element => {
-            if(i > pageSize.value * (pageNum.value - 1))
-            {
-                if(i <= pageSize.value * pageNum.value){
-                    if(categoryId.value != "请选择" && element.Category != categoryId.value){
-                        console.log("oh no!")
-                    }
-                    else{
-                        questionnaires.value.push(element);
+            if(categoryId.value != "请选择" && element.Category != categoryId.value){
+                console.log("oh no!")
+            }
+            else{
+                if(i > pageSize.value * (pageNum.value - 1))
+                {
+                    if(i <= pageSize.value * pageNum.value){
+                        questionnaires.value.push(element);   
                     }
                 }
+                count++;
+                i++;
             }
-            count++;
-            i++;
         });
-        if(flag.value)
-        {
-            total.value = count;
-            flag.value = false;
-        }
+        total.value = count;
         
     })
 }
@@ -158,6 +154,7 @@ const deleteQs = (id) =>{
     )
         .then(() => {
             //用户点击了确认
+            total.value--;
             var promise = DeleteFilledQs(id);
             promise.then((result)=>{
                 if(result.message === "True"){
@@ -245,8 +242,8 @@ const deleteQs = (id) =>{
 
         </div>
         <!-- 分页条 -->
-        <el-pagination :page-sizes="[3, 5, 10]"
-        layout="sizes, prev, pager, next" background :total="total" @size-change="onSizeChange"
+        <el-pagination :page-size="4" 
+        layout="total, prev, pager, next" background :total="total" @size-change="onSizeChange"
         @current-change="onCurrentChange" style="margin-top: 20px; justify-content: flex-end" />
     </el-card>
 </template>
