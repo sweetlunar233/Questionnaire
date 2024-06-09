@@ -296,25 +296,35 @@ const handleCreate = () => {
                 </div>
                 <div class="blob"></div>
             </div>
-            <el-dialog title="选择问卷类型" v-model="createDialogVisible" @update:visible="val => createDialogVisible = val">
-                <!-- 在这里放置选择问卷类型的表单或组件 -->
-                <!-- 例如： -->
-                <el-form>
-                    <el-form-item label="问卷类型">
-                    <el-select v-model="selectedType" placeholder="请选择">
-                        <el-option label="普通问卷" value=0></el-option>
-                        <el-option label="投票问卷" value=1></el-option>
-                        <el-option label="报名问卷" value=2></el-option>
-                        <el-option label="考试问卷" value=3></el-option>
-                        <!-- 其他类型选项 -->
-                    </el-select>
-                    </el-form-item>
-                    <!-- 其他表单项 -->
-                </el-form>
-
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="handleCloseDialog" class="bottone5">取消</el-button>
-                    <el-button type="primary" @click="handleCreate" class="bottone5" style="background-color: black;color: white;">确定</el-button>
+            <el-dialog width="1050px" :height="auto" center v-model="createDialogVisible" @update:visible="val => createDialogVisible = val" >
+                <div class="dialogfather">
+                    <div class="dialogfont">请选择问卷类型</div>
+                    <div class="dialog">
+                        <div class="book" @click="goToQuestionnaireDesign(-1, 0)">
+                            <p>普通问卷</p>
+                            <div class="cover">
+                                <img src="../../assets/0.png">
+                            </div>
+                        </div>
+                        <div class="book" @click="goToQuestionnaireDesign(-1, 1)">
+                            <p>投票问卷</p>
+                            <div class="cover">
+                                <img src="../../assets/1.png">
+                            </div>
+                        </div>
+                        <div class="book" @click="goToQuestionnaireDesign(-1, 2)">
+                            <p>报名问卷</p>
+                            <div class="cover">
+                                <img src="../../assets/2.png">
+                            </div>
+                        </div>
+                        <div class="book" @click="goToQuestionnaireDesign(-1, 3)">
+                            <p>考试问卷</p>
+                            <div class="cover">
+                                <img src="../../assets/3.png">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </el-dialog>
         </div>
@@ -325,6 +335,106 @@ const handleCreate = () => {
     </el-card>
 </template>
 <style scoped>
+.dialogfather{
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    flex-direction: column;
+    color: black;
+}
+
+.dialogfont{
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.dialog .book {
+  position: relative;
+  border-radius: 10px;
+  width: 200px;
+  height: 250px;
+  background-color: rgb(255, 255, 255);
+  /* -webkit-box-shadow: 1px 1px 12px #000; */
+  box-shadow: 1px 1px 3px #000;
+  -webkit-transform: preserve-3d;
+  -ms-transform: preserve-3d;
+  transform: preserve-3d;
+  -webkit-perspective: 2000px;
+  perspective: 2000px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  color: #000;
+
+  margin: 40px 20px;
+  cursor: pointer;
+}
+
+.dialog .cover {
+  top: 0;
+  position: absolute;
+  background-color: rgb(255, 255, 255);
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  cursor: pointer;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+  -webkit-transform-origin: 0;
+  -ms-transform-origin: 0;
+  transform-origin: 0;
+  /* -webkit-box-shadow: 1px 1px 12px #000; */
+  box-shadow: 1px 1px 3px #000;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.dialog .book:hover .cover {
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+  -webkit-transform: rotatey(-80deg);
+  -ms-transform: rotatey(-80deg);
+  transform: rotatey(-80deg);
+}
+
+.dialog p {
+  font-size: 40px;
+  font-weight: bolder;
+  margin-left: 20px;
+}
+
+.dialog{
+    display: flex; 
+    flex-direction: row;
+    justify-content: center; 
+    align-items: center;
+}
+
+.dialog div{
+    width: 20px;
+    height: 20px;
+}
+
+.dialog img{
+    display: inline-block;
+    max-width: 100%; 
+    height: auto; 
+    margin: 0; 
+}
+
 
 .bottone5 {
  align-items: center;

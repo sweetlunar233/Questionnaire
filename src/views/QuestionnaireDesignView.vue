@@ -5,7 +5,7 @@
 
     <div class="left">
       <div class="title">题型</div>
-      <van-divider  :style="{ color: '#626aef', borderColor: '#626aef', padding: '0 16px' }"></van-divider>
+      <van-divider  :style="{ width: '80%', color: '#626aef', borderColor: '#626aef', padding: '0 16px' }"></van-divider>
 
       <!-- 单选题、多选题 -->
       <div>
@@ -46,7 +46,7 @@
       <!-- 保存、发布、乱序展示、人数限制、时间限制 -->
       <div style="margin-top: 220%;">
         <!-- 对于考试问卷/报名问卷，是否乱序展示/设置人数限制 -->
-        <div>
+        <div class = "blank_button_container">
           <div v-if="type==3">
             <el-switch v-model="isDisorder" size="large" style="--el-switch-on-color: #626aef;"/>&nbsp;是否乱序展示
           </div>
@@ -58,7 +58,7 @@
           </div>
         </div>
         <div class="row"></div>
-        <div>
+        <div class = "post_button_container">
           <el-button plain color="#626aef" size="large" @click="saveQuestionnaire()" round><el-icon><Upload/></el-icon>&nbsp;保存</el-button>
           <el-button plain color="#626aef" size="large" round><el-icon><Position/></el-icon>&nbsp;发布</el-button>
         <!-- <el-button plain color="#626aef" size="large" round @click="conserve"><el-icon><Upload/></el-icon>&nbsp;保存</el-button>
@@ -86,7 +86,7 @@
            @drop: 放置元素时触发，处理元素放置后的逻辑。
            @dragenter.prevent: 进入另一个可放置元素时触发，这里用来调整元素位置。 -->
 
-      <div v-for="index in questionCnt"
+      <div v-for="index in questionList.length"
       draggable=true
       @dragstart="dragStart(index-1)"
       @dragover.prevent
@@ -194,7 +194,7 @@
         </div>
 
         <!-- TieZhu:填空题 -->
-        <div v-if="questionList[index-1].type==3">
+        <div v-if="questionList[index-1].type==3" @click="showTB(index-1)">
           <el-input v-if="questionList[index-1].qsIsEditing" v-model="questionList[index-1].question" @blur="finishEditing(0,index-1,0)" @keyup.enter="finishEditing(0,index-1,0)" clearable/>
           <span v-else @click="startEditing(0,index-1,0)">{{ questionList[index-1].text }}</span>
           <br/>
@@ -205,11 +205,11 @@
         </div>
 
         <!-- TieZhu:评分题 -->
-        <div v-if="questionList[index-1].type==4">
+        <div v-if="questionList[index-1].type==4" @click="showTB(index-1)">
           <el-input v-if="questionList[index-1].qsIsEditing" v-model="questionList[index-1].question" @blur="finishEditing(0,index-1,0)" @keyup.enter="finishEditing(0,index-1,0)" clearable/>
           <span v-else @click="startEditing(0,index-1,0)">{{ questionList[index-1].text }}</span>
           <br/>
-          <el-rate v-model="score" allow-half></el-rate>
+          <el-rate v-model="score" disabled></el-rate>
           <br/>
           <br/>
         </div>
@@ -350,19 +350,6 @@ const router = useRouter();
         }
       })
     },
-    showQuestionnaireDesign(){
-      var promise = GetQuestionnaireDesign(this.username, this.questionnaireId, this.type);
-      promise.then((result)=>{
-        this.questionnaireId = result.questionnaireId;
-        this.type = result.type;
-        this.questionList = result.questionList;
-        this.people = result.people;
-        this.isDisorder = result.isDisorder;
-        this.title = result.title;
-        this.text = this.title;
-        this.questionCnt = questionList.length;
-      })
-    },
 
 
     //TieZhu:添加单选题
@@ -382,12 +369,12 @@ const router = useRouter();
     //TieZhu:添加填空题
     addFill(){
       this.questionCnt++;
-      this.questionList.push({"type":3,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请填空","text":"请填空","score":0});
+      this.questionList.push({"type":3,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请填空","text":"请填空","score":0,"correctAnwser":false});
     },
     //TieZhu:添加评分题
     addScore(){
       this.questionCnt++;
-      this.questionList.push({"type":4,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请评分","text":"请评分","score":0});
+      this.questionList.push({"type":4,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请评分","text":"请评分","score":0,"correctAnwser":false});
     },
 
     //TieZhu:工具栏功能
@@ -567,45 +554,45 @@ const router = useRouter();
       this.success("发布成功");
     }
    },
-   mounted(){
-    // GetQuestionnaireDesign();
-   },
    components:{
     NavigationBarInQuestionnaire,
     NPopover,
    },
-   created(){
+   mounted(){
     const internalInstance = getCurrentInstance()
     const internalData = internalInstance.appContext.config.globalProperties
     this.username = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
     
     this.questionnaireId = parseInt(this.$route.query.questionnaireId);
     this.type = this.$route.query.questionnaireType;
-    // if(this.questionnaireId != -1){
-    //   var promise=GetQuestionnaire(this.questionnaireId,"/quetionnaireDesign",true);
-    //   promise.then((result) => {
-    //     this.title = result.Title;
-    //     this.type = result.category;
-    //     this.people = result.people;
-    //     this.timeLimit = result.TimeLimit;
-    //     this.questionList = result.questionList;
-    //   })
-    //   let i = 0,j = 0;
-    //   for(i = 0;i < this.questionList.length;i++){
-    //     this.questionList[i].showToolbar = ref(false);
-    //     this.questionList[i].qsIsEditing = ref(false);
-    //     this.questionList[i].isDisabled = ref(true);
-    //     this.questionList[i].max = ref(1);
-    //     this.questionList[i].text = ref(this.questionList[i].question);
-    //     if(this.questionList[i].type <= 2){
-    //       for(j = 0;j < this.questionList[i].optionList.length;j++){
-    //       this.questionList[i].optionList[j].text = ref(this.questionList[i].optionList[j].content);
-    //       this.questionList[i].optionList[j].isEditing = ref(false);
-    //       }
-    //     }
-    //   }
-    // }
-    // 创建可以访问内部组件实例的实例
+    if(this.questionnaireId != -1){
+      var promise=GetQuestionnaire(this.questionnaireId,"/quetionnaireDesign",true);
+      
+      promise.then((result) => {
+        this.title = result.Title;
+        this.text = this.title;
+        this.type = result.category;
+        this.people = result.people;
+        this.timeLimit = result.TimeLimit;
+        this.questionList = result.questionList;
+        this.description = result.description;
+        this.destext = this.description;
+        let i = 0,j = 0;
+        for(i = 0;i < this.questionList.length;i++){
+          this.questionList[i].showToolbar = false;
+          this.questionList[i].qsIsEditing = false;
+          this.questionList[i].isDisabled = true;
+          this.questionList[i].max = 1;
+          this.questionList[i].text = this.questionList[i].question;
+          if(this.questionList[i].type <= 2){
+            for(j = 0;j < this.questionList[i].optionCnt;j++){
+            this.questionList[i].optionList[j].text = this.questionList[i].optionList[j].content;
+            this.questionList[i].optionList[j].isEditing = false;
+            }
+          }
+        }
+      })
+    }
    }
  })
 </script>
@@ -617,21 +604,27 @@ const router = useRouter();
   position: fixed;
   top: 5%;
   margin: 2%;
-  margin-left: 15%;
+  margin-left: 10%;
   border-radius: 5px;
   border: 2px;
   padding: 1%;
-  width: 12%;
-  height: 700px;
+  width: 15%;
+  height: 80%;
   box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.1);
   background-color: white;
+
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .right{
   position: relative;
   height: 700px;
-  width: 50%;
-  height: 700px;
+  width: 60%;
+  height: 80%;
   top: 8%;
   left: 30%;
   border-radius: 5px;
@@ -665,5 +658,14 @@ const router = useRouter();
 }
 .correct-answer{
   color:green
+}
+
+.blank_button_container {
+  position: relative;
+  /* margin-bottom: 5%; */
+}
+.post_button_container {
+  position: relative;
+  /* margin-bottom: 10%; */
 }
 </style>

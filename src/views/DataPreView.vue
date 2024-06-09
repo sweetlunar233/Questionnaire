@@ -4,161 +4,167 @@
   <!-- <div class="chartBox">
     <div id="pillarsChart" :style="{ width: '100%', height: '100%' }"></div>
   </div> -->
-  <navigation-bar style="position: fixed;"/>
+  
 
     <div class="back">
+      <el-container>
+        <el-header>
+          <navigation-bar style="position: fixed;"/>
+        </el-header>
+        <el-main class="main_container">
+          <div class="right">
+            <n-card :title="title">
+              <n-tabs type="line" size="medium" @update:value="changeBar(value)" animated>
+                <n-tab-pane name="dataAnalysis" tab="数据分析">
+                  <div  id="dataAnalysis">
+                  <div v-for="index in questionCnt"  style="margin-left: 2%;">
       
-      <div class="right">
+                    <!-- TieZhu:
+                    对于单选/多选/评分：
+                      quetionList有如下属性。
+                        type：标识题目类型
+                        question：题干
+                        optionCnt：一个数组。选择对应选项的人数。
+                        optionContent：选项内容数组。对于评分题为：[1,2,3,4,5]
+                        hasChart:是否有图表显示
+                    对于填空：
+                      quetionList有如下属性:
+                        type：标识题目类型
+                        question：题干
+                        hasChart:是否有图表显示
+                        fill:一个数组，填写者所填内容（仅对填空题有效）
+                        cnt:对应填写的人数
+                    -->
 
-        <n-card :title="title">
-          <n-tabs type="line" size="medium" @update:value="changeBar(value)" animated>
-            <n-tab-pane name="dataAnalysis" tab="数据分析">
-              <div  id="dataAnalysis">
-              <div v-for="index in questionCnt"  style="margin-left: 2%;">
-  
-                <!-- TieZhu:
-                对于单选/多选/评分：
-                  quetionList有如下属性。
-                    type：标识题目类型
-                    question：题干
-                    optionCnt：一个数组。选择对应选项的人数。
-                    optionContent：选项内容数组。对于评分题为：[1,2,3,4,5]
-                    hasChart:是否有图表显示
-                对于填空：
-                  quetionList有如下属性:
-                    type：标识题目类型
-                    question：题干
-                    hasChart:是否有图表显示
-                    fill:一个数组，填写者所填内容（仅对填空题有效）
-                    cnt:对应填写的人数
-                -->
-
-                <!-- TieZhu：单选题 -->
-                <div v-if="questionList[index-1].type==1">
-                  <div>
-                    {{ questionList[index-1].question }}
-                  </div>
-                  <div class="qstype">[单选题]</div>
-                  <div class="row"></div>
-                  <el-button @click="toggleChart(index-1,'bar')" style="color: #409EFF;" plain>柱状图</el-button>
-                  <el-button @click="toggleChart(index-1,'pie')" style="color: #409EFF;" plain>饼状图</el-button>
-                  <el-button @click="toggleChart(index-1,'line')" style="color: #409EFF;" plain>折线图</el-button>
-                  <br/>
-                  <br/>
-                  <div v-if="questionList[index-1].hasChart">
-                    <div class="chartBox">
-                      <div :id="index-1" :style="{ width: '100%', height: '100%' }"></div>
+                    <!-- TieZhu：单选题 -->
+                    <div v-if="questionList[index-1].type==1">
+                      <div>
+                        {{ questionList[index-1].question }}
+                      </div>
+                      <div class="qstype">[单选题]</div>
+                      <div class="row"></div>
+                      <el-button @click="toggleChart(index-1,'bar')" style="color: #409EFF;" plain>柱状图</el-button>
+                      <el-button @click="toggleChart(index-1,'pie')" style="color: #409EFF;" plain>饼状图</el-button>
+                      <el-button @click="toggleChart(index-1,'line')" style="color: #409EFF;" plain>折线图</el-button>
+                      <br/>
+                      <br/>
+                      <div v-if="questionList[index-1].hasChart">
+                        <div class="chartBox">
+                          <div :id="index-1" :style="{ width: '100%', height: '100%' }"></div>
+                        </div>
+                      </div>
+                      <br/>
                     </div>
-                  </div>
-                  <br/>
-                </div>
 
-                <!-- TieZhu：多选题 -->
-                <div v-if="questionList[index-1].type==2">
-                  <div>
+                    <!-- TieZhu：多选题 -->
+                    <div v-if="questionList[index-1].type==2">
+                      <div>
+                          {{ questionList[index-1].question }}
+                      </div>
+                      <div class="qstype">[多选题]</div>
+                      <br/><div class="row"></div>                  <el-button @click="toggleChart(index-1,'bar')" style="color: #409EFF;" plain>柱状图</el-button>
+                      <el-button @click="toggleChart(index-1,'pie')" style="color: #409EFF;" plain>饼状图</el-button>
+                      <el-button @click="toggleChart(index-1,'line')" style="color: #409EFF;" plain>折线图</el-button>
+                      <br/>
+                      <br/>
+                      <div v-if="questionList[index-1].hasChart">
+                        <div class="chartBox">
+                          <div :id="index-1" :style="{ width: '100%', height: '100%' }"></div>
+                        </div>
+                      </div>
+                      <br/>
+                    </div>
+
+                    <!-- TieZhu:填空题 -->
+                    <div v-if="questionList[index-1].type==3">
                       {{ questionList[index-1].question }}
-                  </div>
-                  <div class="qstype">[多选题]</div>
-                  <br/><div class="row"></div>                  <el-button @click="toggleChart(index-1,'bar')" style="color: #409EFF;" plain>柱状图</el-button>
-                  <el-button @click="toggleChart(index-1,'pie')" style="color: #409EFF;" plain>饼状图</el-button>
-                  <el-button @click="toggleChart(index-1,'line')" style="color: #409EFF;" plain>折线图</el-button>
-                  <br/>
-                  <br/>
-                  <div v-if="questionList[index-1].hasChart">
-                    <div class="chartBox">
-                      <div :id="index-1" :style="{ width: '100%', height: '100%' }"></div>
+                      <div class="qstype">[填空题]</div>
+                      <div class="row"></div>
+                      <el-button @click="toggleChart(index-1,'wordcloud')" style="color: #409EFF;" plain>词云图</el-button>
+                      <br/>
+                      <br/>
+                      <div v-if="questionList[index-1].hasChart">
+                        <div class="chartBox">
+                          <div :id="index-1" :style="{ width: '100%', height: '100%' }"></div>
+                        </div>
+                      </div>
+                      <br/>
+                    </div>
+                    
+                    <!-- TieZhu:评分题 -->
+                    <div v-if="questionList[index-1].type==4">
+                      {{ questionList[index-1].question }}
+                      <div class="qstype">[评分题]</div>
+                      <div class="row"></div>
+                      <el-button @click="toggleChart(index-1,'bar')" style="color: #409EFF;" plain>柱状图</el-button>
+                      <el-button @click="toggleChart(index-1,'pie')" style="color: #409EFF;" plain>饼状图</el-button>
+                      <el-button @click="toggleChart(index-1,'line')" style="color: #409EFF;" plain>折线图</el-button>
+                      <div class="row"></div>
+                      <div v-if="questionList[index-1].hasChart">
+                        <div class="chartBox">
+                          <div :id="index-1" :style="{ width: '100%', height: '100%' }"></div>
+                        </div>
+                      </div>
+                      <br/>
                     </div>
                   </div>
-                  <br/>
-                </div>
+                  </div>
+                </n-tab-pane>
+                <n-tab-pane name="crossData" tab="交叉分析">
+                  <div id="crossData">
+                    <div style=" margin-left: 2%; margin-right: 2%;">自变量X</div>
+                    <div class="row"></div>
+                    <div>
+                      <el-select v-model="cross1" placeholder="添加自变量" size="large" style="width: 240px; margin-left: 2%; margin-right: 2%;">
+                        <el-option v-for="item in cross" :key="item.value" :label="item.label" :value="item.value"/>
+                      </el-select>
+                    </div>
+                    <br/>
+                    <div style=" margin-left: 2%; margin-right: 2%;">因变量Y</div>
+                    <!-- TieZhu:空一半行 -->
+                    <div class="row"></div>
+                    <div>
+                      <el-select v-model="cross2" placeholder="添加因变量" size="large" style="width: 240px; margin-left: 2%; margin-right: 2%;">
+                        <el-option v-for="item in cross" :key="item.value" :label="item.label" :value="item.value"/>
+                      </el-select>
+                    </div>
 
-                <!-- TieZhu:填空题 -->
-                <div v-if="questionList[index-1].type==3">
-                  {{ questionList[index-1].question }}
-                  <div class="qstype">[填空题]</div>
-                  <div class="row"></div>
-                  <el-button @click="toggleChart(index-1,'wordcloud')" style="color: #409EFF;" plain>词云图</el-button>
-                  <br/>
-                  <br/>
-                  <div v-if="questionList[index-1].hasChart">
-                    <div class="chartBox">
-                      <div :id="index-1" :style="{ width: '100%', height: '100%' }"></div>
+                    <n-collapse-transition :show="(cross1!=undefined)&&(cross2!=undefined)">
+                      <br/>
+                      <div style="margin-left: 2%; margin-right: 2%;">
+                        <el-button @click="toggleChart(-1,'bar')" style="color: #409EFF;" plain>柱状图</el-button>
+                        <el-button @click="toggleChart(-1,'line')" style="color: #409EFF;" plain>折线图</el-button>
+                      </div>
+                    </n-collapse-transition>
+                    <div v-if="crossHasChart">
+                      <div class="chartBox">
+                        <div :id="-1" :style="{ width: '100%', height: '100%' }"></div>
+                      </div>
                     </div>
                   </div>
-                  <br/>
-                </div>
-                
-                <!-- TieZhu:评分题 -->
-                <div v-if="questionList[index-1].type==4">
-                  {{ questionList[index-1].question }}
-                  <div class="qstype">[评分题]</div>
-                  <div class="row"></div>
-                  <el-button @click="toggleChart(index-1,'bar')" style="color: #409EFF;" plain>柱状图</el-button>
-                  <el-button @click="toggleChart(index-1,'pie')" style="color: #409EFF;" plain>饼状图</el-button>
-                  <el-button @click="toggleChart(index-1,'line')" style="color: #409EFF;" plain>折线图</el-button>
-                  <div class="row"></div>
-                  <div v-if="questionList[index-1].hasChart">
-                    <div class="chartBox">
-                      <div :id="index-1" :style="{ width: '100%', height: '100%' }"></div>
-                    </div>
-                  </div>
-                  <br/>
-                </div>
-              </div>
-              </div>
-            </n-tab-pane>
-            <n-tab-pane name="crossData" tab="交叉分析">
-              <div id="crossData">
-                <div style=" margin-left: 2%; margin-right: 2%;">自变量X</div>
-                <div class="row"></div>
-                <div>
-                  <el-select v-model="cross1" placeholder="添加自变量" size="large" style="width: 240px; margin-left: 2%; margin-right: 2%;">
-                    <el-option v-for="item in cross" :key="item.value" :label="item.label" :value="item.value"/>
-                  </el-select>
-                </div>
-                <br/>
-                <div style=" margin-left: 2%; margin-right: 2%;">因变量Y</div>
-                <!-- TieZhu:空一半行 -->
-                <div class="row"></div>
-                <div>
-                  <el-select v-model="cross2" placeholder="添加因变量" size="large" style="width: 240px; margin-left: 2%; margin-right: 2%;">
-                    <el-option v-for="item in cross" :key="item.value" :label="item.label" :value="item.value"/>
-                  </el-select>
-                </div>
-
-                <n-collapse-transition :show="(cross1!=undefined)&&(cross2!=undefined)">
-                  <br/>
-                  <div style="margin-left: 2%; margin-right: 2%;">
-                    <el-button @click="toggleChart(-1,'bar')" style="color: #409EFF;" plain>柱状图</el-button>
-                    <el-button @click="toggleChart(-1,'line')" style="color: #409EFF;" plain>折线图</el-button>
-                  </div>
-                </n-collapse-transition>
-                <div v-if="crossHasChart">
-                  <div class="chartBox">
-                    <div :id="-1" :style="{ width: '100%', height: '100%' }"></div>
-                  </div>
-                </div>
-              </div>
-            </n-tab-pane>
-          </n-tabs>
-        </n-card>
-      </div>
-      <div class="bar">
-        <el-tooltip content="下载数据" placement="right">
-          <el-button size="large"  v-print="printObj" text circle><el-icon color="#337ecc" :size="30"><Download /></el-icon></el-button>
-        </el-tooltip>
-        <div class="row"></div>
-        <div class="row"></div>
-        <el-tooltip content="分享" placement="right">
-          <n-popover trigger="click" placement="bottom">
-            <template #trigger>
-              <el-button size="large" text circle><el-icon color="#337ecc" :size="30" ><Share /></el-icon></el-button>
-            </template>
-            <!-- TieZhu：分享链接弹出框 -->
-            <span><n-qr-code :value="url" error-correction-level="H"/></span>
-          </n-popover>
-        </el-tooltip>
-      </div>
+                </n-tab-pane>
+              </n-tabs>
+            </n-card>
+          </div>
+          <div class="bar">
+            <el-tooltip content="下载数据" placement="right">
+              <el-button size="large"  v-print="printObj" text circle><el-icon color="#337ecc" :size="30"><Download /></el-icon></el-button>
+            </el-tooltip>
+            <div class="row"></div>
+            <div class="row"></div>
+            <el-tooltip content="分享" placement="right">
+              <n-popover trigger="click" placement="bottom">
+                <template #trigger>
+                  <el-button size="large" text circle><el-icon color="#337ecc" :size="30" ><Share /></el-icon></el-button>
+                </template>
+                <!-- TieZhu：分享链接弹出框 -->
+                <span><n-qr-code :value="url" error-correction-level="H"/></span>
+              </n-popover>
+            </el-tooltip>
+          </div>
+        </el-main>
+      </el-container>
+      
       
 
     </div>
@@ -166,7 +172,7 @@
 
 <script>
 import 'echarts-wordcloud';//引用云词
-import NavigationBar from "@/components/NavigationBar.vue"
+import NavigationBar from "@/components/NavigationBarInQuestionnaire.vue"
 import { NCard } from 'naive-ui';
 import { NTabs } from 'naive-ui';
 import { NTabPane } from 'naive-ui';
@@ -383,14 +389,14 @@ export default {
 <!-- dcx：scoped保证样式只会应用到当前 .vue 文件 -->
 <style scoped>
 .chartBox {
-  width: 80%;
+  /* width: 80%; */
   height: 50vh;
 }
 
 .right{
-  position: relative;
-  height: 700px;
-  width: 50%;
+  /* position: relative; */
+  height: 780px;
+  width: 70%;
   background-color: rgb(255, 255, 255);
   top: 8%;
   left: 20%;
@@ -408,7 +414,8 @@ export default {
 }
 
 .back{
-  position: relative;
+  /* position: relative; */
+  
   height: 100vh;
   background-image: url('../assets/bg.png'); /* 设置背景图片 */
   background-size: cover; /* 确保背景图片完全覆盖容器，可能会被裁切 */
@@ -417,12 +424,18 @@ export default {
   background-attachment: fixed; 
 }
 
+.el-main {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
 .qstype{
   color: darkgray;
 }
 
 .bar{
-  position: relative;
+  /* position: relative; */
   width: 2.2%;
   height: 12%;
   bottom: 70%;
@@ -432,6 +445,7 @@ export default {
   border: 2px;
   padding: 20px;
   box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.1);
+  margin-left: 1%;
 }
 /* TieZhu:用于空行 */
 .row{
