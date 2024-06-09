@@ -101,7 +101,7 @@
         
       </div>
 
-      <div class="bottom">
+      <div v-if="flag!=1" class="bottom">
         <el-button color="#626aef" @click="postFill(1)" size="large"><el-icon><Upload/></el-icon>&nbsp;提交</el-button>
         <el-button color="#626aef" @click="postFill(0)" size="large"><el-icon><House/></el-icon>&nbsp;暂存</el-button>
       </div>
@@ -137,6 +137,7 @@
         duration:60,//以秒为单位
         description:'问卷描述',
         submisstionId:0,
+        flag:0,//1是预览问卷,2是导出问卷
       }
      },
      methods: {

@@ -568,7 +568,7 @@ const router = useRouter();
     this.username = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
     
     this.questionnaireId = parseInt(this.$route.query.questionnaireId);
-    this.type = this.$route.query.questionnaireType;
+    // this.type = this.$route.query.questionnaireType;
     if(this.questionnaireId != -1){
       var promise=GetQuestionnaire(this.questionnaireId,"/quetionnaireDesign",true);
       
