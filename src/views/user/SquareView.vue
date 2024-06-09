@@ -104,7 +104,15 @@ const goToQuestionnaireFill = (questionnaireId, type) => {
 
 
 
+//引入cookie
+import { getCurrentInstance } from 'vue'
 
+const username = ref("")
+ 
+// 创建可以访问内部组件实例的实例
+const internalInstance = getCurrentInstance()
+const internalData = internalInstance.appContext.config.globalProperties
+username.value = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
 
 
 
