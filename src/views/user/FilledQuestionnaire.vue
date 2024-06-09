@@ -4,7 +4,8 @@ import {
     Delete,
     Link,
     Odometer,
-    Check
+    Check,
+    GoldMedal,
 } from '@element-plus/icons-vue'
 
 import { ref } from 'vue'
@@ -79,7 +80,7 @@ const goToQuestionnaireDesign = (questionnaireId, questionnaireType) => {
     }
   });
 }
-const goToQuestionnaireFill = (questionnaireId, submissionId, Status) => {
+const goToQuestionnaireFill = (questionnaireId, submissionId, Status, type, score) => {
   let url = '';
   if(Status === "未提交"){
     url = '/questionnaireFill';
@@ -95,7 +96,54 @@ const goToQuestionnaireFill = (questionnaireId, submissionId, Status) => {
     ElMessage.error("该问卷已被发布者删除");
   }
   else{
-    进入查看界面
+    if(type == 0){
+        r.push({
+            path: "/normalAnswer",
+            query: {
+                questionnaireId: questionnaireId,
+                submissionId: submissionId
+            }
+        });
+    }
+    else if(type == 1){
+        r.push({
+            path: "/????????????????????????????????????????????",
+            query: {
+                questionnaireId: questionnaireId,
+                submissionId: submissionId
+            }
+        });
+    }
+    else if(type == 2){
+        ElMessageBox.confirm(
+            '恭喜您，已经报名成功！',
+            '温馨提示',
+            {
+                confirmButtonText: '确认',
+                cancelButtonText: '取消',
+                type: 'warning',
+                icon: 'GoldMedal',
+            }
+        )
+        .then(() => {
+            //用户点击了确认
+            
+        })
+        .catch(() => {
+            //用户点击了取消
+            
+        })
+    }
+    else if(type == 3){
+        r.push({
+            path: "/testAnswer",
+            query: {
+                questionnaireId: questionnaireId,
+                submissionId: submissionId,
+                score: score,
+            }
+        });
+    }
   }
   
 }
@@ -267,7 +315,7 @@ const handleCreate = () => {
 
                         <!-- 下部分 -->
                         <div class="card-footer">
-                            <el-button type="text" :icon="Edit" @click="goToQuestionnaireFill(questionnaire.SurveyID, questionnaire.submissionId, questionnaire.Status)" class="thebutton">查看填写</el-button>
+                            <el-button type="text" :icon="Edit" @click="goToQuestionnaireFill(questionnaire.SurveyID, questionnaire.submissionId, questionnaire.Status, questionnaire.Category, questionnaire.Score)" class="thebutton">查看填写</el-button>
                             <el-button type="danger" :icon="Delete" style="float: right" circle @click="deleteQs(questionnaire.SurveyID)" class="deletebutton"></el-button>
                         </div>
                     </div>
