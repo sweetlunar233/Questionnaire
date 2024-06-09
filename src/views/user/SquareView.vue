@@ -105,11 +105,7 @@ const goToQuestionnaireFill = (questionnaireId, type) => {
         ElMessage.error(result.content);
       }
     })
-  
 }
-const questionnaireId = r.query.questionnaireId; // 获取问卷ID
-const submissionId = r.query.submissionId; // 获取提交ID
-console.log(questionnaireId,submissionId)
 
 
 //引入cookie
