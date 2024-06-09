@@ -39,7 +39,7 @@
             <van-radio-group  v-for="index2 in questionListFill[index-1].optionCnt" >
                 <van-radio :name="questionListFill[index-1].optionList[index2-1].optionId" disabled=true>
                     <span :style="getTextColor(index-1, index2-1)">
-                    {{ questionListFill[index-1].optionList[index2-1].content }}
+                      {{ questionListFill[index-1].optionList[index2-1].content }}
                     </span>
                 </van-radio>
                 <br/>
@@ -69,25 +69,30 @@
           </div>
   
           <!-- TieZhu:填空题 -->
-          <div v-if="questionListFill[index-1].type==3">
+          <div v-if="questionListFill[index-1].type == 3">
             <div style="margin-left: 0.5%">
               {{ questionListFill[index-1].question }}
             </div>
             <br/>
             <div>
-              <div>我的答案：{{ questionListFill[index-1].Answer }}</div>
-              <br/>
-              <div style="color: green">正确答案：{{ questionListFill[index-1].correctAnswer }}</div>
+              <div style="color:blue;">{{ questionListFill[index-1].Answer }}</div>
             </div>
             <br/>
             <br/>
           </div>
   
-
+          <!-- TieZhu:评分题 -->
+          <div v-if="questionListFill[index-1].type==4">
+            <div style="margin-left: 0.5%">
+              {{ questionListFill[index-1].question }}
+            </div>
+            <br/>
+            <el-rate v-model="questionListFill[index-1].Answer" disabled=true></el-rate>
+            <br/>
+            <br/>
+          </div>
   
         </div>
-        
-        <div>最终得分：{{ this.score }}</div>
       </div>
 
       <!-- <div class="bottom">
@@ -104,9 +109,9 @@
   import NavigationBar from "@/components/NavigationBarInQuestionnaire.vue"
   import { ref } from 'vue'
   import { ElMessage } from 'element-plus'
-  import { GetFill } from "@/api/answer.js"
+  import { GetFillInNormalAnswer, getFill } from "@/api/answer.js"
   import { getCurrentInstance } from "vue";
-  
+
   
   export default({
     data(){
@@ -132,34 +137,7 @@
       print(x){
         console.log(x);
       },
-      //判断当前选项是否为正确选项
-      isCorrect(index, index2) {
-        //单选
-        if(this.questionListFill[index].type == 1) {
-          let answerOption = 0;
-          this.questionListFill[index].optionList.forEach((option, i) => {
-            if(option.isCorrect == true) {
-              answerOption = i;
-            }
-          });
-          if(index2 == answerOption)
-            return true;
-          else return false;
-        }
-        
-        //多选
-        if(this.questionListFill[index].type == 2) {
-          let answerOption = [];
-          this.questionListFill[index].optionList.forEach((option, i) => {
-            if(option.isCorrect == true) {
-              answerOption.push(i);
-            }
-          });
-          if(answerOption.includes(index2))
-            return true;
-          else return false;
-        }
-      },
+
       // 我是否选了
       isSelected(index, index2) {
         //单选
@@ -176,34 +154,6 @@
         }
 
       },
-      // 我是否选对
-      isSelectedCorrectOption(index, index2) {
-        //单选
-        if(this.questionListFill[index].type == 1) {
-          let answerOption = 0;
-          this.questionListFill[index].optionList.forEach((option, i) => {
-            if(option.isCorrect == true) {
-              answerOption = i;
-            }
-          });
-          if(answerOption == index2)
-            return true;
-          return false;
-        }
-
-        //多选
-        if(this.questionListFill[index].type == 2) {
-          let answerOption = [];
-          this.questionListFill[index].optionList.forEach((option, i) => {
-            if(option.isCorrect == true) {
-              answerOption.push(i);
-            }
-          });
-          if(answerOption.includes(index2))
-            return true;
-          return false;
-        }   
-      },
       getTextColor(index, index2) {
         //判断是否做了，如果没做，Answer is -1
         if(this.questionListFill[index].type == 1) {
@@ -215,37 +165,43 @@
             return {color: 'black'};
         }
 
-        //如果做了
-        if(this.isCorrect(index, index2))
-          return {color: 'green'};
-        else if(this.isSelected(index, index2)) {
-          if(this.isSelectedCorrectOption(index, index2))
-            return {color: 'green'};
-          else return {color: 'red'};
+        if(this.isSelected(index, index2)) {
+          return {color: 'blue'};
         }
         else return {color: 'black'};
       },
+
+      //增加选项
+      addOption(index,ele){
+        this.questionList[index].optionCnt++;
+        this.questionList[index].optionList.push({"content":ele});
+      },
       //TieZhu:添加单选题
       addSingle(){
-          this.questionCnt++;
-          this.questionListFill.push({"type":1,"isNecessary":true,"question":"请选择一个选项",
-          "optionCnt":4,"optionList":[{"optionId":0,"content":"选项", "isCorrect":true},{"optionId":1,"content":"选项","isCorrect":false},{"optionId":2,"content":"选项","isCorrect":false},{"optionId":3,"content":"选项","isCorrect":false}],
+        this.questionCnt++;
+        this.questionListFill.push({"type":1,"isNecessary":true,"question":"请选择一个选项",
+        "optionCnt":4,"optionList":[{"optionId":0,"content":"选项", "isCorrect":true},{"optionId":1,"content":"选项","isCorrect":false},{"optionId":2,"content":"选项","isCorrect":false},{"optionId":3,"content":"选项","isCorrect":false}],
         "Answer":1});
       },
       //TieZhu:添加多选题
       addMultiple(){
-          this.questionCnt++;
-          this.questionListFill.push({"type":2,"isNecessary":true,"question":"请选择以下选项（多选）",
-          "optionCnt":4,"optionList":[{"optionId":0,"content":"选项","isCorrect":true},{"optionId":0,"content":"选项","isCorrect":true},{"optionId":0,"content":"选项","isCorrect":false},{"optionId":0,"content":"选项","isCorrect":false}],
+        this.questionCnt++;
+        this.questionListFill.push({"type":2,"isNecessary":true,"question":"请选择以下选项（多选）",
+        "optionCnt":4,"optionList":[{"optionId":0,"content":"选项","isCorrect":true},{"optionId":0,"content":"选项","isCorrect":true},{"optionId":0,"content":"选项","isCorrect":false},{"optionId":0,"content":"选项","isCorrect":false}],
         "Answer":[1,2]});
       },
       //TieZhu:添加填空题
       addFill(){
-          this.questionCnt++;
-          this.questionListFill.push({"type":3,"isNecessary":true,"question":"请填空","fill":ref(''), "Answer":"我的答案", "correctAnswer":"正确答案"});
+        this.questionCnt++;
+        this.questionListFill.push({"type":3,"isNecessary":true,"question":"请填空","fill":ref(''), "Answer":"我的答案", "correctAnswer":"正确答案"});
+      },
+      //TieZhu:添加评分题
+      addScore(){
+        this.questionCnt++;
+        this.questionListFill.push({"type":4,"isNecessary":true,"question":"请评分","Answer":ref(4)});
       },
       getFill(){
-        var promise = GetFillInTestAnswer(this.username, this.questionnaireId, this.submissionId);
+        var promise = GetFillInNormalAnswer(this.username, this.questionnaireId, this.submissionId);
         promise.then((result)=>{
           this.questionListFill = result.questionList;
           this.type = result.category;
@@ -270,21 +226,24 @@
       this.addSingle();
       this.addMultiple();
       this.addFill();
+      this.addScore();
+      // this.intervalId = setInterval(() => {
+      //   this.time++;
+      // },1000);
     },
     beforeUnmount(){
-      if(this.intervalId){
-        clearInterval(this.intervalId);
-      }
+    if(this.intervalId){
+      clearInterval(this.intervalId);
+    }
     },
     components:{
-      NavigationBar,
-      ElMessage,
+    NavigationBar,
+    ElMessage,
     },
     created(){
-    this.questionnaireId = this.$route.query.questionnaireID;
-    this.submissionId = this.$route.query.submissionID;
-    this.score = this.$route.query.score;
-    console.log(this.questionnaireId + "," + this.submissionId + "," +this.score);
+    // this.questionnaireId = this.$route.query.questionnaireID;
+    // this.submissionId = this.$route.query.submissionID;
+    // this.score = this.$route.query.score;
     
     const internalInstance = getCurrentInstance();
     const internalData = internalInstance.appContext.config.globalProperties;

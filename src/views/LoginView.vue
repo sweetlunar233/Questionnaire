@@ -8,6 +8,11 @@
     const isLogin = ref(1);
     const router = useRouter();
 
+    import { useRoute } from 'vue-router';
+    const route = useRoute();
+    const receivedQuestionnaireId = route.query.questionnaireId;
+    console.log(receivedQuestionnaireId);
+
     const gotoUserManage = () => {
         router.push('/userManage');
     };
@@ -107,13 +112,24 @@
                 // console.log(result.ownphotos);
                 updateNowuser(result);
                 // console.log(result.ownphotos);
+
+                //判断是否要跳转到questioinnareFill界面
+                if(receivedQuestionnaireId != -1){
+                    router.push({path:'/questionnaireFill', query:{questionnaireId: receivedQuestionnaireId}});
+                    return;
+                }
                 gotoUserManage();
             }
         })
         .catch ( (error) => {
             console.log("catch");
         })
+
+        
     }
+
+    
+
 </script>
 
 <template>

@@ -15,7 +15,8 @@
     const router = useRouter();
 
     const gotoLogin = () => {
-        router.push('/login');
+        //-1代表正常登录
+        router.push({path:'/login',query:{questionnaireId:-1}});
     };
 
     const gotoHome = () => {
