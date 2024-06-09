@@ -10,7 +10,7 @@ import {
 
 import { ref } from 'vue'
 import store from '../../store';
-
+import {ElMessage} from 'element-plus'
 
 //文章列表数据模型
 const questionnaires = ref([
@@ -55,7 +55,7 @@ const questionnaires = ref([
 //分页条数据模型
 const pageNum = ref(1)//当前页
 const total = ref(20)//总条数
-const pageSize = ref(3)//每页条数
+const pageSize = ref(10)//每页条数
 
 total.value = questionnaires.value.length
 
@@ -83,22 +83,40 @@ const truncateDescription = (description) => {
 //编辑问卷传输问卷id的函数
 import { useRouter } from 'vue-router';
 const r = useRouter();
-const goToQuestionnaireFill = (questionnaireId) => {
-  r.push({
-    path: '/questionnaireFill',
-    query: {
-      questionnaireId: questionnaireId
-    }
-  });
+const goToQuestionnaireFill = (questionnaireId, type) => {
+    var promise = check(username.value, questionnaireId, type);
+    promise.then((result)=>{
+      if(result.message === "True")
+      {
+        r.push({
+          path: '/questionnaireFill',
+          query: {
+            questionnaireId: questionnaireId
+          }
+        });
+      }
+      else{
+        ElMessage.error(result.content);
+      }
+    })
+  
 }
 
 
 
+//引入cookie
+import { getCurrentInstance } from 'vue'
+
+const username = ref("")
+ 
+// 创建可以访问内部组件实例的实例
+const internalInstance = getCurrentInstance()
+const internalData = internalInstance.appContext.config.globalProperties
+username.value = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
 
 
 
-
-import {GetAllReleasedQs} from '../../api/questionnaire.js'
+import {GetAllReleasedQs, check} from '../../api/questionnaire.js'
 
 const initAllReleased = () =>{
     questionnaires.value = [];
@@ -107,15 +125,20 @@ const initAllReleased = () =>{
         var count = 0;
         var i = 1;
         result.data.forEach(element => {
+          if(element.categoryId != 3)
+          {
             if(i > pageSize.value * (pageNum.value - 1))
             {
                 if(i <= pageSize.value * pageNum.value){
                     questionnaires.value.push(element);
                 }
             }
-            count++;
             i++;
+          } 
+          count++;
+          
         });
+        console.log(questionnaires.value);
         total.value = count;
     })
 }
@@ -135,7 +158,7 @@ initAllReleased();
         <!--考试问卷不显示；悬赏奖励只针对普通问卷和报名问卷；报名问卷显示剩余名额-->
         <div class="questionnaire-list">
             <div :span="8" v-for="(questionnaire, index) in questionnaires" :key="index">
-                <div class="card" v-if="questionnaire.categoryId != 3">
+                <div class="card">
                     <div class="first-content">
                         <span class="firstfirst">{{ questionnaire.Title }}</span>
                         <span class="first">post by： {{ questionnaire.PostMan }}</span>
@@ -144,14 +167,14 @@ initAllReleased();
                         <span class="second">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{truncateDescription(questionnaire.Description)}}</span> 
                         <span class="second" v-if="questionnaire.categoryId == 0 || questionnaire.categoryId == 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;悬赏奖励： {{ questionnaire.Reward }}纸币</span>
                         <span class="second" v-if="questionnaire.categoryId == 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;剩余名额： {{ questionnaire.HeadCount }} </span>  
-                        <button type="primary" style="float: right;font-size: 17px" size="large" @click="goToQuestionnaireFill(questionnaire.SurveyID)"><span>填写</span></button>
+                        <button type="primary" style="float: right;font-size: 17px" size="large" @click="goToQuestionnaireFill(questionnaire.SurveyID, questionnaire.categoryId)"><span>填写</span></button>
                     </div>
                 </div>
             </div>
         </div>
         <!-- 分页条 -->
         <el-pagination :page-sizes="[6, 8, 10, 12]"
-        layout="sizes, prev, pager, next" background :total="total" @size-change="onSizeChange"
+        layout="total, sizes, prev, pager, next" background :total="total" @size-change="onSizeChange"
         @current-change="onCurrentChange" style="margin-top: 20px; justify-content: flex-end" />
     </el-card>
 </template>

@@ -104,7 +104,7 @@
   import NavigationBar from "@/components/NavigationBarInQuestionnaire.vue"
   import { ref } from 'vue'
   import { ElMessage } from 'element-plus'
-  import { getFill } from "@/api/answer.js"
+  import { GetFill } from "@/api/answer.js"
   import { getCurrentInstance } from "vue";
 
   

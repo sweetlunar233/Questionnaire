@@ -42,3 +42,7 @@ export function UpdateOrDelete(id, flag){
     data.flag = flag;
     return post("/userManage/released",data);
 }
+
+export function check(username, questionnaireId, type){
+    return get("/userManage/square/"+username+"/"+questionnaireId+"/"+type);
+}

@@ -41,7 +41,7 @@ const categorys = ref([
 ])
 
 //用户搜索时选中的分类id
-const categoryId = ref('')
+const categoryId = ref("请选择")
 
 //文章列表数据模型
 const questionnaires = ref([
@@ -70,14 +70,25 @@ const onCurrentChange = (num) => {
 //编辑问卷传输问卷id的函数
 import { useRouter } from 'vue-router';
 const r = useRouter();
-const goToQuestionnaireFill = (questionnaireId, submissionId) => {
-  r.push({
-    path: '/questionnaireFill',
-    query: {
-      questionnaireId: questionnaireId,
-      submissionId: submissionId
-    }
-  });
+const goToQuestionnaireFill = (questionnaireId, submissionId, Status) => {
+  let url = '';
+  if(Status === "未提交"){
+    url = '/questionnaireFill';
+    r.push({
+        path: url,
+        query: {
+            questionnaireId: questionnaireId,
+            submissionId: submissionId
+        }
+    });
+  }
+  else if(Status === "已删除"){
+    ElMessage.error("该问卷已被发布者删除");
+  }
+  else{
+    进入查看界面
+  }
+  
 }
 
 
@@ -113,7 +124,7 @@ const initFilled = (username) =>{
             if(i > pageSize.value * (pageNum.value - 1))
             {
                 if(i <= pageSize.value * pageNum.value){
-                    if(categoryId.value != "" && element.Category != categoryId.value){
+                    if(categoryId.value != "请选择" && element.Category != categoryId.value){
                         console.log("oh no!")
                     }
                     else{
@@ -207,7 +218,7 @@ const deleteQs = (id) =>{
             </el-form-item> -->
             <el-form-item>
                 <el-button class="bottone5" type="primary" @click="initFilled(username)" style="background-color: black;border: 0;color: white;">搜索</el-button>
-                <el-button class="bottone5" @click="categoryId=''" style="color: rgba(0, 0, 0, 0.753);">重置</el-button>
+                <el-button class="bottone5" @click="categoryId='请选择'" style="color: rgba(0, 0, 0, 0.753);">重置</el-button>
             </el-form-item>
         </el-form>
         <div class="card-container">
@@ -224,7 +235,7 @@ const deleteQs = (id) =>{
 
                         <!-- 下部分 -->
                         <div class="card-footer">
-                            <el-button type="text" :icon="Edit" @click="goToQuestionnaireFill(questionnaire.SurveyID, questionnaire.submissionId)" class="thebutton">查看填写</el-button>
+                            <el-button type="text" :icon="Edit" @click="goToQuestionnaireFill(questionnaire.SurveyID, questionnaire.submissionId, questionnaire.Status)" class="thebutton">查看填写</el-button>
                             <el-button type="danger" :icon="Delete" style="float: right" circle @click="deleteQs(questionnaire.SurveyID)" class="deletebutton"></el-button>
                         </div>
                     </div>

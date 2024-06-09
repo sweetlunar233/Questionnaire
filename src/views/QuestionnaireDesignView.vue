@@ -1,6 +1,6 @@
 <!-- 问卷设计页面 -->
 <template>
-  <navigation-bar style="position: fixed;"/>
+  <NavigationBarInQuestionnaire style="position: fixed;"/>
   <div class="back">
 
     <div class="left">
@@ -28,7 +28,7 @@
 
       <!-- 评分题、填空题 -->
       <div>
-        <el-button @click="addScore()" plain>
+        <el-button v-if="type!=3" @click="addScore()" plain>
           <el-icon style="vertical-align: middle">
             <Finished/>
           </el-icon>
@@ -263,7 +263,6 @@
 
 <script>
 import { GetQuestionnaire, PostQuestion } from "@/api/question";
-import NavigationBar from "@/components/NavigationBar.vue"
 import { ElMessage } from 'element-plus'
 import { NPopover } from "naive-ui"
 import { ref } from "vue" ;
@@ -272,6 +271,7 @@ import { getCurrentInstance } from 'vue'
 import { ConserveOrReleaseQuestionnaire, GetQuestionnaireDesign } from '../api/design.js'
 //编辑问卷传输问卷id的函数
 import { useRouter } from 'vue-router';
+import NavigationBarInQuestionnaire from "@/components/NavigationBarInQuestionnaire.vue";
 const router = useRouter();
  
  export default({
@@ -507,7 +507,12 @@ const router = useRouter();
         type:'warning',
       });
     },
-
+    success(content){
+      ElMessage({
+        message:content,
+        type:'success',
+      });
+    },
     //出现工具栏，注意，不仅要出现当前问题的工具栏，还要关闭其他问题的工具栏和退出其他问题的编辑状态
     showTB(index){
       this.questionList.forEach(ele => {
@@ -549,21 +554,32 @@ const router = useRouter();
 
     //保存问卷
     saveQuestionnaire(){
-      // var promise = PostQuestion(this.questionnaireId,this.title,this.type,!this.isDisorder,this.people,this.timeLimit,this.questionList);
+      console.log(this.username);
+      var promise = PostQuestion(this.questionnaireId,this.title,this.type,!this.isDisorder,this.people,this.timeLimit,this.questionList,this.description ,this.username,false);
+      this.$router.push({path:'/userManage/filled'});
+      this.success("保存成功");
+    },
+    //发布问卷
+    releaseQuestionnaire(){
+      console.log(this.username);
+      var promise = PostQuestion(this.questionnaireId,this.title,this.type,!this.isDisorder,this.people,this.timeLimit,this.questionList,this.description ,this.username,true);
+      this.$router.push({path:'/userManage/filled'});
+      this.success("发布成功");
     }
    },
    mounted(){
-    GetQuestionnaireDesign();
+    // GetQuestionnaireDesign();
    },
    components:{
-    NavigationBar,
+    NavigationBarInQuestionnaire,
     NPopover,
    },
    created(){
     const internalInstance = getCurrentInstance()
     const internalData = internalInstance.appContext.config.globalProperties
     this.username = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
-    this.questionnaireId = this.$route.query.questionnaireId;
+    
+    this.questionnaireId = parseInt(this.$route.query.questionnaireId);
     this.type = this.$route.query.questionnaireType;
     // if(this.questionnaireId != -1){
     //   var promise=GetQuestionnaire(this.questionnaireId,"/quetionnaireDesign",true);
