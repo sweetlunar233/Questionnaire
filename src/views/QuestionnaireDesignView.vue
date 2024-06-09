@@ -61,8 +61,6 @@
         <div class = "post_button_container">
           <el-button plain color="#626aef" size="large" @click="saveQuestionnaire()" round><el-icon><Upload/></el-icon>&nbsp;保存</el-button>
           <el-button plain color="#626aef" size="large" round><el-icon><Position/></el-icon>&nbsp;发布</el-button>
-        <!-- <el-button plain color="#626aef" size="large" round @click="conserve"><el-icon><Upload/></el-icon>&nbsp;保存</el-button>
-        <el-button plain color="#626aef" size="large" round><el-icon><Position/></el-icon>&nbsp;发布</el-button> -->
         </div>
       </div>
 
@@ -607,14 +605,14 @@ const router = useRouter();
 
 .left{
   position: fixed;
-  top: 5%;
+  top: 2%;
   margin: 2%;
   margin-left: 10%;
   border-radius: 5px;
   border: 2px;
   padding: 1%;
   width: 15%;
-  height: 80%;
+  height: 90%;
   box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.1);
   background-color: white;
 
