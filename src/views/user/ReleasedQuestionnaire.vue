@@ -5,7 +5,8 @@ import {
     Link,
     Odometer,
     Open,
-    View
+    View,
+    Printer,
 } from '@element-plus/icons-vue'
 
 import { ref } from 'vue'
@@ -100,11 +101,12 @@ const goToQuestionnaireDesign = (questionnaireId, questionnaireType) => {
     }
   });
 }
-const goToQuestionnaireFill = (questionnaireId) => {
+const goToQuestionnaireFill = (questionnaireId, flag) => {
   r.push({
     path: '/questionnaireFill',
     query: {
-      questionnaireId: questionnaireId
+      questionnaireId: questionnaireId,
+      flag: flag,
     }
   });
 }
@@ -334,9 +336,10 @@ const reviseQuestionnaire = (id) => {
                         <!-- 下部分 -->
                         <div class="card-footer">
                             <el-button type="text" :icon="Edit" @click="reviseQuestionnaire(questionnaire.SurveyID)" :disabled="questionnaire.IsOpening" class="thebutton">编辑问卷</el-button>
-                            <el-button type="text" :icon="View" @click="goToQuestionnaireFill(questionnaire.SurveyID)" class="otherbutton">预览</el-button>
+                            <el-button type="text" :icon="View" @click="goToQuestionnaireFill(questionnaire.SurveyID, 1)" class="otherbutton">预览</el-button>
                             <el-button type="text" :icon="Link" class="otherbutton">发送问卷</el-button>
                             <el-button type="text" :icon="Odometer" class="otherbutton" @click="goToQuestionnaireData(questionnaire.SurveyID)">分析数据</el-button>
+                            <el-button type="text" :icon="Printer" class="otherbutton" @click="goToQuestionnaireFill(questionnaire.SurveyID, 2)">导出问卷</el-button>
                             <el-switch v-model="questionnaire.IsOpening" style="float: right; margin-left: 10px;--el-switch-on-color: #626aef;" @change="updateIsOpening(questionnaire.SurveyID)"  class="deletebutton"/>
                             <el-button type="danger" :icon="Delete" style="float: right" circle @click="deleteQs(questionnaire.SurveyID)"></el-button>
                         </div>
