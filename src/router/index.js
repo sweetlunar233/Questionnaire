@@ -88,7 +88,12 @@ const routes = [
         component: () => import('../views/personal/PersonalShopView.vue')
       }
     ]
-  }
+  },
+  {
+    path: '/aboutUs',
+    name: 'aboutUs',
+    component: () => import('../views/AboutUs.vue')
+  },
 ]
 
 const router = createRouter({

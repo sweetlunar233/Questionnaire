@@ -15,7 +15,7 @@
           剩余人数:{{ people }}
         </div>
         <van-divider v-if="type==2 || type==3"  :style="{ color: '#626aef', borderColor: '#626aef', padding: '0 15px' }"></van-divider>
-        <div v-for="index in questionCnt">
+        <div v-for="index in questionList.length">
   
           <!-- TieZhu:
           对于单选和多选：
@@ -44,7 +44,7 @@
               {{ questionList[index-1].question }}
             </div>
             <br/>
-            <van-radio-group v-model=" questionList[index-1].Answer" v-for="index2 in questionList[index-1].optionCnt" >
+            <van-radio-group v-model=" questionList[index-1].Answer" v-for="index2 in questionList[index-1].optionCnt" :disabled="flag">
                 <van-radio :name="questionList[index-1].optionList[index2-1].optionId" checked-color="#0283EF" :label-disabled=true @click="print(questionList[index-1].radio)">
                     <div>
                     {{ questionList[index-1].optionList[index2-1].content }}
@@ -62,7 +62,7 @@
                 {{ questionList[index-1].question }}
             </div>
             
-            <van-checkbox-group v-model=" questionList[index-1].Answer" v-for="index2 in questionList[index-1].optionCnt"  checked-color="#0283EF">
+            <van-checkbox-group v-model=" questionList[index-1].Answer" v-for="index2 in questionList[index-1].optionCnt"  checked-color="#0283EF" :disabled="flag">
                 <br/>
                 <van-checkbox :name="questionList[index-1].optionList[index2-1].optionId" shape="square" :label-disabled=true>
                     <div>
@@ -82,7 +82,7 @@
             </div>
             <br/>
             <br/>
-            <el-input v-model="questionList[index-1].Answer" size="large" placeholder="请填空"/>
+            <el-input v-model="questionList[index-1].Answer" size="large" placeholder="请填空" :disabled="flag"/>
             <br/>
             <br/>
           </div>
@@ -242,7 +242,7 @@
               this.warning("有必填题目没有填写！")
               return false;
             }
-            else if(this.questionList[i].type == 1 && this.questionList[i].isNecessary && this.questionList[i].Answer==[-1]){
+            else if(this.questionList[i].type == 2 && this.questionList[i].isNecessary && this.questionList[i].Answer==[-1]){
               this.warning("有必填题目没有填写！")
               return false;
             }
@@ -282,7 +282,7 @@
             this.postFill(1);
           }
         },1000);
-        }
+      }
      },
      beforeUnmount(){
       if(this.intervalId){
@@ -295,9 +295,9 @@
      },
      created(){
       var promise;
-      this.questionnaireId = this.$route.query.questionnaireId;
+      this.questionnaireId = parseInt(this.$route.query.questionnaireId);
       this.type = this.$route.query.questionnaireType;
-      this.submissionID = this.$route.query.submissionId;
+      this.submissionID = parseInt(this.$route.query.submissionId);
       this.flag = this.$route.query.flag;
       if(this.flag == 2){
         this.$nextTick(()=>{
@@ -310,16 +310,23 @@
         const internalInstance = getCurrentInstance()
         const internalData = internalInstance.appContext.config.globalProperties
         this.username = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
-        
+        console.log(this.submissionID)
         promise = GetStoreFill(this.username,this.questionnaireId,this.submissionID);
         promise.then((result) => {
-          this.title = result.Titile;
+          this.title = result.Title;
+          console.log(this.title);
           this.type = result.category;
           this.people = result.people;
           this.timeLimit = result.TimeLimit;
           this.questionList = result.questionList;
           this.duration = result.duration;
           this.description = result.description;
+          console.log(this.questionList);
+          if(this.type == 2 && this.people == 0){
+            this.warning("报名人数已满！")
+            this.$router.push({path:'/userManage/filled'});
+            return;
+          }
         })
       }
       else{

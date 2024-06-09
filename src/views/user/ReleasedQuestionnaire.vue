@@ -101,6 +101,16 @@ const goToQuestionnaireDesign = (questionnaireId, questionnaireType) => {
     }
   });
 }
+const goToQuestionnaireDesignCopy = (questionnaireId, questionnaireType, flag) => {
+  r.push({
+    path: '/questionnaireDesign',
+    query: {
+      questionnaireId: questionnaireId,
+      questionnaireType: questionnaireType,
+      flag: flag,
+    }
+  });
+}
 const goToQuestionnaireFill = (questionnaireId, flag) => {
   r.push({
     path: '/questionnaireFill',
@@ -264,7 +274,7 @@ const handleCreate = () => {
 
 
 //编辑问卷提示新开一个问卷
-const reviseQuestionnaire = (id) => {
+const reviseQuestionnaire = (id, type) => {
     ElMessageBox.confirm(
         '该问卷已发布，若要编辑，将新建此问卷的副本。您确定要这么做吗？',
         '温馨提示',
@@ -276,7 +286,7 @@ const reviseQuestionnaire = (id) => {
     )
     .then(() => {
         //用户点击了确认
-        goToQuestionnaireDesign(id, 5);
+        goToQuestionnaireDesignCopy(id, type, 1);
     })
     .catch(() => {
         //用户点击了取消
@@ -335,7 +345,7 @@ const reviseQuestionnaire = (id) => {
 
                         <!-- 下部分 -->
                         <div class="card-footer">
-                            <el-button type="text" :icon="Edit" @click="reviseQuestionnaire(questionnaire.SurveyID)" :disabled="questionnaire.IsOpening" class="thebutton">编辑问卷</el-button>
+                            <el-button type="text" :icon="Edit" @click="reviseQuestionnaire(questionnaire.SurveyID, questionnaire.Category)" :disabled="questionnaire.IsOpening" class="thebutton">编辑问卷</el-button>
                             <el-button type="text" :icon="View" @click="goToQuestionnaireFill(questionnaire.SurveyID, 1)" class="otherbutton">预览</el-button>
                             <el-button type="text" :icon="Link" class="otherbutton">发送问卷</el-button>
                             <el-button type="text" :icon="Odometer" class="otherbutton" @click="goToQuestionnaireData(questionnaire.SurveyID)">分析数据</el-button>
