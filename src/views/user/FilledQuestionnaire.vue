@@ -110,7 +110,8 @@ const goToQuestionnaireFill = (questionnaireId, submissionId, Status, type, scor
             path: "/dataPre",
             query: {
                 questionnaireId: questionnaireId,
-                submissionId: submissionId
+                submissionId: submissionId,
+                flag: true
             }
         });
     }
