@@ -86,7 +86,7 @@
            @drop: 放置元素时触发，处理元素放置后的逻辑。
            @dragenter.prevent: 进入另一个可放置元素时触发，这里用来调整元素位置。 -->
 
-      <div v-for="index in questionCnt"
+      <div v-for="index in questionList.length"
       draggable=true
       @dragstart="dragStart(index-1)"
       @dragover.prevent
@@ -150,7 +150,9 @@
                       <el-button size="small" color="#fef0f0" @click="addOption(index-1,index2-1)" text><el-icon><Plus/></el-icon></el-button>
                       <el-button size="small" color="#ecf5ff" @click="deleteOption(index-1,index2-1)" :disabled="questionList[index-1].isDisabled" text><el-icon><Minus/></el-icon></el-button>
                       &nbsp;
-                      <el-switch v-model="questionList[index-1].optionList[index2-1].isCorrect" @change="checkAnswer(0,index-1,index2-1)"/>&nbsp;正确答案
+                      <el-tooltip content="正确答案" placement="right">
+                        <el-switch v-if="type==3" v-model="questionList[index-1].optionList[index2-1].isCorrect" @change="checkAnswer(0,index-1,index2-1)"/>
+                      </el-tooltip>
                     </div>
                   </n-popover>
                 </van-radio>
@@ -185,7 +187,9 @@
                     <el-button size="small" color="#fef0f0" @click="addOption(index-1,index2-1)" text><el-icon><Plus/></el-icon></el-button>
                     <el-button size="small" color="#ecf5ff" @click="deleteOption(index-1,index2-1)" :disabled="questionList[index-1].isDisabled" text><el-icon><Minus/></el-icon></el-button>
                     &nbsp;
-                    <el-switch v-model="questionList[index-1].optionList[index2-1].isCorrect" @change="checkAnswer(1,index-1,index2-1)"/>&nbsp;正确答案
+                    <el-tooltip content="正确答案" placement="right">
+                      <el-switch v-if="type==3" v-model="questionList[index-1].optionList[index2-1].isCorrect" @change="checkAnswer(1,index-1,index2-1)"/>
+                    </el-tooltip>
                   </n-popover>
                 </van-checkbox>
                 <br/>
@@ -194,7 +198,7 @@
         </div>
 
         <!-- TieZhu:填空题 -->
-        <div v-if="questionList[index-1].type==3">
+        <div v-if="questionList[index-1].type==3" @click="showTB(index-1)">
           <el-input v-if="questionList[index-1].qsIsEditing" v-model="questionList[index-1].question" @blur="finishEditing(0,index-1,0)" @keyup.enter="finishEditing(0,index-1,0)" clearable/>
           <span v-else @click="startEditing(0,index-1,0)">{{ questionList[index-1].text }}</span>
           <br/>
@@ -205,11 +209,11 @@
         </div>
 
         <!-- TieZhu:评分题 -->
-        <div v-if="questionList[index-1].type==4">
+        <div v-if="questionList[index-1].type==4" @click="showTB(index-1)">
           <el-input v-if="questionList[index-1].qsIsEditing" v-model="questionList[index-1].question" @blur="finishEditing(0,index-1,0)" @keyup.enter="finishEditing(0,index-1,0)" clearable/>
           <span v-else @click="startEditing(0,index-1,0)">{{ questionList[index-1].text }}</span>
           <br/>
-          <el-rate v-model="score" allow-half></el-rate>
+          <el-rate v-model="score" disabled></el-rate>
           <br/>
           <br/>
         </div>
@@ -350,19 +354,6 @@ const router = useRouter();
         }
       })
     },
-    showQuestionnaireDesign(){
-      var promise = GetQuestionnaireDesign(this.username, this.questionnaireId, this.type);
-      promise.then((result)=>{
-        this.questionnaireId = result.questionnaireId;
-        this.type = result.type;
-        this.questionList = result.questionList;
-        this.people = result.people;
-        this.isDisorder = result.isDisorder;
-        this.title = result.title;
-        this.text = this.title;
-        this.questionCnt = questionList.length;
-      })
-    },
 
 
     //TieZhu:添加单选题
@@ -382,12 +373,12 @@ const router = useRouter();
     //TieZhu:添加填空题
     addFill(){
       this.questionCnt++;
-      this.questionList.push({"type":3,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请填空","text":"请填空","score":0});
+      this.questionList.push({"type":3,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请填空","text":"请填空","score":0,"correctAnwser":false});
     },
     //TieZhu:添加评分题
     addScore(){
       this.questionCnt++;
-      this.questionList.push({"type":4,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请评分","text":"请评分","score":0});
+      this.questionList.push({"type":4,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请评分","text":"请评分","score":0,"correctAnwser":false});
     },
 
     //TieZhu:工具栏功能
@@ -567,14 +558,11 @@ const router = useRouter();
       this.success("发布成功");
     }
    },
-   mounted(){
-    // GetQuestionnaireDesign();
-   },
    components:{
     NavigationBarInQuestionnaire,
     NPopover,
    },
-   created(){
+   mounted(){
     const internalInstance = getCurrentInstance()
     const internalData = internalInstance.appContext.config.globalProperties
     this.username = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
@@ -583,29 +571,33 @@ const router = useRouter();
     this.type = this.$route.query.questionnaireType;
     if(this.questionnaireId != -1){
       var promise=GetQuestionnaire(this.questionnaireId,"/quetionnaireDesign",true);
+      
       promise.then((result) => {
         this.title = result.Title;
+        this.text = this.title;
         this.type = result.category;
         this.people = result.people;
         this.timeLimit = result.TimeLimit;
         this.questionList = result.questionList;
-      })
-      let i = 0,j = 0;
-      for(i = 0;i < this.questionList.length;i++){
-        this.questionList[i].showToolbar = ref(false);
-        this.questionList[i].qsIsEditing = ref(false);
-        this.questionList[i].isDisabled = ref(true);
-        this.questionList[i].max = ref(1);
-        this.questionList[i].text = ref(this.questionList[i].question);
-        if(this.questionList[i].type <= 2){
-          for(j = 0;j < this.questionList[i].optionList.length;j++){
-          this.questionList[i].optionList[j].text = ref(this.questionList[i].optionList[j].content);
-          this.questionList[i].optionList[j].isEditing = ref(false);
+        this.description = result.description;
+        this.destext = this.description;
+        console.log(this.questionList);
+        let i = 0,j = 0;
+        for(i = 0;i < this.questionList.length;i++){
+          this.questionList[i].showToolbar = false;
+          this.questionList[i].qsIsEditing = false;
+          this.questionList[i].isDisabled = true;
+          this.questionList[i].max = 1;
+          this.questionList[i].text = this.questionList[i].question;
+          if(this.questionList[i].type <= 2){
+            for(j = 0;j < this.questionList[i].optionCnt;j++){
+            this.questionList[i].optionList[j].text = this.questionList[i].optionList[j].content;
+            this.questionList[i].optionList[j].isEditing = false;
+            }
           }
         }
-      }
+      })
     }
-    // 创建可以访问内部组件实例的实例
    }
  })
 </script>
