@@ -5,27 +5,27 @@ export function GetQuestionnaire(surveyID,url,isDesign){
     data.surveyID = surveyID;
     data.url = url;
     data.isDesign = isDesign;
-    return get(url,data);
+    return get(url+"/"+surveyID+"/"+isDesign,data);
 }
 //拿到交叉分析数据
 export function GetCrossData(QuestionID1,QuestionID2){
     let data = {};
     data.QuestionID1 = QuestionID1;
     data.QuestionID2 = QuestionID2;
-    return get("/dataPre",data);
+    return get("/dataPre"+"/"+QuestionID1+"/"+QuestionID2,data);
 }
 //拿到其他数据
 export function GetOtherData(surveyID){
     let data = {};
     data.surveyID = surveyID;
-    return get("/dataPre",data);
+    return get("/dataPre/"+surveyID,data);
 }
 //拿到暂存信息
 export function GetStoreFill(userName,surveyID){
     let data = {};
     data.userName = userName;
     data.surveyID = surveyID;
-    return get('/questionnaireFill',data)
+    return get('/questionnaireFill/'+userName+surveyID,data)
 }
 //传回填写信息
 export function PostFill(surveyID,status,question){
@@ -36,7 +36,7 @@ export function PostFill(surveyID,status,question){
     return post('/questionnaireFill',data);
 }
 //传回问卷信息
-export function PostQuestion(surveyID,title,category,isOrder,people,timeLimit,questionList){
+export function PostQuestion(surveyID,title,category,isOrder,people,timeLimit,questionList,description,userName){
     let data = {};
     data.surveyID = surveyID;
     data.title = title;
@@ -45,5 +45,7 @@ export function PostQuestion(surveyID,title,category,isOrder,people,timeLimit,qu
     data.peoples = people;
     data.timeLimit = timeLimit;
     data.questionList = questionList;
+    data.description = description;
+    data.userName = userName;
     return post('/questionnaireDesign',data);
 }
