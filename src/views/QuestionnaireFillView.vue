@@ -14,7 +14,7 @@
         <div v-if="type==2" class="time">
           剩余人数:{{ people }}
         </div>
-        <van-divider  :style="{ color: '#626aef', borderColor: '#626aef', padding: '0 15px' }"></van-divider>
+        <van-divider v-if="type==2 || type==3"  :style="{ color: '#626aef', borderColor: '#626aef', padding: '0 15px' }"></van-divider>
         <div v-for="index in questionCnt">
   
           <!-- TieZhu:
@@ -263,20 +263,22 @@
       this.addMultiple();
       this.addFill();
       this.addScore();
-      let totalSeconds = this.timeLimit * 60 - this.duration;
-      const timeDisplay = document.getElementById('time');
-      this.intervalId = setInterval(() => {
-        totalSeconds--;
-        const minutes = Math.floor(totalSeconds / 60);
-        const seconds = totalSeconds % 60;
-        timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+      if(this.type == 3){
+        let totalSeconds = this.timeLimit * 60 - this.duration;
+        const timeDisplay = document.getElementById('time');
+        this.intervalId = setInterval(() => {
+          totalSeconds--;
+          const minutes = Math.floor(totalSeconds / 60);
+          const seconds = totalSeconds % 60;
+          timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
-        if (totalSeconds <= 0) {
-          this.warning("考试时间到！试卷回收");
-          clearInterval(this.intervalId);
-          this.postFill(1);
+          if (totalSeconds <= 0) {
+            this.warning("考试时间到！试卷回收");
+            clearInterval(this.intervalId);
+            this.postFill(1);
+          }
+        },1000);
         }
-      },1000);
      },
      beforeUnmount(){
       if(this.intervalId){
