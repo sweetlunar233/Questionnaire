@@ -306,7 +306,7 @@
   
   .right{
     position: relative;
-    height: 650px;
+    height: 75%;
     width: 90%;
     top: 8%;
     left: 4%;
