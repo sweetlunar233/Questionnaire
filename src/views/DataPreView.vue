@@ -146,7 +146,7 @@
               </n-tabs>
             </n-card>
           </div>
-          <div class="bar">
+          <div v-if="!flag" class="bar">
             <el-tooltip content="下载数据" placement="right">
               <el-button size="large"  v-print="printObj" text circle><el-icon color="#337ecc" :size="30"><Download /></el-icon></el-button>
             </el-tooltip>
@@ -210,6 +210,7 @@ export default {
 		    }
       },
       url:'',
+      flag:false,//是否是为了展示投票结果而存在的页面
     };
   },
   mounted() {
@@ -352,7 +353,7 @@ export default {
     changeBar(value){
       this.isCross = !this.isCross;
       if(this.isCross){
-        this.printObj.id = 'crossData'; //TieZhu：为什么要加#？不知道，反正打印组件要加
+        this.printObj.id = 'crossData';
       }
       else{
         this.printObj.id = 'dataAnalysis';
@@ -372,6 +373,7 @@ export default {
   },
   created(){
     this.questionnaireId = this.$route.query.questionnaireId;
+    this.flag = this.$route.query.questionnaireId;
     var promise = GetOtherData(this.questionnaireId);
     promise.then((result) => {
       this.questionList = result.questions_stats;

@@ -10,6 +10,9 @@
         <div v-if="type==3" id="time" class="time">
           剩余时间
         </div>
+        <div v-if="type==2" class="time">
+          剩余人数:{{ people }}
+        </div>
         <van-divider  :style="{ color: '#626aef', borderColor: '#626aef', padding: '0 15px' }"></van-divider>
         <div v-for="index in questionCnt">
   
@@ -277,6 +280,7 @@
      created(){
       var promise;
       this.questionnaireId = this.$route.query.questionnaireId;
+      this.type = this.$route.query.questionnaireType;
       if(this.$cookies.isKey('username')){
         const internalInstance = getCurrentInstance()
         const internalData = internalInstance.appContext.config.globalProperties
