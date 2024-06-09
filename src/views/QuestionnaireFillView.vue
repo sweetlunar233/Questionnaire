@@ -15,7 +15,7 @@
           剩余人数:{{ people }}
         </div>
         <van-divider v-if="type==2 || type==3"  :style="{ color: '#626aef', borderColor: '#626aef', padding: '0 15px' }"></van-divider>
-        <div v-for="index in questionCnt">
+        <div v-for="index in questionList.length">
   
           <!-- TieZhu:
           对于单选和多选：
@@ -313,13 +313,15 @@
         console.log(this.submissionID)
         promise = GetStoreFill(this.username,this.questionnaireId,this.submissionID);
         promise.then((result) => {
-          this.title = result.Titile;
+          this.title = result.Title;
+          console.log(this.title);
           this.type = result.category;
           this.people = result.people;
           this.timeLimit = result.TimeLimit;
           this.questionList = result.questionList;
           this.duration = result.duration;
           this.description = result.description;
+          console.log(this.questionList);
           if(this.type == 2 && this.people == 0){
             this.warning("报名人数已满！")
             this.$router.push({path:'/userManage/filled'});
