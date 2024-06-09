@@ -44,7 +44,7 @@
               {{ questionList[index-1].question }}
             </div>
             <br/>
-            <van-radio-group v-model=" questionList[index-1].Answer" v-for="index2 in questionList[index-1].optionCnt" >
+            <van-radio-group v-model=" questionList[index-1].Answer" v-for="index2 in questionList[index-1].optionCnt" :disabled="flag">
                 <van-radio :name="questionList[index-1].optionList[index2-1].optionId" checked-color="#0283EF" :label-disabled=true @click="print(questionList[index-1].radio)">
                     <div>
                     {{ questionList[index-1].optionList[index2-1].content }}
@@ -62,7 +62,7 @@
                 {{ questionList[index-1].question }}
             </div>
             
-            <van-checkbox-group v-model=" questionList[index-1].Answer" v-for="index2 in questionList[index-1].optionCnt"  checked-color="#0283EF">
+            <van-checkbox-group v-model=" questionList[index-1].Answer" v-for="index2 in questionList[index-1].optionCnt"  checked-color="#0283EF" :disabled="flag">
                 <br/>
                 <van-checkbox :name="questionList[index-1].optionList[index2-1].optionId" shape="square" :label-disabled=true>
                     <div>
@@ -82,7 +82,7 @@
             </div>
             <br/>
             <br/>
-            <el-input v-model="questionList[index-1].Answer" size="large" placeholder="请填空"/>
+            <el-input v-model="questionList[index-1].Answer" size="large" placeholder="请填空" :disabled="flag"/>
             <br/>
             <br/>
           </div>
@@ -242,7 +242,7 @@
               this.warning("有必填题目没有填写！")
               return false;
             }
-            else if(this.questionList[i].type == 1 && this.questionList[i].isNecessary && this.questionList[i].Answer==[-1]){
+            else if(this.questionList[i].type == 2 && this.questionList[i].isNecessary && this.questionList[i].Answer==[-1]){
               this.warning("有必填题目没有填写！")
               return false;
             }
@@ -295,9 +295,9 @@
      },
      created(){
       var promise;
-      this.questionnaireId = this.$route.query.questionnaireId;
+      this.questionnaireId = parseInt(this.$route.query.questionnaireId);
       this.type = this.$route.query.questionnaireType;
-      this.submissionID = this.$route.query.submissionId;
+      this.submissionID = parseInt(this.$route.query.submissionId);
       this.flag = this.$route.query.flag;
       if(this.flag == 2){
         this.$nextTick(()=>{

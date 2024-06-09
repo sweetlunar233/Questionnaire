@@ -377,7 +377,7 @@ export default {
     NQrCode,
   },
   created(){
-    this.questionnaireId = this.$route.query.questionnaireId;
+    this.questionnaireId = parseInt(this.$route.query.questionnaireId);
     this.flag = this.$route.query.questionnaireId;
     var promise = GetOtherData(this.questionnaireId);
     console.log(promise);
