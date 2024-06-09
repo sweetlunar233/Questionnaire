@@ -556,9 +556,11 @@ const router = useRouter();
     NPopover,
    },
    created(){
-    // const internalInstance = getCurrentInstance()
-    // const internalData = internalInstance.appContext.config.globalProperties
-    // this.username = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
+    const internalInstance = getCurrentInstance()
+    const internalData = internalInstance.appContext.config.globalProperties
+    this.username = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
+    this.questionnaireId = this.$route.query.questionnaireId;
+    this.type = this.$route.query.questionnaireType;
     // if(this.questionnaireId != -1){
     //   var promise=GetQuestionnaire(this.questionnaireId,"/quetionnaireDesign",true);
     //   promise.then((result) => {
