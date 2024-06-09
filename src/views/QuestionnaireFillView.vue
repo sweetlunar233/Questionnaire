@@ -310,7 +310,7 @@
         const internalInstance = getCurrentInstance()
         const internalData = internalInstance.appContext.config.globalProperties
         this.username = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
-        
+        console.log(this.submissionID)
         promise = GetStoreFill(this.username,this.questionnaireId,this.submissionID);
         promise.then((result) => {
           this.title = result.Titile;
