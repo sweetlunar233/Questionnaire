@@ -176,7 +176,7 @@
                     <template #trigger>
                       <el-input 
                       v-if="questionList[index-1].optionList[index2-1].isEditing"
-                      v-model="questionList[index-1].optionList[index2-1].text" 
+                      v-model="questionList[index-1].optionList[index2-1].content" 
                       @blur="finishEditing(1,index-1,index2-1)" 
                       @keyup.enter="finishEditing(1,index-1,index2-1)"
                       />
