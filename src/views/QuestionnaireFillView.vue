@@ -1,9 +1,10 @@
 <!-- 问卷设计页面 -->
 <template>
+    <button v-if="flag==2" v-print="printObj" ref="printButton">打印</button>
     <navigation-bar style="position: fixed;"/>
     <div class="back">
       
-      <div class="right">
+      <div class="right" id="print">
         <div class="title">{{ title }}</div>
         <div>{{ description }}</div>
         <van-divider  :style="{ color: '#626aef', borderColor: '#626aef', padding: '0 16px' }"></van-divider>
@@ -142,6 +143,9 @@
           id:'print',
           popTitle:"纸翼传问",
           preview:false,
+          beforeOpenCallback:()=>{
+            console.log("开始打印前callback");
+          }
         }
       }
      },
@@ -287,6 +291,14 @@
       var promise;
       this.questionnaireId = this.$route.query.questionnaireId;
       this.type = this.$route.query.questionnaireType;
+      this.flag = this.$route.query.flag;
+      if(this.flag == 2){
+        this.$nextTick(()=>{
+          this.$refs.printButton.click();   //强行触发打印
+          this.$router.push({path:'/userManage/filled'});
+          return;
+        })
+      }
       if(this.$cookies.isKey('username')){
         const internalInstance = getCurrentInstance()
         const internalData = internalInstance.appContext.config.globalProperties
