@@ -66,7 +66,7 @@ const gotoSquare = () => {
                     <router-view/>
                 </el-main>
                 <!-- 底部区域 -->
-                <el-footer style="color: white;">问卷星球 ©2024 Created by 咱是什么组名啊来着</el-footer>
+                <el-footer style="color: white;">Copyright © 2024 问卷星球 Created by 咱是什么组名啊来着. All Rights Reserved</el-footer>
             </el-container>
         </el-container>
     </el-container>
