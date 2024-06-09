@@ -16,8 +16,8 @@ export function GetOtherData(surveyID){
     return get("/dataPre/"+surveyID);
 }
 //拿到暂存的填写记录
-export function GetStoreFill(userName,surveyID){
-    const url = `/questionnaireFill?userName=${encodeURIComponent(userName)}&surveyID=${encodeURIComponent(surveyID)}`;
+export function GetStoreFill(userName,surveyID,submissionID){
+    const url = `/questionnaireFill/${userName}/${surveyID}/${submissionID}`;
     return get(url);
 }
 //传回填写信息
