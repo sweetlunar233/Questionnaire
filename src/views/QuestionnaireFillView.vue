@@ -85,7 +85,7 @@
               {{ questionList[index-1].question }}
             </div>
             <br/>
-            <el-rate v-model="questionList[index-1].grade"></el-rate>
+            <el-rate v-model="questionList[index-1].grade" allow-half></el-rate>
             <br/>
             <br/>
           </div>
@@ -109,6 +109,11 @@
   import { ref } from 'vue'
   import { ElMessage, descriptionItemProps } from 'element-plus'
    
+
+
+
+
+
    export default({
      data(){
       return{

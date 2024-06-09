@@ -70,11 +70,12 @@ const onCurrentChange = (num) => {
 //编辑问卷传输问卷id的函数
 import { useRouter } from 'vue-router';
 const r = useRouter();
-const goToQuestionnaireFill = (questionnaireId) => {
+const goToQuestionnaireFill = (questionnaireId, submissionId) => {
   r.push({
     path: '/questionnaireFill',
     query: {
-      questionnaireId: questionnaireId
+      questionnaireId: questionnaireId,
+      submissionId: submissionId
     }
   });
 }
@@ -217,12 +218,13 @@ const deleteQs = (id) =>{
                         <div class="card-header">
                             <span class="textbutton">{{ questionnaire.Title }}</span>
                             <span style="float: right" class="right">填写日期: {{ questionnaire.PublishDate }}</span>
+                            <span style="float: right" class="right">{{ questionnaire.Status }}</span>
                             <span style="float: right" class="right">ID: {{questionnaire.SurveyID}}</span>
                         </div>
 
                         <!-- 下部分 -->
                         <div class="card-footer">
-                            <el-button type="text" :icon="Edit" @click="goToQuestionnaireFill(questionnaire.SurveyID)" class="thebutton">查看填写</el-button>
+                            <el-button type="text" :icon="Edit" @click="goToQuestionnaireFill(questionnaire.SurveyID, questionnaire.submissionId)" class="thebutton">查看填写</el-button>
                             <el-button type="danger" :icon="Delete" style="float: right" circle @click="deleteQs(questionnaire.SurveyID)" class="deletebutton"></el-button>
                         </div>
                     </div>
