@@ -138,7 +138,7 @@
         duration:60,//以秒为单位
         score:0,
         description:'问卷描述',
-        submisstionId:0,
+        // submisstionId:0,
         flag:0,//1是预览问卷,2是导出问卷
         question:[], //传给后端的时候用的
         printObj:{
@@ -197,7 +197,7 @@
           }
           var promise;
           if(status == 0){
-            console.log(this.duration)
+            // console.log(this.)
             promise = PostFill(this.questionnaireId,'Unsubmitted', this.question,this.duration,this.submissionId,this.username, 0);
           }
           else if(status == 1 && this.type == 3){
@@ -311,7 +311,7 @@
       var promise;
       this.questionnaireId = parseInt(this.$route.query.questionnaireId);
       this.type = this.$route.query.questionnaireType;
-      this.submissionID = parseInt(this.$route.query.submissionId);
+      this.submissionId = parseInt(this.$route.query.submissionId);
       this.flag = this.$route.query.flag;
       if(this.flag == 2){
         this.$nextTick(()=>{
@@ -324,8 +324,8 @@
         const internalInstance = getCurrentInstance()
         const internalData = internalInstance.appContext.config.globalProperties
         this.username = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
-        // console.log(this.submissionID)
-        promise = GetStoreFill(this.username,this.questionnaireId,this.submissionID);
+        // console.log(this.submissionId)
+        promise = GetStoreFill(this.username,this.questionnaireId,this.submissionId);
         promise.then((result) => {
           this.title = result.Title;
           // console.log(this.title);
