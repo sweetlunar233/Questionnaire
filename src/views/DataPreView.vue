@@ -186,6 +186,7 @@ export default {
       questionCnt: 0,
       questionList: [],
       title:'问题标题',
+      description:'',
       //用于交叉分析
       cross:[], //可以用于交叉分析的题目
       cross1:undefined, //自变量的问题ID
@@ -372,7 +373,9 @@ export default {
     this.questionnaireId = this.$route.query.questionnaireId;
     var promise = GetOtherData(this.questionnaireId);
     promise.then((result) => {
-      this.questionList = result.questionList;
+      this.questionList = result.questions_stats;
+      this.title = result.title;
+
     })
     let i = 0;
     for(i = 0;i < this.questionList.length;i++){
