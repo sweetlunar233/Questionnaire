@@ -35,6 +35,10 @@
         router.push('/personal');
     }
 
+    const gotoAboutUs = () =>{
+        router.push('/aboutUs');
+    }
+
     const goBack = () => {
         router.go(-1); // 返回上一页
     };
@@ -98,6 +102,7 @@
             <template #dropdown>
             <el-dropdown-menu class="dropdown_menu">
                 <el-dropdown-item @click="gotoPersonal">个人中心</el-dropdown-item>
+                <el-dropdown-item @click="gotoAboutUs">关于我们</el-dropdown-item>
                 <el-dropdown-item @click="gotoHome">退出登录</el-dropdown-item>
             </el-dropdown-menu>
             </template>
