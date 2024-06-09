@@ -112,6 +112,7 @@
   import NavigationBar from "@/components/NavigationBarInQuestionnaire.vue"
   import { ref } from 'vue'
   import { ElMessage, descriptionItemProps } from 'element-plus'
+  import {getCurrentInstance} from 'vue'
 
    export default({
      data(){
@@ -264,11 +265,11 @@
      },
      created(){
       var promise;
-      this.questionnaireId = this.$route.query.questionnaireId;
-      // const internalInstance = getCurrentInstance()
-      // const internalData = internalInstance.appContext.config.globalProperties
-      // this.username = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
-      if(this.username){
+      // this.questionnaireId = this.$route.query.questionnaireId;
+      if(this.$cookies.isKey('username')){
+        const internalInstance = getCurrentInstance()
+        const internalData = internalInstance.appContext.config.globalProperties
+        this.username = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
         promise = GetStoreFill(this.username,this.questionnaireId);
         promise.then((result) => {
           this.title = result.Titile;
@@ -280,10 +281,12 @@
           this.description = result.description;
         })
       }
-      // else{
-      //   this.warning("请先登录！");
-      //   this.$router.push({path:'/login',query:{questionnaireId:this.questionnaireId}});
-      // }
+      else{
+        this.warning("请先登录！");
+        console.log("1")
+        this.$router.push({path:'/login',query:{questionnaireId:this.questionnaireId}});
+        console.log("2")
+      }
      }
    })
   </script>
