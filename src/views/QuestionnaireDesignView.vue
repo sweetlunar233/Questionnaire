@@ -297,6 +297,7 @@ const router = useRouter();
       description:'问卷描述',
       desIsEditing:false,
       destext:'问卷描述',
+      flag:0,//如果flag为1则代表该问卷是点击已发布再编辑
     }
    },
    methods: {
@@ -543,13 +544,18 @@ const router = useRouter();
 
     //保存问卷
     saveQuestionnaire(){
-      console.log(this.username);
+      if(this.flag==1){
+        this.questionnaireId = -1;
+      }
       var promise = PostQuestion(this.questionnaireId,this.title,this.type,!this.isDisorder,this.people,this.timeLimit,this.questionList,this.description ,this.username,false);
       this.$router.push({path:'/userManage/filled'});
       this.success("保存成功");
     },
     //发布问卷
     releaseQuestionnaire(){
+      if(this.flag==1){
+        this.questionnaireId = -1;
+      }
       console.log(this.username);
       var promise = PostQuestion(this.questionnaireId,this.title,this.type,!this.isDisorder,this.people,this.timeLimit,this.questionList,this.description ,this.username,true);
       this.$router.push({path:'/userManage/filled'});
@@ -567,6 +573,7 @@ const router = useRouter();
     
     this.questionnaireId = parseInt(this.$route.query.questionnaireId);
     this.type = this.$route.query.questionnaireType;
+    this.flag = this.$route.query.flag;
     if(this.questionnaireId != -1){
       var promise=GetQuestionnaire(this.questionnaireId,"/quetionnaireDesign",true);
       
