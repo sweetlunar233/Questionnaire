@@ -9,7 +9,8 @@ export function GetQuestionnaire(surveyID,isDesign){    //isDesign=True,表示�
 }
 //拿到交叉分析数据
 export function GetCrossData(QuestionID1,QuestionID2){
-    return get("/dataPre/"+QuestionID1+"/"+QuestionID2);
+    const url = `/dataPre/${QuestionID1}/${QuestionID2}`;
+    return get(url);
 }
 //拿到其他数据
 export function GetOtherData(surveyID){
@@ -47,4 +48,11 @@ export function PostQuestion(surveyID,title,category,isOrder,people,timeLimit,qu
     data.Is_released = Is_released;
     console.log(questionList);
     return post('/questionnaireDesign',data);
+}
+//下载excel表格
+export function GetExcel(surveyID){
+    let data={};
+    data.surveyID = surveyID;
+    const url = `/dataPre/download/${surveyID}`;
+    return get(url);
 }

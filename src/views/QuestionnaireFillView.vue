@@ -148,7 +148,7 @@
           beforeOpenCallback:()=>{
             console.log("开始打印前callback");
           }
-        }
+        },
       }
      },
      methods: {
@@ -170,7 +170,7 @@
         //TieZhu:添加多选题
         addMultiple(){
             this.questionCnt++;
-            this.questionList.push({"type":2,"isNecessary":true,"question":"请选择以下选项（多选）","max":1, "Answer":ref([-1]),
+            this.questionList.push({"type":2,"isNecessary":true,"question":"请选择以下选项（多选）","max":1, "Answer":ref([]),
             "optionCnt":1,"optionList":[{"optionId":0,"content":"选项"}]});
         },
         //TieZhu:添加填空题
