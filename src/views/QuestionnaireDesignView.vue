@@ -542,31 +542,6 @@ const router = useRouter();
     const internalInstance = getCurrentInstance()
     const internalData = internalInstance.appContext.config.globalProperties
     this.username = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
-    // if(this.questionnaireId != -1){
-    //   var promise=GetQuestionnaire(this.questionnaireId,"/quetionnaireDesign",true);
-    //   promise.then((result) => {
-    //     this.title = result.Title;
-    //     this.type = result.category;
-    //     this.people = result.people;
-    //     this.timeLimit = result.TimeLimit;
-    //     this.questionList = result.questionList;
-    //   })
-    //   let i = 0,j = 0;
-    //   for(i = 0;i < this.questionList.length;i++){
-    //     this.questionList[i].showToolbar = ref(false);
-    //     this.questionList[i].qsIsEditing = ref(false);
-    //     this.questionList[i].isDisabled = ref(true);
-    //     this.questionList[i].max = ref(1);
-    //     this.questionList[i].text = ref(this.questionList[i].question);
-    //     if(this.questionList[i].type <= 2){
-    //       for(j = 0;j < this.questionList[i].optionList.length;j++){
-    //       this.questionList[i].optionList[j].text = ref(this.questionList[i].optionList[j].content);
-    //       this.questionList[i].optionList[j].isEditing = ref(false);
-    //       }
-    //     }
-    //   }
-    // }
-    // 创建可以访问内部组件实例的实例
    }
  })
 </script>

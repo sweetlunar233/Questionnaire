@@ -81,7 +81,7 @@
           <div v-if="questionList[index-1].type==4">
             {{ questionList[index-1].question }}
             <br/>
-            <el-rate v-model="questionList[index-1].grade"></el-rate>
+            <el-rate v-model="questionList[index-1].grade" allow-half></el-rate>
             <br/>
             <br/>
           </div>
@@ -105,6 +105,11 @@
   import { ref } from 'vue'
   import { ElMessage } from 'element-plus'
    
+
+
+
+
+
    export default({
      data(){
       return{
