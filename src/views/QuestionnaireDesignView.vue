@@ -86,7 +86,7 @@
            @drop: 放置元素时触发，处理元素放置后的逻辑。
            @dragenter.prevent: 进入另一个可放置元素时触发，这里用来调整元素位置。 -->
 
-      <div v-for="index in questionCnt"
+      <div v-for="index in questionList.length"
       draggable=true
       @dragstart="dragStart(index-1)"
       @dragover.prevent
@@ -194,7 +194,7 @@
         </div>
 
         <!-- TieZhu:填空题 -->
-        <div v-if="questionList[index-1].type==3">
+        <div v-if="questionList[index-1].type==3" @click="showTB(index-1)">
           <el-input v-if="questionList[index-1].qsIsEditing" v-model="questionList[index-1].question" @blur="finishEditing(0,index-1,0)" @keyup.enter="finishEditing(0,index-1,0)" clearable/>
           <span v-else @click="startEditing(0,index-1,0)">{{ questionList[index-1].text }}</span>
           <br/>
@@ -205,11 +205,11 @@
         </div>
 
         <!-- TieZhu:评分题 -->
-        <div v-if="questionList[index-1].type==4">
+        <div v-if="questionList[index-1].type==4" @click="showTB(index-1)">
           <el-input v-if="questionList[index-1].qsIsEditing" v-model="questionList[index-1].question" @blur="finishEditing(0,index-1,0)" @keyup.enter="finishEditing(0,index-1,0)" clearable/>
           <span v-else @click="startEditing(0,index-1,0)">{{ questionList[index-1].text }}</span>
           <br/>
-          <el-rate v-model="score" allow-half></el-rate>
+          <el-rate v-model="score" disabled></el-rate>
           <br/>
           <br/>
         </div>
@@ -577,25 +577,22 @@ const router = useRouter();
         this.questionList = result.questionList;
         this.description = result.description;
         this.destext = this.description;
-        
         let i = 0,j = 0;
         for(i = 0;i < this.questionList.length;i++){
-          this.questionList[i].showToolbar = ref(false);
-          this.questionList[i].qsIsEditing = ref(false);
-          this.questionList[i].isDisabled = ref(true);
-          this.questionList[i].max = ref(1);
-          this.questionList[i].text = ref(this.questionList[i].question);
+          this.questionList[i].showToolbar = false;
+          this.questionList[i].qsIsEditing = false;
+          this.questionList[i].isDisabled = true;
+          this.questionList[i].max = 1;
+          this.questionList[i].text = this.questionList[i].question;
           if(this.questionList[i].type <= 2){
-            console.log(this.questionList[i]);
             for(j = 0;j < this.questionList[i].optionCnt;j++){
-            this.questionList[i].optionList[j].text = ref(this.questionList[i].optionList[j].content);
-            this.questionList[i].optionList[j].isEditing = ref(false);
+            this.questionList[i].optionList[j].text = this.questionList[i].optionList[j].content;
+            this.questionList[i].optionList[j].isEditing = false;
             }
           }
         }
       })
     }
-    // 创建可以访问内部组件实例的实例
    }
  })
 </script>
