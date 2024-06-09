@@ -291,6 +291,7 @@
       var promise;
       this.questionnaireId = this.$route.query.questionnaireId;
       this.type = this.$route.query.questionnaireType;
+      this.submissionID = this.$route.query.submissionID;
       this.flag = this.$route.query.flag;
       if(this.flag == 2){
         this.$nextTick(()=>{
@@ -304,7 +305,7 @@
         const internalData = internalInstance.appContext.config.globalProperties
         this.username = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
         
-        promise = GetStoreFill(this.username,this.questionnaireId);
+        promise = GetStoreFill(this.username,this.questionnaireId,this.submissionID);
         promise.then((result) => {
           this.title = result.Titile;
           this.type = result.category;

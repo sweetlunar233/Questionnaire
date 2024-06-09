@@ -383,6 +383,7 @@ export default {
     promise.then((result) => {
       this.questionList = result.questions_stats;
       this.title = result.title;
+      console.log(this.title);
     })
     let i = 0;
     for(i = 0;i < this.questionList.length;i++){

@@ -61,8 +61,6 @@
         <div class = "post_button_container">
           <el-button plain color="#626aef" size="large" @click="saveQuestionnaire()" round><el-icon><Upload/></el-icon>&nbsp;保存</el-button>
           <el-button plain color="#626aef" size="large" round><el-icon><Position/></el-icon>&nbsp;发布</el-button>
-        <!-- <el-button plain color="#626aef" size="large" round @click="conserve"><el-icon><Upload/></el-icon>&nbsp;保存</el-button>
-        <el-button plain color="#626aef" size="large" round><el-icon><Position/></el-icon>&nbsp;发布</el-button> -->
         </div>
       </div>
 
@@ -581,6 +579,7 @@ const router = useRouter();
         this.questionList = result.questionList;
         this.description = result.description;
         this.destext = this.description;
+        this.isDisorder = result.isOrder;
         console.log(this.questionList);
         let i = 0,j = 0;
         for(i = 0;i < this.questionList.length;i++){
