@@ -33,7 +33,7 @@ const categorys = ref([
 ])
 
 //用户搜索时选中的分类id
-const categoryId = ref('')
+const categoryId = ref('请选择')
 
 //文章列表数据模型
 const questionnaires = ref([
@@ -157,7 +157,7 @@ const initCreated = (username) =>{
             if(i > pageSize.value * (pageNum.value - 1))
             {
                 if(i <= pageSize.value * pageNum.value){
-                    if(categoryId.value != "" && element.Category != categoryId.value){
+                    if(categoryId.value != "请选择" && element.Category != categoryId.value){
                         console.log("oh no!")
                     }
                     else{
@@ -316,7 +316,7 @@ const reviseQuestionnaire = (id) => {
             </el-form-item>
             <el-form-item>
                 <el-button class="bottone5" type="primary" @click="initCreated(username)" style="background-color: black;border: 0;color: white;">搜索</el-button>
-                <el-button class="bottone5" @click="categoryId=''" style="color: rgba(0, 0, 0, 0.753);">重置</el-button>
+                <el-button class="bottone5" @click="categoryId='请选择'" style="color: rgba(0, 0, 0, 0.753);">重置</el-button>
             </el-form-item>
         </el-form>
         <div class="card-container">
