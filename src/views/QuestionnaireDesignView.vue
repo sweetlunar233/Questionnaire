@@ -150,7 +150,9 @@
                       <el-button size="small" color="#fef0f0" @click="addOption(index-1,index2-1)" text><el-icon><Plus/></el-icon></el-button>
                       <el-button size="small" color="#ecf5ff" @click="deleteOption(index-1,index2-1)" :disabled="questionList[index-1].isDisabled" text><el-icon><Minus/></el-icon></el-button>
                       &nbsp;
-                      <el-switch v-model="questionList[index-1].optionList[index2-1].isCorrect" @change="checkAnswer(0,index-1,index2-1)"/>&nbsp;正确答案
+                      <el-tooltip content="正确答案" placement="right">
+                        <el-switch v-if="type==3" v-model="questionList[index-1].optionList[index2-1].isCorrect" @change="checkAnswer(0,index-1,index2-1)"/>
+                      </el-tooltip>
                     </div>
                   </n-popover>
                 </van-radio>
@@ -185,7 +187,9 @@
                     <el-button size="small" color="#fef0f0" @click="addOption(index-1,index2-1)" text><el-icon><Plus/></el-icon></el-button>
                     <el-button size="small" color="#ecf5ff" @click="deleteOption(index-1,index2-1)" :disabled="questionList[index-1].isDisabled" text><el-icon><Minus/></el-icon></el-button>
                     &nbsp;
-                    <el-switch v-model="questionList[index-1].optionList[index2-1].isCorrect" @change="checkAnswer(1,index-1,index2-1)"/>&nbsp;正确答案
+                    <el-tooltip content="正确答案" placement="right">
+                      <el-switch v-if="type==3" v-model="questionList[index-1].optionList[index2-1].isCorrect" @change="checkAnswer(1,index-1,index2-1)"/>
+                    </el-tooltip>
                   </n-popover>
                 </van-checkbox>
                 <br/>
@@ -577,6 +581,7 @@ const router = useRouter();
         this.questionList = result.questionList;
         this.description = result.description;
         this.destext = this.description;
+        console.log(this.questionList);
         let i = 0,j = 0;
         for(i = 0;i < this.questionList.length;i++){
           this.questionList[i].showToolbar = false;

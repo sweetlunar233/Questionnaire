@@ -21,7 +21,7 @@ export function GetStoreFill(userName,surveyID){
     return get(url);
 }
 //传回填写信息
-export function PostFill(surveyID,status,question,duration,submisstionID,username){
+export function PostFill(surveyID,status,question,duration,submisstionID,username,score){
     let data = {};
     data.surveyID = surveyID;
     data.status = status;
@@ -29,6 +29,7 @@ export function PostFill(surveyID,status,question,duration,submisstionID,usernam
     data.duration = duration;
     data.submisstionID = submisstionID;
     data.username = username;
+    data.score = score;
     return post('/questionnaireFill',data);
 }
 //传回问卷信息
@@ -41,10 +42,9 @@ export function PostQuestion(surveyID,title,category,isOrder,people,timeLimit,qu
     data.people = people;
     data.timeLimit = timeLimit;
     data.questionList = questionList;
-    console.log(questionList);
     data.userName=userName;         //创建者用户名
     data.description=description;   //问卷描述
-    console.log(Is_released);
     data.Is_released = Is_released;
+    console.log(questionList);
     return post('/questionnaireDesign',data);
 }
