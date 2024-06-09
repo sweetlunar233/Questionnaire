@@ -125,6 +125,14 @@ const goToQuestionnaireFill = (questionnaireId, submissionId, Status, type, scor
                 icon: 'GoldMedal',
             }
         )
+        .then(() => {
+            //用户点击了确认
+            
+        })
+        .catch(() => {
+            //用户点击了取消
+            
+        })
     }
     else if(type == 3){
         r.push({
