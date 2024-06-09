@@ -5,8 +5,12 @@
       
       <div class="right">
         <div class="title">{{ title }}</div>
+        <div>{{ description }}</div>
         <van-divider  :style="{ color: '#626aef', borderColor: '#626aef', padding: '0 16px' }"></van-divider>
-  
+        <div v-if="type==3" id="time" class="time">
+          剩余时间
+        </div>
+        <van-divider  :style="{ color: '#626aef', borderColor: '#626aef', padding: '0 15px' }"></van-divider>
         <div v-for="index in questionCnt">
   
           <!-- TieZhu:
@@ -116,18 +120,20 @@
         input:'',
         username:'',
         questionnaireId:0,
-        type:0,
+        type:3,
         questionCnt: 0,
         questionList: [],
         title:'问题标题',
         isDisorder:false,
         people:0, //剩余人数
-        timeLimit:0,
+        timeLimit:5,
         time:0, //存储在此页面停留的时间
         intervalId:null, //存储定时器的ID
         description:'',
         submissionId:0,
-        duration:0,
+        duration:4,
+        description:'问卷描述',
+        miao:0,
       }
      },
      methods: {
@@ -164,7 +170,7 @@
         },
         //暂存/提交,如果status是0，那么是暂存，如果status是1.那么根据问卷类型判断是已批改还是已提交
         postFill(status){
-          if(!this.canSubmit()){
+          if(this.time <= this.timeLimit && !this.canSubmit()){
             return;
           }
           var promise;
@@ -234,6 +240,19 @@
           this.postFill(1);
         }
       },60000);
+      let totalSeconds = this.timeLimit * 60;
+      const timeDisplay = document.getElementById('time');
+      this.intervalId = setInterval(() => {
+        totalSeconds--;
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+        if (totalSeconds <= 0) {
+          this.warning("考试时间到！试卷回收");
+          this.postFill(1);
+        }
+      },1000);
      },
      beforeUnmount(){
       if(this.intervalId){
@@ -257,7 +276,10 @@
           this.title = result.Titile;
           this.type = result.category;
           this.people = result.people;
-          
+          this.timeLimit = result.TimeLimit;
+          this.questionList = result.questionList;
+          this.duration = result.duration;
+          this.description = result.description;
         })
       }
       else{
@@ -316,5 +338,12 @@
     padding: 10px;
     box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.1);
     top: 10%;
+  }
+
+  .time{
+    text-align: center;
+    font-size:medium;
+    color: #626aef;
+    font-weight: bold;
   }
   </style>
