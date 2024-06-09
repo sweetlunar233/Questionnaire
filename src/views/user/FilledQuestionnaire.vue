@@ -70,6 +70,15 @@ const onCurrentChange = (num) => {
 //编辑问卷传输问卷id的函数
 import { useRouter } from 'vue-router';
 const r = useRouter();
+const goToQuestionnaireDesign = (questionnaireId, questionnaireType) => {
+  r.push({
+    path: '/questionnaireDesign',
+    query: {
+      questionnaireId: questionnaireId,
+      questionnaireType: questionnaireType
+    }
+  });
+}
 const goToQuestionnaireFill = (questionnaireId, submissionId, Status) => {
   let url = '';
   if(Status === "未提交"){
@@ -182,6 +191,32 @@ const deleteQs = (id) =>{
 }
 
 
+// 使用 ref 创建响应式数据
+const createDialogVisible = ref(false); // 控制创建问卷弹窗的显示
+const selectedType = ref(""); // 选择的问卷类型
+
+// 点击创建问卷按钮时显示弹窗
+const showCreateDialog = () => {
+  selectedType.value = "";
+  createDialogVisible.value = true;
+};
+
+// 处理关闭弹窗事件
+const handleCloseDialog = () => {
+  // 清空数据或其他操作
+  createDialogVisible.value = false
+  selectedType.value = "";
+};
+
+// 处理创建问卷事件
+const handleCreate = () => {
+  // 根据选定的问卷类型执行相应的操作
+  // 例如：保存选择的类型，跳转到问卷设计页面等
+  goToQuestionnaireDesign(-1, selectedType.value);
+  // 关闭弹窗
+  createDialogVisible.value = false;
+};
+
 
 
 
@@ -191,9 +226,9 @@ const deleteQs = (id) =>{
     <el-card class="page-container">
             <div class="header">
                 <span style="font-size: 30px;">已填写问卷</span>
-                <!-- <div class="extra">
-                    <el-button type="primary">添加文章</el-button>
-                </div> -->
+                <div class="extra">
+                    <button class="nbbutton" @click="showCreateDialog" style="margin-right: 30px;">创建问卷</button>
+                </div>
             </div>
         <!-- 搜索表单 -->
         <el-form inline class="searchform">
@@ -239,7 +274,38 @@ const deleteQs = (id) =>{
                 </div>
                 <div class="blob"></div>
             </div>
-
+            <!-- 创建问卷的弹窗 -->
+            <el-dialog width="1050px" :height="auto" center v-model="createDialogVisible" @update:visible="val => createDialogVisible = val" >
+                <div class="dialogfather">
+                    <div class="dialogfont">请选择问卷类型</div>
+                    <div class="dialog">
+                        <div class="book" @click="goToQuestionnaireDesign(-1, 0)">
+                            <p>普通问卷</p>
+                            <div class="cover">
+                                <img src="../../assets/0.png">
+                            </div>
+                        </div>
+                        <div class="book" @click="goToQuestionnaireDesign(-1, 1)">
+                            <p>投票问卷</p>
+                            <div class="cover">
+                                <img src="../../assets/1.png">
+                            </div>
+                        </div>
+                        <div class="book" @click="goToQuestionnaireDesign(-1, 2)">
+                            <p>报名问卷</p>
+                            <div class="cover">
+                                <img src="../../assets/2.png">
+                            </div>
+                        </div>
+                        <div class="book" @click="goToQuestionnaireDesign(-1, 3)">
+                            <p>考试问卷</p>
+                            <div class="cover">
+                                <img src="../../assets/3.png">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </el-dialog>
         </div>
         <!-- 分页条 -->
         <el-pagination :page-size="4" 
@@ -248,6 +314,147 @@ const deleteQs = (id) =>{
     </el-card>
 </template>
 <style scoped>
+
+.nbbutton {
+ padding: 8px 12px;
+ border: unset;
+ border-radius: 15px;
+ color: #212121;
+ z-index: 1;
+ background: #e8e8e8;
+ position: relative;
+ font-weight: 1000;
+ font-size: 17px;
+ -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+ box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+ transition: all 250ms;
+ overflow: hidden;
+
+ border: 5px solid black;
+}
+
+.nbbutton::before {
+ content: "";
+ position: absolute;
+ top: 0;
+ left: 0;
+ height: 100%;
+ width: 0;
+ border-radius: 15px;
+ background-color: #212121;
+ z-index: -1;
+ -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+ box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+ transition: all 250ms
+}
+
+.nbbutton:hover {
+ color: #e8e8e8;
+}
+
+.nbbutton:hover::before {
+ width: 100%;
+}
+
+.dialogfather{
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    flex-direction: column;
+    color: black;
+}
+
+.dialogfont{
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.dialog .book {
+  position: relative;
+  border-radius: 10px;
+  width: 200px;
+  height: 250px;
+  background-color: rgb(255, 255, 255);
+  /* -webkit-box-shadow: 1px 1px 12px #000; */
+  box-shadow: 1px 1px 3px #000;
+  -webkit-transform: preserve-3d;
+  -ms-transform: preserve-3d;
+  transform: preserve-3d;
+  -webkit-perspective: 2000px;
+  perspective: 2000px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  color: #000;
+
+  margin: 40px 20px;
+  cursor: pointer;
+}
+
+.dialog .cover {
+  top: 0;
+  position: absolute;
+  background-color: rgb(255, 255, 255);
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  cursor: pointer;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+  -webkit-transform-origin: 0;
+  -ms-transform-origin: 0;
+  transform-origin: 0;
+  /* -webkit-box-shadow: 1px 1px 12px #000; */
+  box-shadow: 1px 1px 3px #000;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.dialog .book:hover .cover {
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+  -webkit-transform: rotatey(-80deg);
+  -ms-transform: rotatey(-80deg);
+  transform: rotatey(-80deg);
+}
+
+.dialog p {
+  font-size: 40px;
+  font-weight: bolder;
+  margin-left: 20px;
+}
+
+.dialog{
+    display: flex; 
+    flex-direction: row;
+    justify-content: center; 
+    align-items: center;
+}
+
+.dialog div{
+    width: 20px;
+    height: 20px;
+}
+
+.dialog img{
+    display: inline-block;
+    max-width: 100%; 
+    height: auto; 
+    margin: 0; 
+}
 
 .bottone5 {
  align-items: center;
