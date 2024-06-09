@@ -7,7 +7,7 @@
         <div class="title">{{ title }}</div>
         <div>{{ description }}</div>
         <van-divider  :style="{ color: '#626aef', borderColor: '#626aef', padding: '0 16px' }"></van-divider>
-        <div id="time" class="time">
+        <div v-if="type==3" id="time" class="time">
           剩余时间
         </div>
         <van-divider  :style="{ color: '#626aef', borderColor: '#626aef', padding: '0 15px' }"></van-divider>
