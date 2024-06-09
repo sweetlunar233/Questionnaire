@@ -105,7 +105,7 @@
   
   <script>
   import { GetStoreFill, PostFill } from "@/api/question";
-  import NavigationBar from "@/components/NavigationBar.vue"
+  import NavigationBar from "@/components/NavigationBarInQuestionnaire.vue"
   import { ref } from 'vue'
   import { ElMessage } from 'element-plus'
    

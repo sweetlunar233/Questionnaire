@@ -23,6 +23,11 @@ const routes = [
     component: () => import('../views/QuestionnaireFillView.vue')
   },
   {
+    path: '/testAnswer',
+    name: 'testAnswer',
+    component: () => import('../views/TestAnswer.vue')
+  },
+  {
     path: '/userManage',
     name: 'userManage',
     component: () => import('../views/UserManageView.vue'),
