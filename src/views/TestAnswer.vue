@@ -47,6 +47,38 @@
   
             <br/>
           </div>
+
+
+          <!-- TieZhu：多选题 -->
+          <!-- <div v-if="questionList[index-1].type==2">
+            <div style="margin-left: 0.5%">
+                {{ questionList[index-1].question }}
+            </div>
+            
+            <van-checkbox-group v-model=" questionList[index-1].radio" v-for="index2 in questionList[index-1].optionCnt"  checked-color="#0283EF">
+                <br/>
+                <van-checkbox :name="questionList[index-1].optionList[index2-1].optionId" shape="square" :label-disabled=true>
+                    <div>
+                      {{ questionList[index-1].optionList[index2-1].content }}
+                    </div>
+                </van-checkbox>
+                <br/>
+            </van-checkbox-group>
+  
+            <br/>
+          </div> -->
+  
+          <!-- TieZhu:填空题 -->
+          <!-- <div v-if="questionList[index-1].type==3">
+            <div style="margin-left: 0.5%">
+              {{ questionList[index-1].question }}
+            </div>
+            <br/>
+            <br/>
+            <el-input v-model="questionList[index-1].fill" size="large" placeholder="请填空"/>
+            <br/>
+            <br/>
+          </div> -->
   
 
   
@@ -69,6 +101,9 @@
   import NavigationBar from "@/components/NavigationBarInQuestionnaire.vue"
   import { ref } from 'vue'
   import { ElMessage } from 'element-plus'
+  import { getFill } from "@/api/answer.js"
+  import { getCurrentInstance } from "vue";
+
    
    export default({
      data(){
@@ -178,20 +213,17 @@
             this.questionList.push({"type":4,"isNecessary":true,"question":"请评分","grade":ref('')});
         },
         //暂存/提交,如果status是0，那么是暂存，如果status是1.那么根据问卷类型判断是已批改还是已提交
-        postFill(status){
-          if(!this.canSubmit()){
-            return;
-          }
-          // var promise;
-          // if(status == 0){
-          //   promise = PostFill(this.questionnaireId,'Unsubmitted',this.question);
-          // }
-          // else if(status == 1 && this.type == 3){
-          //   promise = PostFill(this.questionnaireId,'Graded',this.question);
-          // }
-          // else{
-          //   promise = PostFill(this.questionnaireId,'Submitted',this.question);
-          // }
+        getFill(){
+          var promise = GetFill(this.username, this.questionnaireId, this.submissionId);
+          promise.then((result)=>{
+            this.questionListFill = result.questionList;
+            this.type = result.category;
+            this.title = result.title;
+            this.questionCnt = this.questionnaireListFill.length;
+            this.people = result.people;
+            this.timeLimit = result.TimeLimit;
+          })
+          
         },
         warning(content){
           ElMessage({
@@ -241,46 +273,15 @@
       ElMessage,
      },
      created(){
-      var promise;
-      this.questionnaireId = this.$route.query.questionnaireId;
-      const storedUsername = localStorage.getItem('username');
-      if(storedUsername){
-        this.username = storedUsername;
-        // promise = GetStoreFill(this.username,this.questionnaireId);
-        // promise.then((result) => {
-        //   this.question = result.question;
-        // })
-      }
-      // else{
-      //   this.$router.push({path:'/login',query:{questionnaireId:this.questionnaireId}});
-      // }
-      // promise=GetQuestionnaire(this.questionnaireId,"/quetionnaireFill",false);
-      // promise.then((result) => {
-      //   this.title = result.Title;
-      //   this.type = result.category;
-      //   this.people = result.people;
-      //   this.timeLimit = result.TimeLimit;
-      //   this.questionList = result.questionList;
-      // })
-      // if(storedUsername){
-      //   let i = 0, j = 0;
-      //   for(i = 0;i < this.questionList.length;i++){
-      //     for(j = 0;j < this.question.length;j++){
-      //       if(this.questionList[i].questionID == this.question[j].questionID){
-      //         if(this.questionList[i].type <= 2){
-      //           this.questionList[i].radio = ref(this.question[j].value);
-      //         }
-      //         else if(this.questionList[i].type == 3){
-      //           this.questionList[i].radio = ref(this.question[j].fill);
-      //         }
-      //         else{
-      //           this.questionList[i].radio = ref(this.question[j].grade);
-      //         }
-      //       }
-      //     }
-      //   }
-      // }
-     }
+      // this.questionnaireId = this.$route.query.questionnaireID;
+      // this.submissionId = this.$route.query.submissionID;
+      // this.score = this.$route.query.score;
+      
+      const internalInstance = getCurrentInstance();
+      const internalData = internalInstance.appContext.config.globalProperties;
+      this.username = internalData.$cookies.get('username'); // 后面的为之前设置的cookies的名字
+      // this.getFill();
+    }
    })
   </script>
   
