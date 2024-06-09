@@ -298,7 +298,7 @@ const handleCreate = () => {
             </el-form-item> -->
             <el-form-item>
                 <el-button class="bottone5" type="primary" @click="initFilled(username)" style="background-color: black;border: 0;color: white;">搜索</el-button>
-                <el-button class="bottone5" @click="categoryId='请选择'" style="color: rgba(0, 0, 0, 0.753);">重置</el-button>
+                <el-button class="bottone5" @click="categoryId='请选择';initFilled(username)" style="color: rgba(0, 0, 0, 0.753);">重置</el-button>
             </el-form-item>
         </el-form>
         <div class="card-container">
