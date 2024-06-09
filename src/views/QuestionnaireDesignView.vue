@@ -42,10 +42,9 @@
           &ensp;填空题
         </el-button>
       </div>
-      <br/>
       <div style="flex-grow: 1;"></div>
       <!-- 保存、发布、乱序展示、人数限制、时间限制 -->
-      <div >
+      <div>
         <!-- 对于考试问卷/报名问卷，是否乱序展示/设置人数限制 -->
         <div class = "blank_button_container">
           <div v-if="type==3">
@@ -62,6 +61,8 @@
         <div class = "post_button_container">
           <el-button plain color="#626aef" size="large" @click="saveQuestionnaire()" round><el-icon><Upload/></el-icon>&nbsp;保存</el-button>
           <el-button plain color="#626aef" size="large" round><el-icon><Position/></el-icon>&nbsp;发布</el-button>
+        <!-- <el-button plain color="#626aef" size="large" round @click="conserve"><el-icon><Upload/></el-icon>&nbsp;保存</el-button>
+        <el-button plain color="#626aef" size="large" round><el-icon><Position/></el-icon>&nbsp;发布</el-button> -->
         </div>
       </div>
 
@@ -606,14 +607,14 @@ const router = useRouter();
 
 .left{
   position: fixed;
-  top: 2%;
+  top: 5%;
   margin: 2%;
   margin-left: 10%;
   border-radius: 5px;
   border: 2px;
   padding: 1%;
   width: 15%;
-  height: 90%;
+  height: 80%;
   box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.1);
   background-color: white;
 
