@@ -373,12 +373,12 @@ const router = useRouter();
     //TieZhu:添加填空题
     addFill(){
       this.questionCnt++;
-      this.questionList.push({"type":3,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请填空","text":"请填空","score":0,"correctAnwser":''});
+      this.questionList.push({"type":3,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请填空","text":"请填空","score":0,"correctAnswer":''});
     },
     //TieZhu:添加评分题
     addScore(){
       this.questionCnt++;
-      this.questionList.push({"type":4,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请评分","text":"请评分","score":0,"correctAnwser":false});
+      this.questionList.push({"type":4,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请评分","text":"请评分","score":0,"correctAnswer":false});
     },
 
     //TieZhu:工具栏功能

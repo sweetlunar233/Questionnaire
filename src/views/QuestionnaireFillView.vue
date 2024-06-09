@@ -138,6 +138,11 @@
         description:'问卷描述',
         submisstionId:0,
         flag:0,//1是预览问卷,2是导出问卷
+        printObj:{
+          id:'print',
+          popTitle:"纸翼传问",
+          preview:false,
+        }
       }
      },
      methods: {
@@ -185,7 +190,7 @@
             promise = PostFill(this.questionnaireId,'Graded',this.question,this.submissionId,this.username);
             let sum = 0,i = 0;
             for(i=0;i<this.questionList.length;i++){
-              if(this.questionList[i].type == 3 && this.questionList[i].fill == this.questionList[i].correctAnwser){
+              if(this.questionList[i].type == 3 && this.questionList[i].fill == this.questionList[i].correctAnswer){
                 sum += this.questionList[i].score;
               }
               else if(this.questionList[i].type == 1 && this.questionList[i].optionList[this.questionList[i].Answer].isCorrect){
@@ -195,7 +200,7 @@
                 let j = 0;
                 sum += this.questionList[i].score;
                 for(j=0;j<this.questionList[i].optionList.length;j++){
-                  if(this.questionList[i].correctAnwser[j] != this.questionList[i].fill[j]){
+                  if(this.questionList[i].correctAnswer[j] != this.questionList[i].fill[j]){
                     sum -= this.questionList[i].score;
                     break;
                   }
