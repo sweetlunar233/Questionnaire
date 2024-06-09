@@ -16,7 +16,7 @@
               question：题干
               isNecessary：布尔类型，是否必填，初值true
               optionCnt：选项数量
-              radio:所选择的选项
+              Answer:所选择的选项
               optionList：选项数组。包含以下内容：
                 content：选项内容
           对于填空/评分：
@@ -24,8 +24,8 @@
               type：标识题目类型
               question：题干
               isNecessary：布尔类型，是否必填，初值true
-              fill:所填内容（仅对填空题有效）
-              grade:所评分数（仅对评分题有效）
+              Answer:所填内容（仅对填空题有效）
+              Answer:所评分数（仅对评分题有效）
           -->
   
           <el-icon color="#c45656" style="position: absolute; left: 1%;" v-if="questionList[index-1].isNecessary==true"><StarFilled/>&ensp;</el-icon>
@@ -36,7 +36,7 @@
               {{ questionList[index-1].question }}
             </div>
             <br/>
-            <van-radio-group v-model=" questionList[index-1].radio" v-for="index2 in questionList[index-1].optionCnt" >
+            <van-radio-group v-model=" questionList[index-1].Answer" v-for="index2 in questionList[index-1].optionCnt" >
                 <van-radio :name="questionList[index-1].optionList[index2-1].optionId" checked-color="#0283EF" :label-disabled=true @click="print(questionList[index-1].radio)">
                     <div>
                     {{ questionList[index-1].optionList[index2-1].content }}
@@ -54,7 +54,7 @@
                 {{ questionList[index-1].question }}
             </div>
             
-            <van-checkbox-group v-model=" questionList[index-1].radio" v-for="index2 in questionList[index-1].optionCnt"  checked-color="#0283EF">
+            <van-checkbox-group v-model=" questionList[index-1].Answer" v-for="index2 in questionList[index-1].optionCnt"  checked-color="#0283EF">
                 <br/>
                 <van-checkbox :name="questionList[index-1].optionList[index2-1].optionId" shape="square" :label-disabled=true>
                     <div>
@@ -74,7 +74,7 @@
             </div>
             <br/>
             <br/>
-            <el-input v-model="questionList[index-1].fill" size="large" placeholder="请填空"/>
+            <el-input v-model="questionList[index-1].Answer" size="large" placeholder="请填空"/>
             <br/>
             <br/>
           </div>
@@ -85,7 +85,7 @@
               {{ questionList[index-1].question }}
             </div>
             <br/>
-            <el-rate v-model="questionList[index-1].grade" allow-half></el-rate>
+            <el-rate v-model="questionList[index-1].Answer" allow-half></el-rate>
             <br/>
             <br/>
           </div>
@@ -108,11 +108,6 @@
   import NavigationBar from "@/components/NavigationBarInQuestionnaire.vue"
   import { ref } from 'vue'
   import { ElMessage, descriptionItemProps } from 'element-plus'
-   
-
-
-
-
 
    export default({
      data(){
@@ -129,8 +124,9 @@
         timeLimit:0,
         time:0, //存储在此页面停留的时间
         intervalId:null, //存储定时器的ID
-        question:[],
         description:'',
+        submissionId:0,
+        duration:0,
       }
      },
      methods: {
@@ -146,40 +142,53 @@
         //TieZhu:添加单选题
         addSingle(){
             this.questionCnt++;
-            this.questionList.push({"type":1,"isNecessary":true,"question":"请选择一个选项","radio":ref(''),
-            "optionCnt":1,"optionList":[{"optionId":0,"content":"选项", "isCorrect":true}]});
+            this.questionList.push({"type":1,"isNecessary":true,"question":"请选择一个选项","Answer":ref(''),
+            "optionCnt":1,"optionList":[{"optionId":0,"content":"选项"}]});
         },
         //TieZhu:添加多选题
         addMultiple(){
             this.questionCnt++;
-            this.questionList.push({"type":2,"score":10,"isNecessary":true,"question":"请选择以下选项（多选）","max":1, "radio":ref(''),
-            "optionCnt":1,"optionList":[{"optionId":0,"content":"选项", "isCorrect":true}]});
+            this.questionList.push({"type":2,"isNecessary":true,"question":"请选择以下选项（多选）","max":1, "Answer":ref(''),
+            "optionCnt":1,"optionList":[{"optionId":0,"content":"选项"}]});
         },
         //TieZhu:添加填空题
         addFill(){
             this.questionCnt++;
-            this.questionList.push({"type":3,"isNecessary":true,"question":"请填空","fill":ref(''), "answer":""});
+            this.questionList.push({"type":3,"isNecessary":true,"question":"请填空","Answer":ref('')});
         },
         //TieZhu:添加评分题
         addScore(){
             this.questionCnt++;
-            this.questionList.push({"type":4,"isNecessary":true,"question":"请评分","grade":ref('')});
+            this.questionList.push({"type":4,"isNecessary":true,"question":"请评分","Answer":ref('')});
         },
         //暂存/提交,如果status是0，那么是暂存，如果status是1.那么根据问卷类型判断是已批改还是已提交
         postFill(status){
           if(!this.canSubmit()){
             return;
           }
-          // var promise;
-          // if(status == 0){
-          //   promise = PostFill(this.questionnaireId,'Unsubmitted',this.question);
-          // }
-          // else if(status == 1 && this.type == 3){
-          //   promise = PostFill(this.questionnaireId,'Graded',this.question);
-          // }
-          // else{
-          //   promise = PostFill(this.questionnaireId,'Submitted',this.question);
-          // }
+          var promise;
+          if(status == 0){
+            promise = PostFill(this.questionnaireId,'Unsubmitted',this.question);
+          }
+          else if(status == 1 && this.type == 3){
+            promise = PostFill(this.questionnaireId,'Graded',this.question);
+            let sum = 0,i = 0;
+            for(i=0;i<this.questionList.length;i++){
+              if(this.questionList[i].type == 3 && this.questionList[i].fill == this.questionList[i].correctAnwser){
+                sum += this.questionList[i].score;
+              }
+              else if(this.questionList[i].type == 1 && this.questionList[i].optionList[this.questionList[i].Answer].isCorrect){
+                sum += this.questionList[i].score;
+              }
+              else if(this.questionList[i].type == 2){
+
+              }
+            }
+            this.$router.push({path:'/testAnswer',query:{questionnaireID:this.questionnaireId,submissionID:this.submissionId,score:sum}}); 
+          }
+          else{
+            promise = PostFill(this.questionnaireId,'Submitted',this.question);
+          }
         },
         warning(content){
           ElMessage({
@@ -191,33 +200,39 @@
         canSubmit(){
           let i = 0;
           for(i = 0;i < this.questionList.length;i++){
-            if(this.questionList[i].type <= 2 && this.questionList[i].isNecessary && this.questionList[i].radio==''){
+            if(this.questionList[i].type <= 2 && this.questionList[i].isNecessary && this.questionList[i].Answer==''){
               this.warning("有必填题目没有填写！")
               return false;
             }
-            else if(this.questionList[i].type == 3 && this.questionList[i].isNecessary && this.questionList[i].fill==''){
+            else if(this.questionList[i].type == 3 && this.questionList[i].isNecessary && this.questionList[i].Answer==''){
               this.warning("有必填题目没有填写！")
               return false;
             }
-            else if(this.questionList[i].type == 4 && this.questionList[i].isNecessary && this.questionList[i].grade==''){
+            else if(this.questionList[i].type == 4 && this.questionList[i].isNecessary && this.questionList[i].Answer==''){
               this.warning("有必填题目没有填写！")
               return false;
             }
           }
           return true;
-        }
+        },
      },
      components:{
       NavigationBar,
+      ElMessage,
      },
      mounted(){
       this.addSingle();
       this.addMultiple();
       this.addFill();
       this.addScore();
+      this.time = this.duration;
       this.intervalId = setInterval(() => {
         this.time++;
-      },1000);
+        if(this.time > this.duration){
+          this.warning("考试时间到！试卷回收");
+          this.postFill(1);
+        }
+      },60000);
      },
      beforeUnmount(){
       if(this.intervalId){
@@ -231,42 +246,21 @@
      created(){
       var promise;
       this.questionnaireId = this.$route.query.questionnaireId;
-      const storedUsername = localStorage.getItem('username');
-      if(storedUsername){
-        this.username = storedUsername;
-        // promise = GetStoreFill(this.username,this.questionnaireId);
-        // promise.then((result) => {
-        //   this.question = result.question;
-        // })
+      const internalInstance = getCurrentInstance()
+      const internalData = internalInstance.appContext.config.globalProperties
+      this.username = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
+      if(this.username){
+        promise = GetStoreFill(this.username,this.questionnaireId);
+        promise.then((result) => {
+          this.title = result.Titile;
+          this.type = result.category;
+          this.people = result.people;
+          
+        })
       }
       // else{
+      //   this.warning("请先登录！");
       //   this.$router.push({path:'/login',query:{questionnaireId:this.questionnaireId}});
-      // }
-      // promise=GetQuestionnaire(this.questionnaireId,"/quetionnaireFill",false);
-      // promise.then((result) => {
-      //   this.title = result.Title;
-      //   this.type = result.category;
-      //   this.people = result.people;
-      //   this.timeLimit = result.TimeLimit;
-      //   this.questionList = result.questionList;
-      // })
-      // if(storedUsername){
-      //   let i = 0, j = 0;
-      //   for(i = 0;i < this.questionList.length;i++){
-      //     for(j = 0;j < this.question.length;j++){
-      //       if(this.questionList[i].questionID == this.question[j].questionID){
-      //         if(this.questionList[i].type <= 2){
-      //           this.questionList[i].radio = ref(this.question[j].value);
-      //         }
-      //         else if(this.questionList[i].type == 3){
-      //           this.questionList[i].radio = ref(this.question[j].fill);
-      //         }
-      //         else{
-      //           this.questionList[i].radio = ref(this.question[j].grade);
-      //         }
-      //       }
-      //     }
-      //   }
       // }
      }
    })
