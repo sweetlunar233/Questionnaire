@@ -45,7 +45,7 @@
             </div>
             <br/>
             <van-radio-group v-model=" questionList[index-1].Answer" v-for="index2 in questionList[index-1].optionCnt" :disabled="flag">
-                <van-radio :name="questionList[index-1].optionList[index2-1].optionId" checked-color="#0283EF" :label-disabled=true @click="print(questionList[index-1].radio)">
+                <van-radio :name="questionList[index-1].optionList[index2-1].optionId" checked-color="#0283EF" :label-disabled=true @click="print(questionList[index-1].optionList[index2-1].optionId)">
                     <div>
                     {{ questionList[index-1].optionList[index2-1].content }}
                     </div>
@@ -136,6 +136,7 @@
         description:'',
         submissionId:0,
         duration:60,//以秒为单位
+        score:0,
         description:'问卷描述',
         submisstionId:0,
         flag:0,//1是预览问卷,2是导出问卷
@@ -188,10 +189,10 @@
           }
           var promise;
           if(status == 0){
-            promise = PostFill(this.questionnaireId,'Unsubmitted',this.question,this.submissionId,this.username);
+            promise = PostFill(this.questionnaireId,'Unsubmitted', this.question,this.duration,this.submissionId,this.username, 0);
           }
           else if(status == 1 && this.type == 3){
-            promise = PostFill(this.questionnaireId,'Graded',this.question,this.submissionId,this.username);
+            
             let sum = 0,i = 0;
             for(i=0;i<this.questionList.length;i++){
               if(this.questionList[i].type == 3 && this.questionList[i].fill == this.questionList[i].correctAnswer){
@@ -211,7 +212,9 @@
                 }
               }
             }
+            promise = PostFill(this.questionnaireId,'Graded',this.question,this.duration,this.submissionId,this.username, sum);
             this.$router.push({path:'/testAnswer',query:{questionnaireID:this.questionnaireId,submissionID:this.submissionId,score:sum}}); 
+            this.score = sum;
           }
           else if(status == 1 && this.type == 1){
             this.success("投票成功");
@@ -310,18 +313,18 @@
         const internalInstance = getCurrentInstance()
         const internalData = internalInstance.appContext.config.globalProperties
         this.username = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
-        console.log(this.submissionID)
+        // console.log(this.submissionID)
         promise = GetStoreFill(this.username,this.questionnaireId,this.submissionID);
         promise.then((result) => {
           this.title = result.Title;
-          console.log(this.title);
+          // console.log(this.title);
           this.type = result.category;
           this.people = result.people;
           this.timeLimit = result.TimeLimit;
           this.questionList = result.questionList;
           this.duration = result.duration;
           this.description = result.description;
-          console.log(this.questionList);
+          // console.log(this.questionList);
           if(this.type == 2 && this.people == 0){
             this.warning("报名人数已满！")
             this.$router.push({path:'/userManage/filled'});

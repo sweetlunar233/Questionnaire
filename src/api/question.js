@@ -21,13 +21,13 @@ export function GetStoreFill(userName,surveyID,submissionID){
     return get(url);
 }
 //传回填写信息
-export function PostFill(surveyID,status,question,duration,submisstionID,username,score){
+export function PostFill(surveyID,status,question,duration,submissionID,username,score){
     let data = {};
     data.surveyID = surveyID;
     data.status = status;
     data.question = question;
     data.duration = duration;
-    data.submisstionID = submisstionID;
+    data.submissionID = submissionID;
     data.username = username;
     data.score = score;
     return post('/questionnaireFill',data);
