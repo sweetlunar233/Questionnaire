@@ -97,7 +97,8 @@ const goToQuestionnaireFill = (questionnaireId, type) => {
         r.push({
           path: '/questionnaireFill',
           query: {
-            questionnaireId: questionnaireId
+            questionnaireId: questionnaireId,
+            submissionId: -1,
           }
         });
       }
