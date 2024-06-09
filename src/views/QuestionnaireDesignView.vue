@@ -373,7 +373,7 @@ const router = useRouter();
     //TieZhu:添加填空题
     addFill(){
       this.questionCnt++;
-      this.questionList.push({"type":3,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请填空","text":"请填空","score":0,"correctAnwser":false});
+      this.questionList.push({"type":3,"showToolbar":false,"isNecessary":true,"qsIsEditing":false,"question":"请填空","text":"请填空","score":0,"correctAnwser":''});
     },
     //TieZhu:添加评分题
     addScore(){

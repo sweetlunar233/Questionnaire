@@ -203,7 +203,7 @@
           else if(status == 1 && this.type == 1){
             this.success("投票成功");
             promise = PostFill(this.questionnaireId,'Submitted',this.question,this.submissionId,this.username);
-            this.$router.push({path:'/dataPre',query:{questionnaireID:this.questionnaireId}});
+            this.$router.push({path:'/dataPre',query:{questionnaireID:this.questionnaireId,flag:true}});
           }
           else{
             promise = PostFill(this.questionnaireId,'Submitted',this.question,this.submissionId,this.username);
