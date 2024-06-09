@@ -93,7 +93,7 @@
         </div>
 
       </div>
-      
+      <div>最终得分：{{ this.score }}</div>
     </div>
 
     <div class="bottom">
@@ -110,6 +110,8 @@ import { GetStoreFill, PostFill } from "@/api/question";
 import NavigationBar from "@/components/NavigationBarInQuestionnaire.vue"
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
+
+import { GetFill, GetDesign } from '../api/answer.js'
  
  export default({
    data(){
@@ -127,9 +129,28 @@ import { ElMessage } from 'element-plus'
       time:0, //存储在此页面停留的时间
       intervalId:null, //存储定时器的ID
       question:[],
+      score:0,
     }
    },
    methods: {
+      getFill(){
+        var promise = GetFill(this.questionnaireId);
+        promise.then((result)=>{
+          this.questionListFill = result.questionList;
+          this.score = result.score;
+        })
+      },
+      getDesign(){
+        var promise = GetDesign(this.questionnaireId);
+        promise.then((result)=>{
+          this.questionListDesign = result.questionList;
+          this.type = result.type;
+          this.title = result.title;
+          this.questionCnt = this.questionnaireListDesign.length;
+          this.people = result.people;
+          this.timeLimit = result.timeLimit;
+        })
+      },
       print(x){
         console.log(x);
       },
@@ -156,7 +177,7 @@ import { ElMessage } from 'element-plus'
       addMultiple(){
           this.questionCnt++;
           this.questionList.push({"type":2,"isNecessary":true,"question":"请选择以下选项（多选）","max":1, "radio":ref(''),
-          "optionCnt":1,"optionList":[{"optionId":0,"content":"选项"}]});
+          "optionCnt":1,"optionList":[{"optionId":0,"content":"选项"},{"optionId":1,"content":"选项"},{"optionId":2,"content":"选项"}]});
       },
       //TieZhu:添加填空题
       addFill(){
@@ -216,6 +237,7 @@ import { ElMessage } from 'element-plus'
    mounted(){
     this.addSingle();
     this.addMultiple();
+    this.addMultiple();
     this.addFill();
     this.addScore();
     this.intervalId = setInterval(() => {
@@ -237,40 +259,7 @@ import { ElMessage } from 'element-plus'
     const storedUsername = localStorage.getItem('username');
     if(storedUsername){
       this.username = storedUsername;
-      // promise = GetStoreFill(this.username,this.questionnaireId);
-      // promise.then((result) => {
-      //   this.question = result.question;
-      // })
     }
-    // else{
-    //   this.$router.push({path:'/login',query:{questionnaireId:this.questionnaireId}});
-    // }
-    // promise=GetQuestionnaire(this.questionnaireId,"/quetionnaireFill",false);
-    // promise.then((result) => {
-    //   this.title = result.Title;
-    //   this.type = result.category;
-    //   this.people = result.people;
-    //   this.timeLimit = result.TimeLimit;
-    //   this.questionList = result.questionList;
-    // })
-    // if(storedUsername){
-    //   let i = 0, j = 0;
-    //   for(i = 0;i < this.questionList.length;i++){
-    //     for(j = 0;j < this.question.length;j++){
-    //       if(this.questionList[i].questionID == this.question[j].questionID){
-    //         if(this.questionList[i].type <= 2){
-    //           this.questionList[i].radio = ref(this.question[j].value);
-    //         }
-    //         else if(this.questionList[i].type == 3){
-    //           this.questionList[i].radio = ref(this.question[j].fill);
-    //         }
-    //         else{
-    //           this.questionList[i].radio = ref(this.question[j].grade);
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
    }
  })
 </script>

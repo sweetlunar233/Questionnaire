@@ -1,9 +1,9 @@
 import { post,get } from "./api"
 
 export function GetFill(questionnaireId) {
-    return get("/answer/GetAnswer/"+questionnaireId)
+    return get("/testAnswer/"+questionnaireId)
 }
 
 export function GetDesign(questionnaireId) {
-    return get("/answer/GetAnswer/"+questionnaireId)
+    return get("/testAnswer/"+questionnaireId)
 }
