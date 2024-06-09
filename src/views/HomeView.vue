@@ -19,7 +19,7 @@
         document.getElementById("start_btn").classList.remove("zoom-btn");
     }
 
-
+import { NCarousel } from 'naive-ui'
 
 </script>
 
