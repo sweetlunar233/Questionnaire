@@ -244,6 +244,7 @@
           this.questionCnt++;
           this.questionListFill.push({"type":3,"isNecessary":true,"question":"请填空","fill":ref(''), "Answer":"我的答案", "correctAnswer":"正确答案"});
       },
+      //获取问卷信息接口
       getFill(){
         var promise = GetFillInTestAnswer(this.username, this.questionnaireId, this.submissionId);
         promise.then((result)=>{
