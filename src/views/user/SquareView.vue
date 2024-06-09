@@ -107,9 +107,6 @@ const goToQuestionnaireFill = (questionnaireId, type) => {
     })
   
 }
-const questionnaireId = r.query.questionnaireId; // 获取问卷ID
-const submissionId = r.query.submissionId; // 获取提交ID
-console.log(questionnaireId,submissionId)
 
 
 //引入cookie

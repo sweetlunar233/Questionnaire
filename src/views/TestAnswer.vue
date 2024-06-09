@@ -90,10 +90,10 @@
         <div>最终得分：{{ this.score }}</div>
       </div>
 
-      <div class="bottom">
+      <!-- <div class="bottom">
         <el-button color="#626aef" @click="postFill(1)" size="large"><el-icon><Upload/></el-icon>&nbsp;提交</el-button>
         <el-button color="#626aef" @click="postFill(0)" size="large"><el-icon><House/></el-icon>&nbsp;暂存</el-button>
-      </div>
+      </div> -->
   
     </div>
     
@@ -244,6 +244,18 @@
           this.questionCnt++;
           this.questionListFill.push({"type":3,"isNecessary":true,"question":"请填空","fill":ref(''), "Answer":"我的答案", "correctAnswer":"正确答案"});
       },
+      getFill(){
+        var promise = GetFillInTestAnswer(this.username, this.questionnaireId, this.submissionId);
+        promise.then((result)=>{
+          this.questionListFill = result.questionList;
+          this.type = result.category;
+          this.title = result.title;
+          this.questionCnt = this.questionnaireListFill.length;
+          this.people = result.people;
+          this.timeLimit = result.TimeLimit;
+        })
+        
+      },
       warning(content){
         ElMessage({
           message:content,
@@ -287,7 +299,7 @@
   
   .right{
     position: relative;
-    height: 650px;
+    height: 83%;
     width: 90%;
     top: 8%;
     left: 4%;
