@@ -29,16 +29,19 @@ export function PostFill(surveyID,status,question){
     return post('/questionnaireFill',data);
 }
 //传回问卷信息
-export function PostQuestion(surveyID,title,category,isOrder,people,timeLimit,questionList,description,userName){
+export function PostQuestion(surveyID,title,category,isOrder,people,timeLimit,questionList,description,userName,Is_released){
     let data = {};
     data.surveyID = surveyID;
     data.title = title;
     data.category = category;
     data.isOrder = isOrder;
-    data.peoples = people;
+    data.people = people;
     data.timeLimit = timeLimit;
     data.questionList = questionList;
-    data.username=username;         //创建者用户名
+    console.log(questionList);
+    data.userName=userName;         //创建者用户名
     data.description=description;   //问卷描述
+    console.log(Is_released);
+    data.Is_released = Is_released;
     return post('/questionnaireDesign',data);
 }

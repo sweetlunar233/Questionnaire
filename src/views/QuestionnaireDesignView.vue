@@ -549,11 +549,13 @@ const router = useRouter();
 
     //保存问卷
     saveQuestionnaire(){
-      // var promise = PostQuestion(this.questionnaireId,this.title,this.type,!this.isDisorder,this.people,this.timeLimit,this.questionList);
+      console.log(this.username);
+      
+      var promise = PostQuestion(this.questionnaireId,this.title,this.type,!this.isDisorder,this.people,this.timeLimit,this.questionList,this.description ,this.username,false);
     }
    },
    mounted(){
-    GetQuestionnaireDesign();
+    // GetQuestionnaireDesign();
    },
    components:{
     NavigationBar,
@@ -563,7 +565,8 @@ const router = useRouter();
     const internalInstance = getCurrentInstance()
     const internalData = internalInstance.appContext.config.globalProperties
     this.username = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
-    this.questionnaireId = this.$route.query.questionnaireId;
+    
+    this.questionnaireId = parseInt(this.$route.query.questionnaireId);
     this.type = this.$route.query.questionnaireType;
     // if(this.questionnaireId != -1){
     //   var promise=GetQuestionnaire(this.questionnaireId,"/quetionnaireDesign",true);
