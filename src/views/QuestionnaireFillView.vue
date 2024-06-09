@@ -197,6 +197,7 @@
           }
           var promise;
           if(status == 0){
+            console.log(this.duration)
             promise = PostFill(this.questionnaireId,'Unsubmitted', this.question,this.duration,this.submissionId,this.username, 0);
           }
           else if(status == 1 && this.type == 3){
@@ -334,7 +335,8 @@
           this.questionList = result.questionList;
           this.duration = result.duration;
           this.description = result.description;
-          // console.log(this.questionList);
+          console.log("start");
+          console.log(this.duration);
           if(this.type == 2 && this.people == 0){
             this.warning("报名人数已满！")
             this.$router.push({path:'/userManage/filled'});
