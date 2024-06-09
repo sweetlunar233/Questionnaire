@@ -16,17 +16,19 @@ export function GetOtherData(surveyID){
     return get("/dataPre/"+surveyID);
 }
 //拿到暂存的填写记录
-export function GetStoreFill(userName,surveyID){
-    const url = `/questionnaireFill?userName=${encodeURIComponent(userName)}&surveyID=${encodeURIComponent(surveyID)}`;
+export function GetStoreFill(userName,surveyID,submissionID){
+    const url = `/questionnaireFill/${userName}/${surveyID}/${submissionID}`;
     return get(url);
 }
 //传回填写信息
-export function PostFill(surveyID,status,question,duration){
+export function PostFill(surveyID,status,question,duration,submissionID,username){
     let data = {};
     data.surveyID = surveyID;
     data.status = status;
     data.question = question;
     data.duration = duration;
+    data.submissionID=submissionID;
+    data.usename=username;
     return post('/questionnaireFill',data);
 }
 //传回问卷信息
