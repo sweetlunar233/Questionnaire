@@ -380,7 +380,9 @@ export default {
     this.questionnaireId = this.$route.query.questionnaireId;
     this.flag = this.$route.query.questionnaireId;
     var promise = GetOtherData(this.questionnaireId);
+    console.log(promise);
     promise.then((result) => {
+      console.log(888888);
       this.questionList = result.questions_stats;
       this.title = result.title;
       console.log(this.title);

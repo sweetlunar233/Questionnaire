@@ -238,7 +238,11 @@
         canSubmit(){
           let i = 0;
           for(i = 0;i < this.questionList.length;i++){
-            if(this.questionList[i].type <= 2 && this.questionList[i].isNecessary && this.questionList[i].Answer==''){
+            if(this.questionList[i].type == 1 && this.questionList[i].isNecessary && this.questionList[i].Answer==-1){
+              this.warning("有必填题目没有填写！")
+              return false;
+            }
+            else if(this.questionList[i].type == 1 && this.questionList[i].isNecessary && this.questionList[i].Answer==[-1]){
               this.warning("有必填题目没有填写！")
               return false;
             }
@@ -246,7 +250,7 @@
               this.warning("有必填题目没有填写！")
               return false;
             }
-            else if(this.questionList[i].type == 4 && this.questionList[i].isNecessary && this.questionList[i].Answer==''){
+            else if(this.questionList[i].type == 4 && this.questionList[i].isNecessary && this.questionList[i].Answer==-1){
               this.warning("有必填题目没有填写！")
               return false;
             }
