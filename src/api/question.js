@@ -29,7 +29,7 @@ export function PostFill(surveyID,status,question){
     return post('/questionnaireFill',data);
 }
 //传回问卷信息
-export function PostQuestion(surveyID,title,category,isOrder,people,timeLimit,questionList){
+export function PostQuestion(surveyID,title,category,isOrder,people,timeLimit,questionList,description,userName){
     let data = {};
     data.surveyID = surveyID;
     data.title = title;

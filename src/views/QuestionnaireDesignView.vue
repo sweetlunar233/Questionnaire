@@ -74,6 +74,11 @@
         <el-input v-if="ttIsEditing" v-model="title" @blur="finishEditing(-1,0,0)" @keyup.enter="finishEditing(-1,0,0)" clearable/>
         <span v-else @click="startEditing(-1,0,0)">{{ text }}</span>
       </div>
+      <div class="row"></div>
+      <div>
+        <el-input v-if="desIsEditing" v-model="description" @blur="finishEditing(2,0,0)" @keyup.enter="finishEditing(2,0,0)" clearable/>
+        <span v-else @click="startEditing(2,0,0)">{{ destext }}</span>
+      </div>
       <van-divider  :style="{ color: '#8a2be2', borderColor: '#8a2be2', padding: '0 16px' }"></van-divider>
 
       <!-- @dragstart: 拖动开始时触发，记录被拖动的题目索引。
@@ -286,6 +291,9 @@ const router = useRouter();
       isDisorder:false,
       people:0,
       timeLimit:0,
+      description:'问卷描述',
+      desIsEditing:false,
+      destext:'问卷描述',
     }
    },
    methods: {
@@ -445,6 +453,9 @@ const router = useRouter();
       else if(type == -1){ //问卷标题
         this.ttIsEditing = true;
       }
+      else if(type == 2){ //问卷描述
+        this.desIsEditing = true;
+      }
     },
     finishEditing(type,index,index2) {
       this.lastEditObj={"type":-2,"index1":-1,"index2":-1};
@@ -468,7 +479,7 @@ const router = useRouter();
           this.questionList[index].optionList[index2].text = this.questionList[index].optionList[index2].content;
         }
       }
-      else{
+      else if(type == -1){
         this.ttIsEditing = false;
         if(this.title.length == 0){
           this.title = this.text;
@@ -476,6 +487,16 @@ const router = useRouter();
         }
         else{
           this.text = this.title;
+        }
+      }
+      else if(type == 2){
+        this.desIsEditing = false;
+        if(this.description.length == 0){
+          this.description = this.destext;
+          this.warning("长度不能为空");
+        }
+        else{
+          this.destext = this.description;
         }
       }
     },
@@ -535,9 +556,9 @@ const router = useRouter();
     NPopover,
    },
    created(){
-    const internalInstance = getCurrentInstance()
-    const internalData = internalInstance.appContext.config.globalProperties
-    this.username = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
+    // const internalInstance = getCurrentInstance()
+    // const internalData = internalInstance.appContext.config.globalProperties
+    // this.username = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
     // if(this.questionnaireId != -1){
     //   var promise=GetQuestionnaire(this.questionnaireId,"/quetionnaireDesign",true);
     //   promise.then((result) => {

@@ -32,7 +32,7 @@
   
           <!-- TieZhu：单选题 -->
           <div v-if="questionList[index-1].type==1">
-            <div>
+            <div style="margin-left: 0.5%">
               {{ questionList[index-1].question }}
             </div>
             <br/>
@@ -50,7 +50,7 @@
   
           <!-- TieZhu：多选题 -->
           <div v-if="questionList[index-1].type==2">
-            <div>
+            <div style="margin-left: 0.5%">
                 {{ questionList[index-1].question }}
             </div>
             
@@ -58,7 +58,7 @@
                 <br/>
                 <van-checkbox :name="questionList[index-1].optionList[index2-1].optionId" shape="square" :label-disabled=true>
                     <div>
-                    {{ questionList[index-1].optionList[index2-1].content }}
+                      {{ questionList[index-1].optionList[index2-1].content }}
                     </div>
                 </van-checkbox>
                 <br/>
@@ -69,7 +69,9 @@
   
           <!-- TieZhu:填空题 -->
           <div v-if="questionList[index-1].type==3">
-            {{ questionList[index-1].question }}
+            <div style="margin-left: 0.5%">
+              {{ questionList[index-1].question }}
+            </div>
             <br/>
             <br/>
             <el-input v-model="questionList[index-1].fill" size="large" placeholder="请填空"/>
@@ -79,7 +81,9 @@
           
           <!-- TieZhu:评分题 -->
           <div v-if="questionList[index-1].type==4">
-            {{ questionList[index-1].question }}
+            <div style="margin-left: 0.5%">
+              {{ questionList[index-1].question }}
+            </div>
             <br/>
             <el-rate v-model="questionList[index-1].grade"></el-rate>
             <br/>
@@ -101,9 +105,9 @@
   
   <script>
   import { GetStoreFill, PostFill } from "@/api/question";
-  import NavigationBar from "@/components/NavigationBar.vue"
+  import NavigationBar from "@/components/NavigationBarInQuestionnaire.vue"
   import { ref } from 'vue'
-  import { ElMessage } from 'element-plus'
+  import { ElMessage, descriptionItemProps } from 'element-plus'
    
    export default({
      data(){
@@ -121,9 +125,14 @@
         time:0, //存储在此页面停留的时间
         intervalId:null, //存储定时器的ID
         question:[],
+        description:'',
       }
      },
      methods: {
+        print(x){
+          console.log(x);
+        },
+
         //增加选项
         addOption(index,ele){
             this.questionList[index].optionCnt++;

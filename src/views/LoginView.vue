@@ -37,7 +37,7 @@
         // store.state.nowuser.own_photos = result.ownphotos;
     }
 
-    import { getUserMessage, postUserMessage } from "@/api/user";
+    import { postUserMessage } from "@/api/user";
     import { ElMessage } from "element-plus";
 
 
