@@ -556,7 +556,6 @@ const router = useRouter();
       if(this.flag==1){
         this.questionnaireId = -1;
       }
-      console.log(this.username);
       var promise = PostQuestion(this.questionnaireId,this.title,this.type,!this.isDisorder,this.people,this.timeLimit,this.questionList,this.description ,this.username,true);
       this.$router.push({path:'/userManage/filled'});
       this.success("发布成功");
