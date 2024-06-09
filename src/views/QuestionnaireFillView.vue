@@ -89,7 +89,7 @@
               {{ questionList[index-1].question }}
             </div>
             <br/>
-            <el-rate v-model="questionList[index-1].Answer" allow-half></el-rate>
+            <el-rate v-model="questionList[index-1].Answer"></el-rate>
             <br/>
             <br/>
           </div>
