@@ -140,6 +140,7 @@
         description:'问卷描述',
         submisstionId:0,
         flag:0,//1是预览问卷,2是导出问卷
+        question:[], //传给后端的时候用的
         printObj:{
           id:'print',
           popTitle:"纸翼传问",
@@ -182,8 +183,15 @@
             this.questionCnt++;
             this.questionList.push({"type":4,"isNecessary":true,"question":"请评分","Answer":ref(-1)});
         },
+        createQuestionInpostFill(){
+          this.questionList.forEach(tmp=>{
+            this.question.push({"questionID":this.questionList.questionID, "value":this.questionList.Answer});
+          })
+        },
         //暂存/提交,如果status是0，那么是暂存，如果status是1.那么根据问卷类型判断是已批改还是已提交
         postFill(status){
+          this.createQuestionInpostFill();
+
           if(this.time <= this.timeLimit && !this.canSubmit()){
             return;
           }
@@ -212,17 +220,18 @@
                 }
               }
             }
-            promise = PostFill(this.questionnaireId,'Graded',this.question,this.duration,this.submissionId,this.username, sum);
-            this.$router.push({path:'/testAnswer',query:{questionnaireID:this.questionnaireId,submissionID:this.submissionId,score:sum}}); 
             this.score = sum;
+            promise = PostFill(this.questionnaireId,'Graded',this.question,this.duration,this.submissionId,this.username, this.score);
+            this.$router.push({path:'/testAnswer',query:{questionnaireID:this.questionnaireId,submissionID:this.submissionId,score:sum}}); 
+            
           }
           else if(status == 1 && this.type == 1){
             this.success("投票成功");
-            promise = PostFill(this.questionnaireId,'Submitted',this.question,this.submissionId,this.username);
+            promise = PostFill(this.questionnaireId,'Submitted',this.question,0,this.submissionId,this.username, 0);
             this.$router.push({path:'/dataPre',query:{questionnaireID:this.questionnaireId,flag:true}});
           }
           else{
-            promise = PostFill(this.questionnaireId,'Submitted',this.question,this.submissionId,this.username);
+            promise = PostFill(this.questionnaireId,'Submitted',this.question,0, this.submissionId,this.username, 0);
           }
         },
         warning(content){
