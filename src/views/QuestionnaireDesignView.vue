@@ -60,7 +60,7 @@
         <div class="row"></div>
         <div class = "post_button_container">
           <el-button plain color="#626aef" size="large" @click="saveQuestionnaire()" round><el-icon><Upload/></el-icon>&nbsp;保存</el-button>
-          <el-button plain color="#626aef" size="large" round><el-icon><Position/></el-icon>&nbsp;发布</el-button>
+          <el-button plain color="#626aef" size="large" @click="releaseQuestionnaire()" round><el-icon><Position/></el-icon>&nbsp;发布</el-button>
         </div>
       </div>
 
@@ -176,7 +176,7 @@
                     <template #trigger>
                       <el-input 
                       v-if="questionList[index-1].optionList[index2-1].isEditing"
-                      v-model="questionList[index-1].optionList[index2-1].text" 
+                      v-model="questionList[index-1].optionList[index2-1].content" 
                       @blur="finishEditing(1,index-1,index2-1)" 
                       @keyup.enter="finishEditing(1,index-1,index2-1)"
                       />

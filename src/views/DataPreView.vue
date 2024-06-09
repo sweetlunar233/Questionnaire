@@ -378,7 +378,7 @@ export default {
   },
   created(){
     this.questionnaireId = parseInt(this.$route.query.questionnaireId);
-    this.flag = this.$route.query.questionnaireId;
+    this.flag = this.$route.query.flag;
     var promise = GetOtherData(this.questionnaireId);
     console.log(promise);
     promise.then((result) => {
