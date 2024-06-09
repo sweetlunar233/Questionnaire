@@ -114,6 +114,11 @@
             console.log("catch");
         })
     }
+
+    const questionnarieId = -1;
+    const subbmissonID = -1;
+    questionnarieId = $route.query.questionnarieId;
+    subbmissonID = $route.query.subbmissonID;
 </script>
 
 <template>

@@ -205,17 +205,6 @@
         }   
       },
       getTextColor(index, index2) {
-        //判断是否做了，如果没做，Answer is -1
-        if(this.questionListFill[index].type == 1) {
-          if(this.questionListFill[index].Answer == -1)
-            return {color: 'black'};
-        }
-        if(this.questionListFill[index].type == 2) {
-          if(this.questionListFill[index].Answer[0] == -1)
-            return {color: 'black'};
-        }
-
-        //如果做了
         if(this.isCorrect(index, index2))
           return {color: 'green'};
         else if(this.isSelected(index, index2)) {
@@ -224,6 +213,12 @@
           else return {color: 'red'};
         }
         else return {color: 'black'};
+      },
+
+      //增加选项
+      addOption(index,ele){
+          this.questionList[index].optionCnt++;
+          this.questionList[index].optionList.push({"content":ele});
       },
       //TieZhu:添加单选题
       addSingle(){
@@ -244,6 +239,19 @@
           this.questionCnt++;
           this.questionListFill.push({"type":3,"isNecessary":true,"question":"请填空","fill":ref(''), "Answer":"我的答案", "correctAnswer":"正确答案"});
       },
+      //暂存/提交,如果status是0，那么是暂存，如果status是1.那么根据问卷类型判断是已批改还是已提交
+      getFill(){
+        var promise = GetFill(this.username, this.questionnaireId, this.submissionId);
+        promise.then((result)=>{
+          this.questionListFill = result.questionList;
+          this.type = result.category;
+          this.title = result.title;
+          this.questionCnt = this.questionnaireListFill.length;
+          this.people = result.people;
+          this.timeLimit = result.TimeLimit;
+        })
+        
+      },
       warning(content){
         ElMessage({
           message:content,
@@ -258,15 +266,19 @@
       this.addSingle();
       this.addMultiple();
       this.addFill();
+      // this.addScore();
+      // this.intervalId = setInterval(() => {
+      //   this.time++;
+      // },1000);
     },
     beforeUnmount(){
-      if(this.intervalId){
-        clearInterval(this.intervalId);
-      }
+    if(this.intervalId){
+      clearInterval(this.intervalId);
+    }
     },
     components:{
-      NavigationBar,
-      ElMessage,
+    NavigationBar,
+    ElMessage,
     },
     created(){
     // this.questionnaireId = this.$route.query.questionnaireID;
