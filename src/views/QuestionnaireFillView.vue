@@ -293,7 +293,7 @@
       var promise;
       this.questionnaireId = this.$route.query.questionnaireId;
       this.type = this.$route.query.questionnaireType;
-      this.submissionID = this.$route.query.submissionID;
+      this.submissionID = this.$route.query.submissionId;
       this.flag = this.$route.query.flag;
       if(this.flag == 2){
         this.$nextTick(()=>{
