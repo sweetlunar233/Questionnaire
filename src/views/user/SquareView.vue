@@ -182,7 +182,7 @@ initAllReleased();
             </div>
         </div>
         <!-- 分页条 -->
-        <el-pagination
+        <el-pagination :page-size="8" 
         layout="total, prev, pager, next" background :total="total" @size-change="onSizeChange"
         @current-change="onCurrentChange" style="margin-top: 20px; justify-content: flex-end" />
     </el-card>
