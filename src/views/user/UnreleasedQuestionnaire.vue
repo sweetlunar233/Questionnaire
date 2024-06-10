@@ -289,7 +289,7 @@ const handleCreate = () => {
                         <!-- 下部分 -->
                         <div class="card-footer">
                             <el-button type="text" :icon="Edit" @click="goToQuestionnaireDesign(questionnaire.SurveyID, questionnaire.Category)" class="thebutton">编辑问卷</el-button>
-                            <el-button type="text" :icon="Link" class="otherbutton">发送问卷</el-button>
+                            <!-- <el-button type="text" :icon="Link" class="otherbutton">发送问卷</el-button> -->
                             <el-button type="danger" :icon="Delete" style="float: right" circle @click="deleteQs(questionnaire.SurveyID)" class="deletebutton"></el-button>
                         </div>
                     </div>

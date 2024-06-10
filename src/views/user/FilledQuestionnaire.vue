@@ -70,6 +70,10 @@ const onCurrentChange = (num) => {
     initFilled(username.value);
 }
 
+const print = (x) => {
+    console.log(x);
+}
+
 
 //编辑问卷传输问卷id的函数
 import { useRouter } from 'vue-router';
@@ -85,7 +89,11 @@ const goToQuestionnaireDesign = (questionnaireId, questionnaireType) => {
 }
 const goToQuestionnaireFill = (questionnaireId, submissionId, Status, type, score) => {
   let url = '';
+//   console.log("start0");
   if(Status === "未提交"){
+    console.log("start")
+    console.log(questionnaireId)
+    console.log(submissionId)
     // var promise = checkFilled(questionnaireId);
     // promise.then((result)=>{
     //     if(result.message === "True"){
@@ -97,12 +105,12 @@ const goToQuestionnaireFill = (questionnaireId, submissionId, Status, type, scor
                     submissionId: submissionId
                 }
             });
-    //     }
-    //     else{
-    //         ElMessage.error(result.content);
-    //     }
-    // })
-  }
+        }
+//         else{
+//             ElMessage.error(result.content);
+//         }
+//     })
+//   }
   else if(Status === "已删除"){
     ElMessage.error("该问卷已被发布者删除");
   }
@@ -323,7 +331,7 @@ const handleCreate = () => {
                             <span style="float: right" class="right">{{ questionnaire.Status }}</span>
                             <span style="float: right" class="right">ID: {{questionnaire.SurveyID}}</span>
                         </div>
-
+                        
                         <!-- 下部分 -->
                         <div class="card-footer">
                             <el-button type="text" :icon="Edit" @click="goToQuestionnaireFill(questionnaire.SurveyID, questionnaire.SubmissionID, questionnaire.Status, questionnaire.Category, questionnaire.Score)" class="thebutton">查看填写</el-button>

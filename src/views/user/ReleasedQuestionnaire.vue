@@ -344,8 +344,8 @@ const reviseQuestionnaire = (id, type) => {
                         <!-- 下部分 -->
                         <div class="card-footer">
                             <el-button type="text" :icon="Edit" @click="reviseQuestionnaire(questionnaire.SurveyID, questionnaire.Category)" :disabled="questionnaire.IsOpening" class="thebutton">编辑问卷</el-button>
-                            <el-button type="text" :icon="View" @click="goToQuestionnaireFill(questionnaire.SurveyID, 1)" class="otherbutton">预览</el-button>
-                            <el-button type="text" :icon="Link" class="otherbutton">发送问卷</el-button>
+                            <!-- <el-button type="text" :icon="View" @click="goToQuestionnaireFill(questionnaire.SurveyID, 1)" class="otherbutton">预览</el-button> -->
+                            <!-- <el-button type="text" :icon="Link" class="otherbutton">发送问卷</el-button> -->
                             <el-button type="text" :icon="Odometer" class="otherbutton" @click="goToQuestionnaireData(questionnaire.SurveyID)">分析数据</el-button>
                             <el-button type="text" :icon="Printer" class="otherbutton" @click="goToQuestionnaireFill(questionnaire.SurveyID, 2)">导出问卷</el-button>
                             <el-switch v-model="questionnaire.IsOpening" style="float: right; margin-left: 10px;--el-switch-on-color: #626aef;" @change="updateIsOpening(questionnaire.SurveyID)"  class="deletebutton"/>

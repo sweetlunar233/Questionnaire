@@ -19,6 +19,7 @@ export function GetOtherData(surveyID){
 //拿到暂存的填写记录
 export function GetStoreFill(userName,surveyID,submissionID){
     const url = `/questionnaireFill/${userName}/${surveyID}/${submissionID}`;
+    console.log(url);
     return get(url);
 }
 //传回填写信息
