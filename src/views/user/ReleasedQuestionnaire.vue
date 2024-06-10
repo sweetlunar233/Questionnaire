@@ -229,13 +229,8 @@ const deleteQs = (id) =>{
 const updateIsOpening = (id) =>{
     var promise = UpdateOrDelete(id, 0);
     promise.then((result)=>{
-        if(result.message === "True"){
-            // ElMessage({
-            //     type: 'success',
-            //     message: '操作成功',
-            // })
-        }
-        else{
+        
+        if(result.message == "False"){
             ElMessage({
                 type: 'error',
                 message: result.content,
