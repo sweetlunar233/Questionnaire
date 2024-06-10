@@ -188,7 +188,7 @@
             // console.log("start")
             // console.log(tmp.questionID)
             // console.log(tmp.Answer)
-            this.question.push({"questionID":tmp.questionID, "value":tmp.Answer});
+            this.question.push({"questionID":tmp.questionID, "question":tmp.question, "value":tmp.Answer});
           })
         },
         //暂存/提交,如果status是0，那么是暂存，如果status是1.那么根据问卷类型判断是已批改还是已提交
@@ -388,8 +388,14 @@
           this.questionList = result.questionList;
           this.duration = result.duration;
           this.description = result.description;
-          
+          // this.submissionId = result.submissionId;
+          console.log("questionList Answer")
+          console.log(this.questionList[0].Answer)
           console.log(this.questionList[1].Answer)
+          console.log(this.questionList[2].Answer)
+          console.log(this.questionList[3].Answer)
+          console.log(this.questionList[4].Answer)
+          console.log(this.questionList[5].Answer)
 
           if(this.type == 2 && this.people == 0){
             this.warning("报名人数已满！")
