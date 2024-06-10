@@ -148,7 +148,7 @@
           </div>
           <div v-if="!flag" class="bar">
             <el-tooltip content="下载数据" placement="right">
-              <el-button size="large"  v-print="printObj" text circle><el-icon color="#337ecc" :size="30"><Download /></el-icon></el-button>
+              <el-button size="large" @click="dialog=true" text circle><el-icon color="#337ecc" :size="30"><Download /></el-icon></el-button>
             </el-tooltip>
             <div class="row"></div>
             <div class="row"></div>
@@ -166,14 +166,17 @@
       </el-container>
       
       
-
+      <el-dialog v-model="dialog" width="800" title="下载数据">
+        <el-button size="large" v-print="printObj" type="primary">下载图表</el-button>
+        <el-button size="large" @click="excel()" type="primary">下载Excel表</el-button>
+      </el-dialog>
     </div>
 </template>
 
 <script>
 import 'echarts-wordcloud';//引用云词
 import NavigationBar from "@/components/NavigationBarInQuestionnaire.vue"
-import { NCard } from 'naive-ui';
+import { NCard, dialogDark } from 'naive-ui';
 import { NTabs } from 'naive-ui';
 import { NTabPane } from 'naive-ui';
 import { ref } from 'vue';
@@ -182,11 +185,13 @@ import { NSpace } from 'naive-ui';
 import { NPopover } from 'naive-ui';
 import { NQrCode } from 'naive-ui';
 import Print from 'vue3-print-nb';
-import { GetCrossData, GetOtherData } from '@/api/question';
+import { GetCrossData, GetExcel, GetOtherData } from '@/api/question';
+import { ElMessage } from 'element-plus'
 
 export default {
   data() {
     return {
+      dialog:false,
       input:'',
       questionnaireId:2,
       questionCnt: 0,
@@ -213,17 +218,6 @@ export default {
       flag:false,//是否是为了展示投票结果而存在的页面
     };
   },
-  mounted() {
-    let i = 0;
-    for(i=0;i<this.questionList.length;i++){
-      if(this.questionList[i].type != 3){
-        this.cross.push({"type":this.questionList[i].type,"value":this.questionList[i].questionId,"label":this.questionList[i].question});
-      }
-    }
-    this.corss1=ref();
-    this.cross2=ref();
-    this.url = window.location.href;
-  },
   
   methods: {
     toggleChart(index,kind) {
@@ -234,14 +228,24 @@ export default {
         });
       }
       else{
+        if(this.cross1 == this.cross2){
+          this.warning("自变量和因变量不能一样");
+          return;
+        }
         this.crossHasChart = true;
         this.$nextTick(() => {
           var promise = GetCrossData(this.cross1,this.cross2);
           promise.then((result) => {
-            this.crossContent = result.crossContent;
-            this.crossCnt = result.crossCnt;
+            console.log(result)
+            let i = 0;
+            this.crossContent = [];
+            this.crossCnt = [];
+            for(i=0;i<result.list.length;i++){
+              this.crossContent.push(result.list[i].content);
+              this.crossCnt.push(result.list[i].cnt);
+            }
+            this.createCharts(index,this.crossContent,this.crossCnt,kind);
           })
-          this.createCharts(index,this.crossContent,this.crossCnt,kind);
         })
       }
     },
@@ -359,6 +363,20 @@ export default {
         this.printObj.id = 'dataAnalysis';
       }
     },
+    //下载excel表格
+    excel(){
+      var promise = GetExcel(this.questionnaireId);
+      promise.then((result) => {
+        console.log(promise);
+      })
+    },
+
+    warning(content){
+      ElMessage({
+        message:content,
+        type:'warning',
+      });
+    },
   },
   components:{
     NavigationBar,
@@ -370,6 +388,7 @@ export default {
     Print,
     NPopover,
     NQrCode,
+    ElMessage,
   },
   created(){
     this.questionnaireId = parseInt(this.$route.query.questionnaireId);
@@ -410,6 +429,14 @@ export default {
           }
         }
       }
+      for(i=0;i<this.questionList.length;i++){
+        if(this.questionList[i].type != 3){
+          this.cross.push({"type":this.questionList[i].type,"value":this.questionList[i].questionId,"label":this.questionList[i].question});
+        }
+      }
+      this.corss1=ref();
+      this.cross2=ref();
+      this.url = window.location.href;
     })
   }
 };
