@@ -114,7 +114,7 @@
 
         nowuserPhotonumber.value = photonumber;
         // updateUserphotoInMassage(store.state.nowuser.username, 0, photonumber);
-        modifyUserInfoInMessage(nowuser_username.value, false, false, false, 0, photonumber, 2);
+        modifyUserInfoInMessage(nowuser_username.value, false, false, 0, photonumber, 2);
         ElMessage.success("修改头像成功!");
         X_quit("ChangePhotoCard");
     }

@@ -185,12 +185,16 @@
         },
         createQuestionInpostFill(){
           this.questionList.forEach(tmp=>{
-            this.question.push({"questionID":this.questionList.questionID, "value":this.questionList.Answer});
+            // console.log("start")
+            // console.log(tmp.questionID)
+            // console.log(tmp.Answer)
+            this.question.push({"questionID":tmp.questionID, "value":tmp.Answer});
           })
         },
         //暂存/提交,如果status是0，那么是暂存，如果status是1.那么根据问卷类型判断是已批改还是已提交
         postFill(status){
           this.createQuestionInpostFill();
+          console.log(this.question);
 
           if(this.time <= this.timeLimit && !this.canSubmit()){
             return;
