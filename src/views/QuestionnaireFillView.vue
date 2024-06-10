@@ -214,17 +214,39 @@
               if(this.questionList[i].type == 3 && this.questionList[i].fill == this.questionList[i].correctAnswer){
                 sum += this.questionList[i].score;
               }
-              else if(this.questionList[i].type == 1 && this.questionList[i].optionList[this.questionList[i].Answer].isCorrect){
-                sum += this.questionList[i].score;
+              // else if(this.questionList[i].type == 1 && this.questionList[i].optionList[this.questionList[i].Answer].isCorrect){
+              //   sum += this.questionList[i].score;
+              // }
+              else if(this.questionList[i].type == 1){
+                  let answerOption = 0;
+                  this.questionList[i].optionList.forEach((option) => {
+                    if(option.isCorrect == true) {
+                      answerOption = option.optionId;
+                    }
+                  });
+                  if(this.questionList[i].Answer == answerOption){
+                    sum += this.questionList[i].score;
+                  }
+                
               }
               else if(this.questionList[i].type == 2){
-                let j = 0;
-                sum += this.questionList[i].score;
-                for(j=0;j<this.questionList[i].optionList.length;j++){
-                  if(this.questionList[i].correctAnswer[j] != this.questionList[i].fill[j]){
-                    sum -= this.questionList[i].score;
-                    break;
+                let answerOption = [];
+                this.questionList[i].optionList.forEach((option) => {
+                  if(option.isCorrect == true) {
+                    answerOption.push(option.optionId);
                   }
+                });
+                let flag_correct = 1;
+                answerOption.forEach(an1=>{
+                  if(!this.questionList[i].Answer.includes(an1))
+                    flag_correct = 0;
+                })
+                this.questionList[i].Answer.forEach(an2=>{
+                  if(!answerOption.includes(an2))
+                    flag_correct = 0;
+                })
+                if(flag_correct == 1){
+                  sum += this.questionList[i].score;
                 }
               }
             }
@@ -233,7 +255,7 @@
             promise.then((result)=>{
               this.submissionId = result.submissionID;
             })
-            this.$router.push({path:'/testAnswer',query:{questionnaireID:this.questionnaireId,submissionID:this.submissionId,score:sum}}); 
+            this.$router.push({path:'/testAnswer',query:{questionnaireID:this.questionnaireId,submissionID:this.submissionId,score:this.score}}); 
             
           }
           else if(status == 1 && this.type == 1){
