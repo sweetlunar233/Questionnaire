@@ -61,7 +61,7 @@ const questionnaires = ref([
 //分页条数据模型
 const pageNum = ref(1)//当前页
 const total = ref(20)//总条数
-const pageSize = ref(10)//每页条数
+const pageSize = ref(8)//每页条数
 
 total.value = questionnaires.value.length
 
