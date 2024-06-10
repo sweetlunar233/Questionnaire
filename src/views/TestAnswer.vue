@@ -120,6 +120,8 @@
         questionListFill: [],
         questionListDesign: [],
         title:'问题标题',
+        description:'',
+        score:0,
         isDisorder:false,
         people:0, //剩余人数
         timeLimit:0,
@@ -249,11 +251,10 @@
         var promise = GetFillInTestAnswer(this.username, this.questionnaireId, this.submissionId);
         promise.then((result)=>{
           this.questionListFill = result.questionList;
-          this.type = result.category;
           this.title = result.title;
-          this.questionCnt = this.questionnaireListFill.length;
-          this.people = result.people;
-          this.timeLimit = result.TimeLimit;
+          this.description = result.description;
+          this.score = result.score;
+          this.questionCnt = this.questionListFill.length;
         })
         
       },

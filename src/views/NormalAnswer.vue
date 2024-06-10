@@ -121,10 +121,9 @@
         questionnaireId:0,
         type:0,
         questionCnt: 0,
-        questionList: [],
         questionListFill: [],
-        questionListDesign: [],
-        title:'问题标题',
+        title:'',
+        description:'',
         isDisorder:false,
         people:0, //剩余人数
         timeLimit:0,
@@ -205,11 +204,9 @@
         var promise = GetFillInNormalAnswer(this.username, this.questionnaireId, this.submissionId);
         promise.then((result)=>{
           this.questionListFill = result.questionList;
-          this.type = result.category;
           this.title = result.title;
-          this.questionCnt = this.questionnaireListFill.length;
-          this.people = result.people;
-          this.timeLimit = result.TimeLimit;
+          this.description = result.description;
+          this.questionCnt = this.questionListFill.length;
         })
         
       },
@@ -224,10 +221,10 @@
     NavigationBar,
     },
     mounted(){
-      this.addSingle();
-      this.addMultiple();
-      this.addFill();
-      this.addScore();
+      // this.addSingle();
+      // this.addMultiple();
+      // this.addFill();
+      // this.addScore();
       // this.intervalId = setInterval(() => {
       //   this.time++;
       // },1000);
@@ -248,7 +245,7 @@
     const internalInstance = getCurrentInstance();
     const internalData = internalInstance.appContext.config.globalProperties;
     this.username = internalData.$cookies.get('username'); // 后面的为之前设置的cookies的名字
-    // this.getFill();
+    this.getFill();
   }
   })
 </script>
