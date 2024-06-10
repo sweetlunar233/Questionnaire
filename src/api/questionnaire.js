@@ -46,3 +46,7 @@ export function UpdateOrDelete(id, flag){
 export function check(username, questionnaireId, type){
     return get("/userManage/square/"+username+"/"+questionnaireId+"/"+type);
 }
+
+export function checkFilled(questionnaireId){
+    return get("/userManage/filled/"+questionnaireId);
+}

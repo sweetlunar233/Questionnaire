@@ -21,6 +21,9 @@ const internalInstance = getCurrentInstance()
 const internalData = internalInstance.appContext.config.globalProperties
 username.value = internalData.$cookies.get('username') // 后面的为之前设置的cookies的名字
 
+import {ElMessageBox, ElMessage} from 'element-plus'
+import {GetFilledQs, DeleteFilledQs, checkFilled} from '../../api/questionnaire.js'
+
 //文章分类数据模型
 const categorys = ref([
     {
@@ -83,14 +86,22 @@ const goToQuestionnaireDesign = (questionnaireId, questionnaireType) => {
 const goToQuestionnaireFill = (questionnaireId, submissionId, Status, type, score) => {
   let url = '';
   if(Status === "未提交"){
-    url = '/questionnaireFill';
-    r.push({
-        path: url,
-        query: {
-            questionnaireId: questionnaireId,
-            submissionId: submissionId
+    var promise = checkFilled(questionnaireId);
+    promise.then((result)=>{
+        if(result.message === "True"){
+            url = '/questionnaireFill';
+            r.push({
+                path: url,
+                query: {
+                    questionnaireId: questionnaireId,
+                    submissionId: submissionId
+                }
+            });
         }
-    });
+        else{
+            ElMessage.error(result.content);
+        }
+    })
   }
   else if(Status === "已删除"){
     ElMessage.error("该问卷已被发布者删除");
@@ -158,8 +169,7 @@ const goToQuestionnaireFill = (questionnaireId, submissionId, Status, type, scor
 
 
 
-import {ElMessageBox, ElMessage} from 'element-plus'
-import {GetFilledQs, DeleteFilledQs} from '../../api/questionnaire.js'
+
 
 const flag = ref(true);
 
