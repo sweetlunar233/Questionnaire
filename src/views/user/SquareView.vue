@@ -94,6 +94,9 @@ const goToQuestionnaireFill = (questionnaireId, type) => {
     promise.then((result)=>{
       if(result.message === "True")
       {
+        console.log("start22")
+        console.log(questionnaireId)
+
         r.push({
           path: '/questionnaireFill',
           query: {

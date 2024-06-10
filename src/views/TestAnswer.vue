@@ -106,6 +106,7 @@
   import { ElMessage } from 'element-plus'
   import { GetFill } from "@/api/answer.js"
   import { getCurrentInstance } from "vue";
+  import { GetFillInTestAnswer, getFill } from "@/api/answer.js"
   
   
   export default({
@@ -291,7 +292,7 @@
     const internalInstance = getCurrentInstance();
     const internalData = internalInstance.appContext.config.globalProperties;
     this.username = internalData.$cookies.get('username'); // 后面的为之前设置的cookies的名字
-    // this.getFill();
+    this.getFill();
   }
   })
 </script>

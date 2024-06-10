@@ -195,6 +195,8 @@
         postFill(status){
           this.createQuestionInpostFill();
           console.log(this.question);
+          console.log(this.questionnaireId);
+          console.log(this.submissionId);
 
           if(this.time <= this.timeLimit && !this.canSubmit()){
             return;
@@ -203,6 +205,7 @@
           if(status == 0){
             // console.log(this.)
             promise = PostFill(this.questionnaireId,'Unsubmitted', this.question,this.duration,this.submissionId,this.username, 0);
+            this.$router.push("/userManage");
           }
           else if(status == 1 && this.type == 3){
             
@@ -250,7 +253,10 @@
             promise.then((result)=>{
               this.submissionId = result.submissionID;
             })
-            this.$router.push({path:'/normalAnswer',query:{questionnaireID:this.questionnaireId,submissionID:this.submissionId}}); 
+            console.log("start to normalAnswer")
+            console.log(this.questionnaireId)
+            console.log(this.submissionId)
+            this.$router.push({path:'/normalAnswer',query:{questionnaireID:this.questionnaireId, submissionID:this.submissionId}}); 
           }
           // this.$router.push('/userManage');
         },
@@ -332,6 +338,10 @@
       this.type = this.$route.query.questionnaireType;
       this.submissionId = parseInt(this.$route.query.submissionId);
       this.flag = this.$route.query.flag;
+
+      console.log("start222");
+      console.log(this.questionnaireId);
+      console.log(this.submissionId);
       if(this.flag == 2){
         this.$nextTick(()=>{
           this.$refs.printButton.click();   //强行触发打印

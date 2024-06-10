@@ -141,13 +141,13 @@
       isSelected(index, index2) {
         //单选
         if(this.questionListFill[index].type == 1) {
-          if(this.questionListFill[index].Answer == index2)
+          if(this.questionListFill[index].Answer == this.questionListFill[index].optionList[index2].optionId)
             return true;
           else return false;
         }
         //多选
         if(this.questionListFill[index].type == 2) {
-          if(this.questionListFill[index].Answer.includes(index2))
+          if(this.questionListFill[index].Answer.includes(this.questionListFill[index].optionList[index2].optionId))
             return true;
           else return false;
         }
@@ -201,12 +201,19 @@
       },
 
       getFill(){
+        console.log("getfill questionnaireid submissionID in normalAnswer")
+        console.log(this.questionnaireId)
+        console.log(this.submissionId)
         var promise = GetFillInNormalAnswer(this.username, this.questionnaireId, this.submissionId);
         promise.then((result)=>{
           this.questionListFill = result.questionList;
-          this.title = result.title;
+          this.title = result.Title;
           this.description = result.description;
           this.questionCnt = this.questionListFill.length;
+
+          console.log("start")
+          console.log(this.questionCnt)
+          console.log(this.questionListFill)
         })
         
       },
@@ -241,6 +248,9 @@
     created(){
     this.questionnaireId = this.$route.query.questionnaireID;
     this.submissionId = this.$route.query.submissionID;
+    console.log("created in normalAnswer questionnaireid submissionid")
+    console.log(this.questionnaireId)
+    console.log(this.submissionId)
     
     const internalInstance = getCurrentInstance();
     const internalData = internalInstance.appContext.config.globalProperties;
