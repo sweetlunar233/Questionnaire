@@ -64,7 +64,7 @@
             
             <van-checkbox-group v-model=" questionList[index-1].Answer" v-for="index2 in questionList[index-1].optionCnt"  checked-color="#0283EF" :disabled="flag">
                 <br/>
-                <van-checkbox :name="questionList[index-1].optionList[index2-1].optionId" shape="square" :label-disabled=true>
+                <van-checkbox :name="questionList[index-1].optionList[index2-1].optionId" shape="square" :label-disabled=true @click="print(questionList[index-1].Answer)">
                     <div>
                       {{ questionList[index-1].optionList[index2-1].content }}
                     </div>
@@ -181,16 +181,20 @@
         //TieZhu:添加评分题
         addScore(){
             this.questionCnt++;
-            this.questionList.push({"type":4,"isNecessary":true,"question":"请评分","Answer":ref(-1)});
+            this.questionList.push({"type":4,"isNecessary":true,"question":"请评分","Answer":ref(0)});
         },
         createQuestionInpostFill(){
           this.questionList.forEach(tmp=>{
-            this.question.push({"questionID":this.questionList.questionID, "value":this.questionList.Answer});
+            // console.log("start")
+            // console.log(tmp.questionID)
+            // console.log(tmp.Answer)
+            this.question.push({"questionID":tmp.questionID, "value":tmp.Answer});
           })
         },
         //暂存/提交,如果status是0，那么是暂存，如果status是1.那么根据问卷类型判断是已批改还是已提交
         postFill(status){
           this.createQuestionInpostFill();
+          console.log(this.question);
 
           if(this.time <= this.timeLimit && !this.canSubmit()){
             return;
@@ -335,8 +339,9 @@
           this.questionList = result.questionList;
           this.duration = result.duration;
           this.description = result.description;
-          console.log("start");
-          console.log(this.duration);
+          
+          console.log(this.questionList[1].Answer)
+
           if(this.type == 2 && this.people == 0){
             this.warning("报名人数已满！")
             this.$router.push({path:'/userManage/filled'});
