@@ -202,7 +202,7 @@ const deleteQs = (id) =>{
             total.value--;
             var promise = UpdateOrDelete(id, 1);
             promise.then((result)=>{
-                if(result.message === "True"){
+                if(result.message == "True"){
                     ElMessage({
                         type: 'success',
                         message: '删除成功',

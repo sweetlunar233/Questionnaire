@@ -200,6 +200,7 @@
         this.questionCnt++;
         this.questionListFill.push({"type":4,"isNecessary":true,"question":"请评分","Answer":ref(4)});
       },
+
       getFill(){
         var promise = GetFillInNormalAnswer(this.username, this.questionnaireId, this.submissionId);
         promise.then((result)=>{
@@ -241,9 +242,8 @@
     ElMessage,
     },
     created(){
-    // this.questionnaireId = this.$route.query.questionnaireID;
-    // this.submissionId = this.$route.query.submissionID;
-    // this.score = this.$route.query.score;
+    this.questionnaireId = this.$route.query.questionnaireID;
+    this.submissionId = this.$route.query.submissionID;
     
     const internalInstance = getCurrentInstance();
     const internalData = internalInstance.appContext.config.globalProperties;

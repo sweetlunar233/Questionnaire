@@ -130,8 +130,8 @@ const initAllReleased = () =>{
         var count = 0;
         var i = 1;
         result.data.forEach(element => {
-          if(element.categoryId != 3)
-          {
+          // if(element.categoryId != 3)
+          // {
             if(i > pageSize.value * (pageNum.value - 1))
             {
                 if(i <= pageSize.value * pageNum.value){
@@ -140,7 +140,7 @@ const initAllReleased = () =>{
             }
             count++;
             i++;
-          } 
+          // } 
           
           
         });

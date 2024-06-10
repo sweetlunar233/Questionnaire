@@ -227,6 +227,9 @@
             }
             this.score = sum;
             promise = PostFill(this.questionnaireId,'Graded',this.question,this.duration,this.submissionId,this.username, this.score);
+            promise.then((result)=>{
+              this.submissionId = result.submissionID;
+            })
             this.$router.push({path:'/testAnswer',query:{questionnaireID:this.questionnaireId,submissionID:this.submissionId,score:sum}}); 
             
           }
@@ -235,9 +238,21 @@
             promise = PostFill(this.questionnaireId,'Submitted',this.question,0,this.submissionId,this.username, 0);
             this.$router.push({path:'/dataPre',query:{questionnaireID:this.questionnaireId,flag:true}});
           }
-          else{
+          else if(status == 1 && this.type == 2){
             promise = PostFill(this.questionnaireId,'Submitted',this.question,0, this.submissionId,this.username, 0);
+            this.success("报名成功");
+            this.$router.push("/userManage");
           }
+          else {
+            console.log("start putong ");
+            console.log(this.submissionId);
+            promise = PostFill(this.questionnaireId,'Submitted',this.question,0, this.submissionId,this.username, 0);
+            promise.then((result)=>{
+              this.submissionId = result.submissionID;
+            })
+            this.$router.push({path:'/normalAnswer',query:{questionnaireID:this.questionnaireId,submissionID:this.submissionId}}); 
+          }
+          // this.$router.push('/userManage');
         },
         warning(content){
           ElMessage({
@@ -332,7 +347,9 @@
         promise = GetStoreFill(this.username,this.questionnaireId,this.submissionId);
         promise.then((result) => {
           this.title = result.Title;
-          // console.log(this.title);
+          console.log("start");
+          console.log(result.Title);
+          console.log(result.questionList);
           this.type = result.category;
           this.people = result.people;
           this.timeLimit = result.TimeLimit;

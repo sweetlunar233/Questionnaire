@@ -212,7 +212,7 @@ initFilled(username.value);
 
 const deleteQs = (id) =>{
     ElMessageBox.confirm(
-        '你确认删除该问卷吗？',
+        '你确认删除该填写记录吗？',
         '温馨提示',
         {
             confirmButtonText: '确认',
