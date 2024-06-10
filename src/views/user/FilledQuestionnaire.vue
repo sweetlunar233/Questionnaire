@@ -86,9 +86,9 @@ const goToQuestionnaireDesign = (questionnaireId, questionnaireType) => {
 const goToQuestionnaireFill = (questionnaireId, submissionId, Status, type, score) => {
   let url = '';
   if(Status === "未提交"){
-    var promise = checkFilled(questionnaireId);
-    promise.then((result)=>{
-        if(result.message === "True"){
+    // var promise = checkFilled(questionnaireId);
+    // promise.then((result)=>{
+    //     if(result.message === "True"){
             url = '/questionnaireFill';
             r.push({
                 path: url,
@@ -97,11 +97,11 @@ const goToQuestionnaireFill = (questionnaireId, submissionId, Status, type, scor
                     submissionId: submissionId
                 }
             });
-        }
-        else{
-            ElMessage.error(result.content);
-        }
-    })
+    //     }
+    //     else{
+    //         ElMessage.error(result.content);
+    //     }
+    // })
   }
   else if(Status === "已删除"){
     ElMessage.error("该问卷已被发布者删除");

@@ -236,6 +236,9 @@ const updateIsOpening = (id) =>{
                 message: result.content,
             })
         }
+        else{
+            console.log("114514")
+        }
     })
 }
 
