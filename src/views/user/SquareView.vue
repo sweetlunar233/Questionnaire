@@ -174,7 +174,7 @@ initAllReleased();
                     </div>
                     <div class="second-content">
                         <span class="second">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{truncateDescription(questionnaire.Description)}}</span> 
-                        <span class="second" v-if="questionnaire.categoryId == 0 || questionnaire.categoryId == 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;悬赏奖励： {{ questionnaire.Reward }}纸币</span>
+                        <span class="second" v-if="questionnaire.categoryId == 0 || questionnaire.categoryId == 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;悬赏奖励： 50纸币</span>
                         <span class="second" v-if="questionnaire.categoryId == 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;剩余名额： {{ questionnaire.HeadCount }} </span>  
                         <button type="primary" style="float: right;font-size: 17px" size="large" @click="goToQuestionnaireFill(questionnaire.SurveyID, questionnaire.categoryId)"><span>填写</span></button>
                     </div>

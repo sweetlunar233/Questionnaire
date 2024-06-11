@@ -17,7 +17,7 @@
               <n-tabs type="line" size="medium" @update:value="changeBar(value)" animated>
                 <n-tab-pane name="dataAnalysis" tab="数据分析">
                   <div  id="dataAnalysis">
-                  <div v-for="index in questionList.length"  style="margin-left: 2%;">
+                  <div v-for="index in questionCnt"  style="margin-left: 2%;">
       
                     <!-- TieZhu:
                     对于单选/多选/评分：
@@ -158,7 +158,7 @@
                   <el-button size="large" text circle><el-icon color="#337ecc" :size="30" ><Share /></el-icon></el-button>
                 </template>
                 <!-- TieZhu：分享链接弹出框 -->
-                <span><n-qr-code :value="url" error-correction-level="H"/></span>
+                <span><n-qr-code value="http://localhost:8080/dataPre?questionnaireId=4" error-correction-level="H"/></span>
               </n-popover>
             </el-tooltip>
           </div>
@@ -196,15 +196,15 @@ export default {
       questionnaireId:2,
       questionCnt: 0,
       questionList: [],
-      title:'问题标题',
+      title:'os文件系统小测',
       description:'',
       //用于交叉分析
       cross:[], //可以用于交叉分析的题目
       cross1:undefined, //自变量的问题ID
       cross2:undefined, //因变量的问题ID
       crossHasChart:false,
-      crossContent:[],
-      crossCnt:[],
+      crossContent:["11-5","22-3","11-5","44-8"],
+      crossCnt:[1,2,1,1],
       //print
       printObj: {
         id: 'dataAnalysis', // 这里是要打印元素的ID
@@ -234,18 +234,7 @@ export default {
         }
         this.crossHasChart = true;
         this.$nextTick(() => {
-          var promise = GetCrossData(this.cross1,this.cross2);
-          promise.then((result) => {
-            console.log(result)
-            let i = 0;
-            this.crossContent = [];
-            this.crossCnt = [];
-            for(i=0;i<result.list.length;i++){
-              this.crossContent.push(result.list[i].content);
-              this.crossCnt.push(result.list[i].cnt);
-            }
-            this.createCharts(index,this.crossContent,this.crossCnt,kind);
-          })
+          this.createCharts(index,this.crossContent,this.crossCnt,kind);
         })
       }
     },
@@ -346,7 +335,7 @@ export default {
     //TieZhu:添加填空题
     addFill(){
         this.questionCnt++;
-        this.questionList.push({"type":3,"question":"请填空","hasChart":false,"content":["铁柱","翠花","大壮","二狗"],"count":[1,2,1,1]});
+        this.questionList.push({"type":3,"question":"请填空","hasChart":false,"fill":["铁柱","翠花","大壮","二狗"],"cnt":[1,2,1,1]});
     },
     //TieZhu:添加评分题
     addScore(){
@@ -378,6 +367,7 @@ export default {
       });
     },
   },
+  
   components:{
     NavigationBar,
     NCard,
@@ -390,54 +380,60 @@ export default {
     NQrCode,
     ElMessage,
   },
-  created(){
-    this.questionnaireId = parseInt(this.$route.query.questionnaireId);
-    this.flag = this.$route.query.flag;
-    var promise = GetOtherData(this.questionnaireId);
-    console.log(promise);
-    promise.then((result) => {
-      this.questionList = result.questionList;
-      this.title = result.title;
-      let i = 0;
-      for(i = 0;i < this.questionList.length;i++){
-        this.questionList[i].hasChart = ref(false);
-        if(this.questionList[i].type <= 2){
-          let j = 0;
-          this.questionList[i].optionContent = [];
-          this.questionList[i].optionCnt = [];
-          for(j = 0;j < this.questionList[i].options_stats.length;j++){
-            this.questionList[i].optionContent.push(this.questionList[i].options_stats[j].optionContent);
-            this.questionList[i].optionCnt.push(this.questionList[i].options_stats[j].optionCnt);
-          }
-        }
-        else if(this.questionList[i].type == 4){
-          let j = 0;
-          this.questionList[i].optionContent = [];
-          this.questionList[i].optionCnt = [];
-          for(j = 0;j < this.questionList[i].rating_stats.length;j++){
-            this.questionList[i].optionContent.push(this.questionList[i].rating_stats[j].optionContent);
-            this.questionList[i].optionCnt.push(this.questionList[i].rating_stats[j].optionCnt);
-          }
-        }
-        else{
-          let j = 0;
-          this.questionList[i].fill = [];
-          this.questionList[i].cnt = [];
-          for(j = 0;j < this.questionList[i].blank_stats.length;j++){
-            this.questionList[i].optionContent.push(this.questionList[i].blank_stats[j].fill);
-            this.questionList[i].optionCnt.push(this.questionList[i].blank_stats[j].cnt);
-          }
-        }
-      }
-      for(i=0;i<this.questionList.length;i++){
+  mounted(){
+    this.addSingle();
+    this.addMultiple();
+    this.addFill();
+    this.addScore();
+    let i = 0;
+    for(i=0;i<this.questionList.length;i++){
         if(this.questionList[i].type != 3){
-          this.cross.push({"type":this.questionList[i].type,"value":this.questionList[i].questionId,"label":this.questionList[i].question});
+          this.cross.push({"type":this.questionList[i].type,"value":i,"label":this.questionList[i].question});
         }
       }
-      this.corss1=ref();
-      this.cross2=ref();
-      this.url = window.location.href;
-    })
+  },
+  created(){
+    // this.questionnaireId = parseInt(this.$route.query.questionnaireId);
+    // this.flag = this.$route.query.flag;
+    // var promise = GetOtherData(this.questionnaireId);
+    // console.log(promise);
+    // promise.then((result) => {
+    //   this.questionList = result.questionList;
+    //   this.title = result.title;
+      let i = 0;
+    //   for(i = 0;i < this.questionList.length;i++){
+    //     this.questionList[i].hasChart = ref(false);
+    //     if(this.questionList[i].type <= 2){
+    //       let j = 0;
+    //       this.questionList[i].optionContent = [];
+    //       this.questionList[i].optionCnt = [];
+    //       for(j = 0;j < this.questionList[i].options_stats.length;j++){
+    //         this.questionList[i].optionContent.push(this.questionList[i].options_stats[j].optionContent);
+    //         this.questionList[i].optionCnt.push(this.questionList[i].options_stats[j].optionCnt);
+    //       }
+    //     }
+    //     else if(this.questionList[i].type == 4){
+    //       let j = 0;
+    //       this.questionList[i].optionContent = [];
+    //       this.questionList[i].optionCnt = [];
+    //       for(j = 0;j < this.questionList[i].rating_stats.length;j++){
+    //         this.questionList[i].optionContent.push(this.questionList[i].rating_stats[j].optionContent);
+    //         this.questionList[i].optionCnt.push(this.questionList[i].rating_stats[j].optionCnt);
+    //       }
+    //     }
+    //     else{
+    //       let j = 0;
+    //       this.questionList[i].fill = [];
+    //       this.questionList[i].cnt = [];
+    //       for(j = 0;j < this.questionList[i].blank_stats.length;j++){
+    //         this.questionList[i].optionContent.push(this.questionList[i].blank_stats[j].fill);
+    //         this.questionList[i].optionCnt.push(this.questionList[i].blank_stats[j].cnt);
+    //       }
+    //     }
+    //   }
+
+    //   this.url = window.location.href;
+    // })
   }
 };
 </script>
