@@ -116,13 +116,14 @@ const goToQuestionnaireFill = (questionnaireId, submissionId, Status, type, scor
   }
   else{
     if(type == 0){
-        r.push({
-            path: "/normalAnswer",
-            query: {
-                questionnaireId: questionnaireId,
-                submissionId: submissionId
-            }
-        });
+        // r.push({
+        //     path: "/normalAnswer",
+        //     query: {
+        //         questionnaireId: questionnaireId,
+        //         submissionId: submissionId
+        //     }
+        // });
+        ElMessage.success("提交成功！")
     }
     else if(type == 1){
         r.push({
@@ -155,14 +156,15 @@ const goToQuestionnaireFill = (questionnaireId, submissionId, Status, type, scor
         })
     }
     else if(type == 3){
-        r.push({
-            path: "/testAnswer",
-            query: {
-                questionnaireId: questionnaireId,
-                submissionId: submissionId,
-                score: score,
-            }
-        });
+        // r.push({
+        //     path: "/testAnswer",
+        //     query: {
+        //         questionnaireId: questionnaireId,
+        //         submissionId: submissionId,
+        //         score: score,
+        //     }
+        // });
+        ElMessage.success("试卷已批改！");
     }
   }
   
@@ -335,7 +337,7 @@ const handleCreate = () => {
                         <!-- 下部分 -->
                         <div class="card-footer">
                             <el-button type="text" :icon="Edit" @click="goToQuestionnaireFill(questionnaire.SurveyID, questionnaire.SubmissionID, questionnaire.Status, questionnaire.Category, questionnaire.Score)" class="thebutton">查看填写</el-button>
-                            <el-button type="danger" :icon="Delete" style="float: right" circle @click="deleteQs(questionnaire.SurveyID)" class="deletebutton"></el-button>
+                            <el-button type="danger" :icon="Delete" style="float: right" circle @click="deleteQs(questionnaire.SubmissionID)" class="deletebutton"></el-button>
                         </div>
                     </div>
                 </div>
